@@ -1,4 +1,4 @@
-# Lifeline Legacy Financial Group — Website
+# Lifeline Legacy Financial Group
 
 **Protecting Families — Building Legacies**
 
