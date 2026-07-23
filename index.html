@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lifeline AI — Missed-Call Exposure Statement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E9ECEA;
+    --card:#FFFFFF;
+    --ink:#182620;
+    --ink-soft:#3C4D45;
+    --muted:#6B7A72;
+    --line:#DCE3DD;
+    --line-strong:#B7C4BC;
+    --teal:#2E6B5C;
+    --teal-deep:#1F4E43;
+    --teal-bg:#E7F1EC;
+    --risk:#A8452F;
+    --risk-bg:#FAEAE4;
+    --brass:#AD7C2A;
+    --brass-ink:#3A2A0E;
+    --brass-bg:#F7EFDD;
+    --focus:#2461A6;
+    --radius:3px;
+    --shadow: 0 1px 1px rgba(24,38,32,.04), 0 10px 30px -12px rgba(24,38,32,.18);
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(24,38,32,.05) 1px, transparent 0);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; font-weight:600; margin:0;}
+  .mono, .num, input, select, textarea, .u{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  a{color:var(--focus);}
+  :focus-visible{outline:2.5px solid var(--focus); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+  /* ---------- Top identity bar ---------- */
+  .identity{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    max-width:1080px;margin:0 auto;padding:26px 20px 10px;
+  }
+  .brand{display:flex;align-items:center;gap:11px;}
+  .brand svg{flex:none;}
+  .brand .name{font-family:'Fraunces',serif;font-weight:600;font-size:17px;letter-spacing:.01em;}
+  .brand .url{font-size:11.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+  .live-pill{
+    display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);
+    border-radius:100px;padding:6px 12px 6px 10px;font-size:11.5px;color:var(--ink-soft);font-weight:500;
+    box-shadow:var(--shadow);
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex:none;position:relative;}
+  .dot::after{
+    content:"";position:absolute;inset:-4px;border-radius:50%;border:1.5px solid var(--teal);
+    animation:ripple 2.4s ease-out infinite;
+  }
+  @keyframes ripple{0%{transform:scale(.5);opacity:.9;}100%{transform:scale(2.1);opacity:0;}}
+
+  /* ---------- Hero ---------- */
+  .hero{max-width:1080px;margin:0 auto;padding:18px 20px 8px;}
+  .hero .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--teal-deep);font-weight:600;margin-bottom:10px;}
+  .hero h1{font-size:clamp(26px,4vw,38px);line-height:1.12;max-width:16ch;letter-spacing:-.01em;}
+  .hero h1 em{font-style:italic;color:var(--teal-deep);}
+  .hero p{margin:12px 0 0;color:var(--ink-soft);max-width:56ch;font-size:15px;}
+
+  /* ---------- Statement document ---------- */
+  .statement{
+    max-width:1080px;margin:22px auto 60px;padding:0 20px;
+  }
+  .doc{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .doc::before{
+    content:"";display:block;height:8px;
+    background-image:radial-gradient(circle at 6px 0, transparent 5px, var(--paper) 5.5px);
+    background-size:12px 8px;background-position:top;
+    border-radius:var(--radius) var(--radius) 0 0;
+    overflow:hidden;
+  }
+  .doc-head{
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:22px 26px 18px;border-bottom:1px dashed var(--line-strong);
+  }
+  .doc-head h2{font-size:19px;}
+  .doc-head .ref{text-align:right;font-size:11.5px;color:var(--muted);line-height:1.6;}
+  .doc-head .ref b{color:var(--ink-soft);font-weight:600;}
+
+  .doc-body{display:grid;grid-template-columns:1.15fr .85fr;align-items:start;}
+  @media (max-width:860px){.doc-body{grid-template-columns:1fr;}}
+  .doc-left .section:last-child{border-bottom:none;}
+  .doc-right{border-left:1px dashed var(--line-strong);background:var(--card);position:sticky;top:16px;align-self:start;}
+  @media (max-width:860px){.doc-right{border-left:none;border-top:1px dashed var(--line-strong);position:static;}}
+  .doc-right .section{border-bottom:none;}
+
+  .section{padding:24px 26px;border-bottom:1px dashed var(--line-strong);}
+  .section:last-child{border-bottom:none;}
+  .section-title{display:flex;align-items:baseline;gap:9px;margin-bottom:18px;}
+  .section-title .idx{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.05em;}
+  .section-title h3{font-size:16px;letter-spacing:-.005em;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-weight:600;font-size:13.5px;margin-bottom:3px;font-family:'IBM Plex Sans',sans-serif;}
+  .field .hint{display:block;font-weight:400;font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'IBM Plex Sans',sans-serif;}
+  .field input[type=text], .field input[type=number], .field select, .field textarea{
+    width:100%;padding:9px 11px;border:1px solid var(--line-strong);border-radius:2px;
+    font-size:14.5px;background:#fff;color:var(--ink);transition:border-color .15s;
+  }
+  .field input:hover, .field select:hover{border-color:var(--muted);}
+  .field textarea{resize:vertical;min-height:60px;font-family:'IBM Plex Sans',sans-serif;}
+  .unit-row{display:flex;align-items:center;gap:8px;}
+  .unit-row .u{font-size:12px;color:var(--muted);white-space:nowrap;}
+  .prefix-wrap{position:relative;flex:1;}
+  .prefix-wrap .prefix{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14.5px;pointer-events:none;}
+  .prefix-wrap input[type=number]{padding-left:28px;}
+  .field.err input, .field.err select{border-color:var(--risk); background:var(--risk-bg);}
+  .field .errmsg{color:var(--risk);font-size:12px;margin-top:4px;display:none;font-weight:600;font-family:'IBM Plex Sans',sans-serif;}
+  .field.err .errmsg{display:block;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:560px){.two-col{grid-template-columns:1fr;}}
+
+  .bench-box{border:1px solid var(--line);border-radius:2px;padding:14px 16px 16px;margin:0 0 16px;background:var(--paper);}
+  .bench-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+  .bench-title{font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);font-family:'IBM Plex Sans',sans-serif;}
+  .assumptions-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  @media (max-width:700px){.assumptions-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:420px){.assumptions-grid{grid-template-columns:1fr;}}
+  .assumptions-grid .field{margin-bottom:0;}
+  .reset-link{background:none;border:none;color:var(--focus);font-size:11.5px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;}
+
+  .scenario-toggle{display:flex;border:1px solid var(--line-strong);border-radius:2px;overflow:hidden;margin-bottom:16px;}
+  .scenario-toggle button{
+    flex:1;border:none;background:#fff;padding:9px 6px;font-weight:600;font-size:12px;cursor:pointer;
+    color:var(--muted);border-right:1px solid var(--line-strong);font-family:'IBM Plex Sans',sans-serif;
+    transition:background .15s,color .15s;
+  }
+  .scenario-toggle button:last-child{border-right:none;}
+  .scenario-toggle button.active{background:var(--ink);color:#fff;}
+
+  .primary-btn{
+    width:100%;background:var(--teal-deep);color:#fff;border:none;
+    padding:13px 16px;border-radius:2px;font-weight:600;font-size:14.5px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;font-family:'IBM Plex Sans',sans-serif;
+    transition:background .15s,transform .1s;
+  }
+  .primary-btn:hover{background:#153a30;}
+  .primary-btn:active{transform:scale(.99);}
+  .ghost-btn{
+    width:100%;background:none;border:1px solid var(--line-strong);color:var(--ink);
+    padding:10px 16px;border-radius:2px;font-weight:600;font-size:13px;cursor:pointer;margin-top:8px;
+    font-family:'IBM Plex Sans',sans-serif;
+  }
+  .ghost-btn:hover{background:var(--paper);}
+
+  .banner{border-radius:2px;padding:10px 12px;font-size:12.5px;margin-bottom:14px;display:none;font-family:'IBM Plex Sans',sans-serif;}
+  .banner.warn{background:var(--brass-bg);border:1px solid #E3CE9C;color:#5C4110;}
+  .banner.info{background:#E8F1F8;border:1px solid #B9D6EA;color:#123A56;}
+  .banner.show{display:block;}
+
+  .empty-state{padding:30px 4px;text-align:center;color:var(--muted);font-size:13.5px;}
+  .empty-state .glyph{margin-bottom:10px;opacity:.6;font-size:22px;}
+
+  .indicator-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+  .indicator{background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:10px;text-align:center;}
+  .indicator .val{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .indicator .lab{font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.25;font-family:'IBM Plex Sans',sans-serif;}
+
+  .ledger-line{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:15px 0;border-bottom:1px dashed var(--line);}
+  .ledger-line .ll-label{max-width:60%;}
+  .ledger-line .ll-label .tag{
+    display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:2px 7px;border-radius:2px;margin-bottom:5px;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .ledger-line.charge .ll-label .tag{background:var(--risk-bg);color:var(--risk);}
+  .ledger-line.credit .ll-label .tag{background:var(--teal-bg);color:var(--teal-deep);}
+  .ledger-line .ll-label .name{display:block;font-weight:600;font-size:13.5px;font-family:'IBM Plex Sans',sans-serif;}
+  .ledger-line .ll-label .sub{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;font-family:'IBM Plex Sans',sans-serif;}
+  .ledger-line .ll-amount{text-align:right;white-space:nowrap;}
+  .ledger-line.charge .ll-amount .amt{color:var(--risk);}
+  .ledger-line.credit .ll-amount .amt{color:var(--teal-deep);}
+  .ledger-line .ll-amount .amt{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .rc-help{
+    background:none;border:1px solid var(--line-strong);color:var(--muted);
+    width:16px;height:16px;border-radius:50%;font-size:10px;font-weight:700;cursor:pointer;
+    line-height:1;padding:0;margin-left:6px;vertical-align:middle;
+  }
+  .rc-detail{margin-top:8px;font-size:11.5px;color:var(--ink-soft);background:var(--paper);border-radius:2px;padding:8px 10px;display:none;font-family:'IBM Plex Sans',sans-serif;}
+  .rc-detail.show{display:block;}
+
+  .balance-row{
+    margin-top:4px;padding:18px 20px;border-radius:2px;background:var(--ink);color:#fff;
+  }
+  .balance-row .bl{font-size:12px;color:#9FB0A6;font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-family:'IBM Plex Sans',sans-serif;}
+  .balance-row .bv{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .invest-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+  .invest-grid .mini{background:rgba(255,255,255,.07);border-radius:2px;padding:9px 10px;}
+  .invest-grid .mini .v{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .invest-grid .mini .l{font-size:10.5px;color:#9FB0A6;font-family:'IBM Plex Sans',sans-serif;}
+
+  .investment-input{padding:14px 16px;border:1px solid var(--line);border-radius:2px;background:var(--paper);margin-bottom:16px;}
+  .investment-input label{font-weight:600;font-size:12.5px;display:block;margin-bottom:6px;font-family:'IBM Plex Sans',sans-serif;}
+  .investment-input .unit-row{max-width:240px;}
+
+  .disclaimer{padding:16px 26px 22px;font-size:11px;color:var(--muted);font-family:'IBM Plex Sans',sans-serif;}
+  .disclaimer strong{color:var(--ink-soft);}
+
+  .amt.tick{animation:tickflash .4s ease-out;}
+  @keyframes tickflash{0%{opacity:.4;transform:translateY(2px);}100%{opacity:1;transform:translateY(0);}}
+
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(24,38,32,.55);display:none;
+    align-items:center;justify-content:center;padding:20px;z-index:50;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal{background:#fff;border-radius:3px;max-width:460px;width:100%;max-height:90vh;overflow:auto;padding:24px;
+    box-shadow:0 30px 60px -15px rgba(0,0,0,.35);}
+  .modal::before{content:"";display:block;height:6px;margin:-24px -24px 18px;
+    background-image:radial-gradient(circle at 6px 0, transparent 5px, #fff 5.5px);background-size:12px 6px;}
+  .modal h2{margin:0 0 4px;font-size:18px;font-family:'Fraunces',serif;}
+  .modal p.sub{margin:0 0 16px;color:var(--muted);font-size:13px;font-family:'IBM Plex Sans',sans-serif;}
+  .modal-close{float:right;background:none;border:none;font-size:16px;cursor:pointer;color:var(--muted);}
+  .consent-row{display:flex;gap:8px;align-items:flex-start;margin:12px 0 16px;font-size:11.5px;color:var(--ink-soft);font-family:'IBM Plex Sans',sans-serif;}
+  .consent-row input{margin-top:3px;}
+  .success-box{text-align:center;padding:10px 0;}
+  .success-box .check{width:40px;height:40px;border-radius:50%;background:var(--teal-bg);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:18px;}
+
+  @media print{
+    body{background:#fff;}
+    .identity,.hero,.live-pill,.rc-help,.modal-overlay,.scenario-toggle,.reset-link,.ghost-btn,#calcBtn{display:none !important;}
+    .doc{box-shadow:none;border:1px solid #999;}
+  }
+
+  footer.sign{max-width:1080px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color:var(--muted);text-align:center;font-family:'IBM Plex Mono',monospace;}
+</style>
+</head>
+<body>
+
+<div class="identity">
+  <div class="brand">
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="15" cy="15" r="15" fill="#182620"/>
+      <path d="M9.5 10.7c0-.9.7-1.6 1.6-1.6h1c.4 0 .75.28.83.67l.55 2.6c.08.36-.04.72-.32.96l-1.1.95c.8 1.65 2.13 3 3.78 3.78l.95-1.1c.24-.28.6-.4.96-.32l2.6.55c.4.08.67.43.67.83v1c0 .9-.7 1.6-1.6 1.6h-.8c-5.2 0-9.5-4.3-9.5-9.5v-.4z" fill="#AD7C2A"/>
+    </svg>
+    <div>
+      <div class="name">Lifeline AI Systems</div>
+      <div class="url">lifelineaisystems.com</div>
+    </div>
+  </div>
+  <div class="live-pill"><span class="dot" aria-hidden="true"></span> Reading your call traffic</div>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Missed-call exposure statement</div>
+  <h1>Every unanswered call is <em>a line item.</em></h1>
+  <p>Fill in your numbers below and we'll itemize what missed calls are actually costing you — and what a 24/7 answering line could put back on the other side of the ledger.</p>
+</div>
+
+<div class="statement">
+  <div class="doc" id="docCard">
+
+    <div class="doc-head">
+      <h2>Statement of Call Traffic</h2>
+      <div class="ref">
+        <div>Prepared for <b id="head-biz">your business</b></div>
+        <div>Date <b id="head-date">—</b></div>
+        <div>Ref <b id="head-ref">—</b></div>
+      </div>
+    </div>
+
+    <div class="doc-body">
+    <div class="doc-left">
+    <div class="section">
+      <div class="section-title"><span class="idx">01</span><h3>Your call traffic</h3></div>
+
+      <div class="two-col">
+        <div class="field">
+          <label for="industry">Industry</label>
+          <select id="industry">
+            <option value="">— Select industry —</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="businessName">Business name <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+          <input type="text" id="businessName" placeholder="e.g. ABC Dental — Dr. Smith" maxlength="100">
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field" id="f-calls">
+          <label>Inbound calls per day</label>
+          <span class="hint">Include after-hours calls</span>
+          <div class="unit-row"><input type="number" id="callsPerDay" min="0" max="10000" step="1" inputmode="decimal"><span class="u">/ day</span></div>
+          <div class="errmsg" id="err-calls"></div>
+        </div>
+        <div class="field" id="f-missed">
+          <label>Of those, unanswered or voicemail</label>
+          <span class="hint">Rough estimate is fine</span>
+          <div class="unit-row"><input type="number" id="missedCallsPerDay" min="0" step="1" inputmode="decimal"><span class="u">/ day</span></div>
+          <div class="errmsg" id="err-missed"></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Call-active days per month</label>
+          <span class="hint">Adjust to match your schedule</span>
+          <div class="unit-row"><input type="number" id="operatingDays" min="1" max="31" step="1"><span class="u">days</span></div>
+        </div>
+        <div class="field" id="f-value">
+          <label>Average value of a new customer</label>
+          <span class="hint">First visit or typical service fee</span>
+          <div class="unit-row">
+            <div class="prefix-wrap"><span class="prefix">$</span><input type="number" id="avgCustomerValue" min="0" step="1"></div>
+            <span class="u">/ visit</span>
+          </div>
+          <div class="errmsg" id="err-value"></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label for="valueBasis">This value represents</label>
+          <select id="valueBasis">
+            <option value="first">First transaction / appointment</option>
+            <option value="ninety">First 90 days of value</option>
+            <option value="lifetime">Full lifetime value</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="currentSetup">Current after-hours coverage</label>
+          <select id="currentSetup">
+            <option value="none">None — voicemail only</option>
+            <option value="staff">Staff (business hours only)</option>
+            <option value="thirdparty">Third-party answering service</option>
+            <option value="combo">Other / combination</option>
+          </select>
+        </div>
+      </div>
+      <div class="banner warn" id="lifetime-warning">Lifetime value doesn't land as cash this month — it's realized gradually. Treat the annual figures below as a directional ceiling, not a check that clears next week.</div>
+      <div class="banner info" id="thirdparty-note">Good to know — Lifeline AI is built to work alongside a third-party service as overflow coverage, not necessarily as a replacement.</div>
+
+      <div class="field">
+        <label for="frustration">Biggest frustration with how calls are handled today <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+        <textarea id="frustration" maxlength="500" placeholder="e.g. We miss calls after hours, customers don't leave voicemails, staff gets overwhelmed..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="idx">02</span><h3>Assumptions &amp; scenario</h3></div>
+
+      <div class="bench-box">
+        <div class="bench-head">
+          <span class="bench-title">Benchmarks</span>
+          <button class="reset-link" id="reset-benchmark" type="button">Reset to industry default</button>
+        </div>
+        <div class="assumptions-grid">
+          <div class="field">
+            <label>Qualified-lead rate</label>
+            <span class="hint">Missed calls that are real leads</span>
+            <div class="unit-row"><input type="number" id="qualifiedCallRate" min="0" max="100" step="1"><span class="u">%</span></div>
+          </div>
+          <div class="field">
+            <label>Lifeline capture rate</label>
+            <span class="hint">Missed calls the AI answers</span>
+            <div class="unit-row"><input type="number" id="solutionCaptureRate" min="0" max="95" step="1"><span class="u">%</span></div>
+          </div>
+          <div class="field">
+            <label>Call-to-customer rate</label>
+            <span class="hint">Answered calls that convert</span>
+            <div class="unit-row"><input type="number" id="callToCustomerRate" min="0" max="100" step="1"><span class="u">%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Scenario</label>
+        <div class="scenario-toggle" role="group" aria-label="Scenario">
+          <button type="button" data-scenario="conservative">Conservative</button>
+          <button type="button" data-scenario="base" class="active">Base</button>
+          <button type="button" data-scenario="upside">Upside</button>
+        </div>
+      </div>
+
+      <div class="investment-input">
+        <label for="monthlyInvestment">Proposed monthly investment <span style="font-weight:400;color:var(--muted);">(optional — enables ROI)</span></label>
+        <div class="unit-row" style="max-width:240px;">
+          <div class="prefix-wrap"><span class="prefix">$</span><input type="number" id="monthlyInvestment" min="0" step="1"></div>
+          <span class="u">/ month</span>
+        </div>
+      </div>
+
+      <button class="primary-btn" id="calcBtn" type="button">Itemize my exposure</button>
+      <button class="ghost-btn" id="printBtn" type="button">Download / print statement</button>
+    </div>
+    </div>
+
+    <div class="doc-right">
+    <div class="section" aria-live="polite">
+      <div class="section-title"><span class="idx">03</span><h3>Exposure statement</h3></div>
+
+      <div id="empty-state" class="empty-state">
+        <div class="glyph">☎</div>
+        Fill in the traffic and value fields above and your itemized statement will appear here.
+      </div>
+
+      <div id="results-body" style="display:none;">
+        <div class="indicator-strip">
+          <div class="indicator"><div class="val" id="ind-missed">–</div><div class="lab">Missed calls / day</div></div>
+          <div class="indicator"><div class="val" id="ind-rate">–</div><div class="lab">Of calls unanswered</div></div>
+          <div class="indicator"><div class="val" id="ind-month">–</div><div class="lab">Missed calls / month</div></div>
+        </div>
+
+        <div class="banner info show" id="no-missed-banner" style="display:none;">Every call is currently getting answered — nice work. There's no unanswered-call exposure to itemize right now, so no investment figure is needed below.</div>
+
+        <div class="ledger-line charge">
+          <div class="ll-label">
+            <span class="tag">Charge</span>
+            <span class="name">Opportunity at risk, monthly <button class="rc-help" data-detail="risk-m" aria-label="How this is calculated">?</button></span>
+            <span class="sub" id="risk-month-sub"></span>
+          </div>
+          <div class="ll-amount"><span class="amt" id="risk-month">$0</span></div>
+        </div>
+        <div class="rc-detail" id="detail-risk-m">Viable missed opportunities/month × average value. Viable opportunities = missed calls/month × qualified-lead rate — this filters out spam and non-viable calls before putting a dollar figure on it.</div>
+
+        <div class="ledger-line charge">
+          <div class="ll-label">
+            <span class="tag">Charge</span>
+            <span class="name">Opportunity at risk, annualized <button class="rc-help" data-detail="risk-y" aria-label="How this is calculated">?</button></span>
+            <span class="sub">If nothing about call coverage changes</span>
+          </div>
+          <div class="ll-amount"><span class="amt" id="risk-year">$0</span></div>
+        </div>
+        <div class="rc-detail" id="detail-risk-y">Monthly opportunity at risk × 12.</div>
+
+        <div class="ledger-line credit">
+          <div class="ll-label">
+            <span class="tag">Credit</span>
+            <span class="name">Projected recovery with Lifeline AI, annualized <button class="rc-help" data-detail="recover" aria-label="How this is calculated">?</button></span>
+            <span class="sub" id="recover-year-sub"></span>
+          </div>
+          <div class="ll-amount"><span class="amt" id="recover-year">$0</span></div>
+        </div>
+        <div class="rc-detail" id="detail-recover">Recovered customers/month = (missed calls/month × capture rate) × qualified-lead rate × conversion rate. That figure × average value × 12 gives the annual projection.</div>
+
+        <div class="balance-row" id="invest-card">
+          <div class="bl">Balance &amp; return <button class="rc-help" data-detail="invest" aria-label="How this is calculated" style="border-color:#4A5B52;color:#9FB0A6;">?</button></div>
+          <div id="invest-blank" style="margin-top:8px;font-size:13px;color:#C4D0C9;font-family:'IBM Plex Sans',sans-serif;">Add a proposed monthly investment above to calculate ROI, payback, and break-even.</div>
+          <div id="invest-filled" style="display:none;">
+            <div class="bv" id="inv-net">$0</div>
+            <div class="invest-grid">
+              <div class="mini"><div class="v" id="inv-roi">0%</div><div class="l">Annual ROI</div></div>
+              <div class="mini"><div class="v" id="inv-payback">–</div><div class="l">Payback period</div></div>
+              <div class="mini"><div class="v" id="inv-breakeven">–</div><div class="l">Break-even customers/mo</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="rc-detail" id="detail-invest">Net annual benefit = projected annual recovery − (monthly investment × 12). ROI = net benefit ÷ annual cost. Payback = monthly investment ÷ projected monthly recovery. Break-even = monthly investment ÷ average customer value.</div>
+
+        <div style="margin-top:20px;">
+          <button class="primary-btn" id="ctaBtn" type="button">Get my recovery plan</button>
+          <div style="text-align:center;font-size:11.5px;color:var(--muted);margin-top:8px;font-family:'IBM Plex Sans',sans-serif;">Receive a copy of this statement and the fastest ways to close the gap. No obligation.</div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Estimates for planning purposes only.</strong> This statement provides estimates for planning and discussion, based on your inputs and assumptions. It does not represent guaranteed revenue and is not accounting, legal, or financial advice.
+      <div id="print-meta" style="margin-top:6px;"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="sign">hello@lifelineaisystems.com</footer>
+
+<div class="sr-only" id="live-announcer" aria-live="polite"></div>
+
+<div class="modal-overlay" id="leadModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <div id="modal-form-wrap">
+      <h2 id="modalTitle">Get my recovery plan</h2>
+      <p class="sub">We'll send your statement and next steps. No spam, no obligation.</p>
+      <form id="leadForm">
+        <div class="two-col">
+          <div class="field"><label for="firstName">First name</label><input type="text" id="firstName" required></div>
+          <div class="field"><label for="lastName">Last name</label><input type="text" id="lastName" required></div>
+        </div>
+        <div class="field"><label for="email">Business email</label><input type="text" id="email" placeholder="you@business.com"></div>
+        <div class="field"><label for="phone">Mobile phone</label><input type="text" id="phone" placeholder="(555) 555-5555"></div>
+        <div class="two-col">
+          <div class="field"><label for="preferredContact">Preferred contact</label>
+            <select id="preferredContact"><option value="email">Email</option><option value="phone">Phone</option><option value="text">Text</option></select>
+          </div>
+          <div class="field"><label for="zip">ZIP / postal code</label><input type="text" id="zip"></div>
+        </div>
+        <div class="consent-row">
+          <input type="checkbox" id="consent" required>
+          <label for="consent">I agree to be contacted by Lifeline AI Systems by the method(s) selected above regarding my results. See our <a href="#" onclick="return false;">privacy policy</a> and <a href="#" onclick="return false;">terms</a>.</label>
+        </div>
+        <div class="errmsg" id="err-lead" style="display:none;margin-bottom:10px;">Enter an email or phone number, and check the consent box, to continue.</div>
+        <button class="primary-btn" type="submit">Send my recovery plan</button>
+      </form>
+    </div>
+    <div id="modal-success" class="success-box" style="display:none;">
+      <div class="check">✓</div>
+      <h2 style="margin-top:8px;">Thanks — you're all set.</h2>
+      <p class="sub">A summary is on its way. In a real deployment, this step upserts your contact in GoHighLevel through a secured server endpoint — nothing here reaches a server; this demo only holds the values in memory.</p>
+      <button class="ghost-btn" id="modal-done">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var INDUSTRIES = [
+    {id:"dental",   label:"Dental Practice",              noun:"patient",  days:22, value:450,  qualified:70, capture:85, conversion:45},
+    {id:"vet",      label:"Veterinary Clinic",             noun:"patient",  days:25, value:350,  qualified:65, capture:85, conversion:40},
+    {id:"hvac",     label:"HVAC / Plumbing",                noun:"customer", days:26, value:600,  qualified:75, capture:85, conversion:50},
+    {id:"auto",     label:"Auto Repair Shop",               noun:"customer", days:26, value:400,  qualified:70, capture:85, conversion:45},
+    {id:"legal",    label:"Law Firm / Legal Services",      noun:"client",   days:22, value:2500, qualified:55, capture:80, conversion:30},
+    {id:"medspa",   label:"Med Spa & Aesthetics",           noun:"client",   days:25, value:700,  qualified:65, capture:85, conversion:40},
+    {id:"realestate",label:"Real Estate Agency",            noun:"client",   days:26, value:6000, qualified:50, capture:80, conversion:20},
+    {id:"insurance",label:"Insurance & Financial Services", noun:"client",   days:22, value:800,  qualified:60, capture:80, conversion:35},
+    {id:"homeserv", label:"Home Services (General)",        noun:"customer", days:26, value:500,  qualified:70, capture:85, conversion:45},
+    {id:"childcare",label:"Childcare Center",               noun:"family",   days:22, value:1200, qualified:65, capture:85, conversion:40},
+    {id:"other",    label:"General / Other Business",       noun:"customer", days:24, value:400,  qualified:65, capture:80, conversion:40}
+  ];
+
+  var SCENARIO_DELTA = {
+    conservative:{qualified:-15, capture:-15, conversion:-10},
+    base:{qualified:0, capture:0, conversion:0},
+    upside:{qualified:10, capture:8, conversion:10}
+  };
+
+  var el = {};
+  ["industry","businessName","callsPerDay","missedCallsPerDay","operatingDays","avgCustomerValue",
+   "valueBasis","currentSetup","frustration","qualifiedCallRate","solutionCaptureRate","callToCustomerRate",
+   "monthlyInvestment"].forEach(function(id){ el[id]=document.getElementById(id); });
+
+  var industrySelect = document.getElementById("industry");
+  INDUSTRIES.forEach(function(ind){
+    var o = document.createElement("option");
+    o.value = ind.id; o.textContent = ind.label;
+    industrySelect.appendChild(o);
+  });
+
+  document.getElementById("head-date").textContent = new Date().toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+  document.getElementById("head-ref").textContent = "LA-" + Math.floor(100000 + Math.random()*899999);
+  el.businessName.addEventListener("input", function(){
+    document.getElementById("head-biz").textContent = el.businessName.value.trim() || "your business";
+  });
+
+  var state = {
+    scenario:"base",
+    dirty:{ qualifiedCallRate:false, solutionCaptureRate:false, callToCustomerRate:false, operatingDays:false, avgCustomerValue:false }
+  };
+
+  function currentIndustry(){
+    return INDUSTRIES.find(function(i){ return i.id === el.industry.value; }) || null;
+  }
+
+  function fmtMoney(n){
+    if(!isFinite(n)) return "—";
+    return n.toLocaleString(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0});
+  }
+  function fmtPct(n,d){ if(!isFinite(n)) return "—"; return n.toFixed(d==null?1:d)+"%"; }
+  function clamp(n,lo,hi){ return Math.max(lo,Math.min(hi,n)); }
+  function num(elm){ var v=parseFloat(elm.value); return isFinite(v)?v:NaN; }
+
+  function applyIndustryDefaults(ind, force){
+    if(!ind) return;
+    if(force || !state.dirty.operatingDays) el.operatingDays.value = ind.days;
+    if(force || !state.dirty.avgCustomerValue) el.avgCustomerValue.value = ind.value;
+    if(force || !state.dirty.qualifiedCallRate) el.qualifiedCallRate.value = ind.qualified;
+    if(force || !state.dirty.solutionCaptureRate) el.solutionCaptureRate.value = ind.capture;
+    if(force || !state.dirty.callToCustomerRate) el.callToCustomerRate.value = ind.conversion;
+  }
+
+  ["operatingDays","avgCustomerValue","qualifiedCallRate","solutionCaptureRate","callToCustomerRate"].forEach(function(id){
+    el[id].addEventListener("input", function(){ state.dirty[id]=true; compute(); });
+  });
+
+  industrySelect.addEventListener("change", function(){
+    applyIndustryDefaults(currentIndustry(), false);
+    compute();
+  });
+
+  document.getElementById("reset-benchmark").addEventListener("click", function(){
+    state.dirty = { qualifiedCallRate:false, solutionCaptureRate:false, callToCustomerRate:false, operatingDays:false, avgCustomerValue:false };
+    applyIndustryDefaults(currentIndustry(), true);
+    compute();
+  });
+
+  document.querySelectorAll(".scenario-toggle button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.querySelectorAll(".scenario-toggle button").forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      state.scenario = btn.getAttribute("data-scenario");
+      compute();
+    });
+  });
+
+  el.valueBasis.addEventListener("change", function(){
+    document.getElementById("lifetime-warning").classList.toggle("show", el.valueBasis.value === "lifetime");
+    compute();
+  });
+  el.currentSetup.addEventListener("change", function(){
+    document.getElementById("thirdparty-note").classList.toggle("show", el.currentSetup.value === "thirdparty");
+    compute();
+  });
+
+  ["callsPerDay","missedCallsPerDay","monthlyInvestment"].forEach(function(id){
+    el[id].addEventListener("input", compute);
+  });
+
+  document.getElementById("calcBtn").addEventListener("click", function(){
+    compute();
+    document.getElementById("results-body").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  function setFieldError(fieldId, errId, msg){
+    var f = document.getElementById(fieldId), e = document.getElementById(errId);
+    if(msg){ f.classList.add("err"); e.textContent = msg; }
+    else { f.classList.remove("err"); e.textContent=""; }
+  }
+
+  function announce(msg){
+    document.getElementById("live-announcer").textContent = msg;
+  }
+
+  function tick(elm, text){
+    elm.textContent = text;
+    elm.classList.remove("tick");
+    void elm.offsetWidth;
+    elm.classList.add("tick");
+  }
+
+  function compute(){
+    var calls = num(el.callsPerDay);
+    var missed = num(el.missedCallsPerDay);
+    var days = num(el.operatingDays);
+    var value = num(el.avgCustomerValue);
+    var investment = num(el.monthlyInvestment);
+
+    var delta = SCENARIO_DELTA[state.scenario];
+    var qualifiedRate = clamp((num(el.qualifiedCallRate)||0) + delta.qualified, 0, 100) / 100;
+    var captureRate   = clamp((num(el.solutionCaptureRate)||0) + delta.capture, 0, 100) / 100;
+    var conversionRate= clamp((num(el.callToCustomerRate)||0) + delta.conversion, 0, 100) / 100;
+
+    setFieldError("f-calls","err-calls", (isFinite(calls) && calls<=0) ? "Enter a value above zero to calculate a missed-call rate." : "");
+    setFieldError("f-missed","err-missed", (isFinite(missed) && isFinite(calls) && missed>calls) ? "Cannot exceed inbound calls." : "");
+    setFieldError("f-value","err-value", (isFinite(value) && value<=0) ? "Enter an average customer value, or use the industry benchmark." : "");
+
+    var ready = el.industry.value && isFinite(calls) && calls>0 && isFinite(missed) && missed<=calls
+                && isFinite(days) && days>0 && isFinite(value) && value>0;
+
+    if(!ready){
+      document.getElementById("empty-state").style.display = "block";
+      document.getElementById("results-body").style.display = "none";
+      return;
+    }
+    document.getElementById("empty-state").style.display = "none";
+    document.getElementById("results-body").style.display = "block";
+
+    var missedRate = calls>0 ? (missed/calls)*100 : 0;
+    var missedMonth = missed * days;
+    var viableMonth = missedMonth * qualifiedRate;
+    var grossRiskMonth = viableMonth * value;
+    var grossRiskYear = grossRiskMonth * 12;
+    var capturedMonth = missedMonth * captureRate;
+    var recoveredCustomersMonth = capturedMonth * qualifiedRate * conversionRate;
+    var recoveryMonth = recoveredCustomersMonth * value;
+    var recoveryYear = recoveryMonth * 12;
+
+    document.getElementById("ind-missed").textContent = missed.toLocaleString();
+    document.getElementById("ind-rate").textContent = fmtPct(missedRate);
+    document.getElementById("ind-month").textContent = Math.round(missedMonth).toLocaleString();
+
+    var isZeroExposure = missed === 0;
+    document.getElementById("no-missed-banner").style.display = isZeroExposure ? "block" : "none";
+
+    tick(document.getElementById("risk-month"), fmtMoney(grossRiskMonth));
+    document.getElementById("risk-month-sub").textContent =
+      "~" + Math.round(viableMonth) + " viable missed opportunities × " + fmtMoney(value);
+    tick(document.getElementById("risk-year"), fmtMoney(grossRiskYear));
+
+    tick(document.getElementById("recover-year"), fmtMoney(recoveryYear));
+    document.getElementById("recover-year-sub").textContent =
+      "~" + Math.round(recoveredCustomersMonth) + " recovered / month × " + fmtMoney(value) + " × 12";
+
+    var investCard = document.getElementById("invest-card");
+    if(isZeroExposure){
+      investCard.style.display = "none";
+    } else {
+      investCard.style.display = "block";
+      var hasInvestment = isFinite(investment) && investment > 0;
+      document.getElementById("invest-blank").style.display = hasInvestment ? "none" : "block";
+      document.getElementById("invest-filled").style.display = hasInvestment ? "block" : "none";
+      if(hasInvestment){
+        var annualCost = investment*12;
+        var netAnnual = recoveryYear - annualCost;
+        var roi = annualCost>0 ? (netAnnual/annualCost)*100 : null;
+        var payback = recoveryMonth>0 ? investment/recoveryMonth : null;
+        var breakEven = value>0 ? investment/value : null;
+
+        document.getElementById("inv-net").textContent = fmtMoney(netAnnual) + " net annual benefit";
+        document.getElementById("inv-roi").textContent = roi==null ? "—" : fmtPct(roi,0);
+        document.getElementById("inv-payback").textContent = (payback==null || !isFinite(payback)) ? "—" : payback.toFixed(1)+" mo";
+        document.getElementById("inv-breakeven").textContent = (breakEven==null) ? "—" : breakEven.toFixed(1);
+      }
+    }
+
+    document.getElementById("print-meta").textContent =
+      "Generated " + new Date().toLocaleString() + " · Scenario: " + state.scenario + " · Calculator v2.0.0";
+
+    announce("Estimated annual opportunity at risk " + fmtMoney(grossRiskYear) + ". Projected annual recovery " + fmtMoney(recoveryYear) + ".");
+  }
+
+  document.querySelectorAll(".rc-help").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var id = "detail-" + btn.getAttribute("data-detail");
+      var d = document.getElementById(id);
+      d.classList.toggle("show");
+    });
+  });
+
+  var modal = document.getElementById("leadModal");
+  function openModal(){ modal.classList.add("show"); document.getElementById("firstName").focus(); }
+  function closeModal(){ modal.classList.remove("show"); }
+  document.getElementById("ctaBtn").addEventListener("click", openModal);
+  document.getElementById("modalClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", function(e){ if(e.target===modal) closeModal(); });
+
+  document.getElementById("leadForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var email = document.getElementById("email").value.trim();
+    var phone = document.getElementById("phone").value.trim();
+    var consent = document.getElementById("consent").checked;
+    var errBox = document.getElementById("err-lead");
+    if((!email && !phone) || !consent){
+      errBox.style.display = "block";
+      return;
+    }
+    errBox.style.display = "none";
+    document.getElementById("modal-form-wrap").style.display = "none";
+    document.getElementById("modal-success").style.display = "block";
+  });
+  document.getElementById("modal-done").addEventListener("click", function(){
+    closeModal();
+    document.getElementById("modal-form-wrap").style.display = "block";
+    document.getElementById("modal-success").style.display = "none";
+    document.getElementById("leadForm").reset();
+  });
+
+  document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
+})();
+</script>
+</body>
+</html>
