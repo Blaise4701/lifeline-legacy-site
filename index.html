@@ -160,6 +160,8 @@
   }
   .primary-btn:hover{background:#153a30;}
   .primary-btn:active{transform:scale(.99);}
+  .primary-btn:disabled{background:var(--line-strong);color:var(--muted);cursor:not-allowed;}
+  .primary-btn:disabled:hover{background:var(--line-strong);}
   .ghost-btn{
     width:100%;background:none;border:1px solid var(--line-strong);color:var(--ink);
     padding:10px 16px;border-radius:2px;font-weight:600;font-size:13px;cursor:pointer;margin-top:8px;
@@ -515,16 +517,16 @@
         </div>
         <div class="consent-row">
           <input type="checkbox" id="consent" required>
-          <label for="consent">I agree to be contacted by Lifeline AI Systems by the method(s) selected above regarding my results. See our <a href="#" onclick="return false;">privacy policy</a> and <a href="#" onclick="return false;">terms</a>.</label>
+          <label for="consent">I agree to be contacted by Lifeline AI Systems by the method(s) selected above regarding my results.</label>
         </div>
         <div class="errmsg" id="err-lead" style="display:none;margin-bottom:10px;">Enter an email or phone number, and check the consent box, to continue.</div>
-        <button class="primary-btn" type="submit">Send my recovery plan</button>
+        <button class="primary-btn" id="leadSubmitBtn" type="submit">Send my recovery plan</button>
       </form>
     </div>
     <div id="modal-success" class="success-box" style="display:none;">
       <div class="check">✓</div>
       <h2 style="margin-top:8px;">Thanks — you're all set.</h2>
-      <p class="sub">A summary is on its way. In a real deployment, this step upserts your contact in GoHighLevel through a secured server endpoint — nothing here reaches a server; this demo only holds the values in memory.</p>
+      <p class="sub">A summary is on its way.</p>
       <button class="ghost-btn" id="modal-done">Done</button>
     </div>
   </div>
@@ -753,8 +755,10 @@
   document.getElementById("modalClose").addEventListener("click", closeModal);
   modal.addEventListener("click", function(e){ if(e.target===modal) closeModal(); });
 
+  var leadSubmitted = false;
   document.getElementById("leadForm").addEventListener("submit", function(e){
     e.preventDefault();
+    if(leadSubmitted) return;
     var email = document.getElementById("email").value.trim();
     var phone = document.getElementById("phone").value.trim();
     var consent = document.getElementById("consent").checked;
@@ -764,6 +768,9 @@
       return;
     }
     errBox.style.display = "none";
+    leadSubmitted = true;
+    document.getElementById("ctaBtn").disabled = true;
+    document.getElementById("ctaBtn").textContent = "Recovery plan sent";
     document.getElementById("modal-form-wrap").style.display = "none";
     document.getElementById("modal-success").style.display = "block";
   });
