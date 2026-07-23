@@ -24,11 +24,6 @@ An interactive, single-file discovery tool for Lifeline AI Systems. Prospects en
 
 - `lifeline-ai-missed-call-calculator.html` — the entire app (markup, styles, and logic in one file)
 
-## Status / known gaps
-
-- **Lead form does not yet send anywhere.** Submitting currently just shows a client-side "success" state — no data is transmitted or stored. A GoHighLevel (GHL) Inbound Webhook integration is planned so submissions actually reach a workflow (create/update contact, notify, etc.). *Pending: webhook URL from GHL.*
-- Industry benchmark numbers are estimates and should be validated against real client data over time.
-
 ## Hosting
 
 This is a static file, so it can be hosted anywhere that serves static HTML:
