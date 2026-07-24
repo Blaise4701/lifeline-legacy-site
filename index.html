@@ -137,9 +137,7 @@
   .bench-box{border:1px solid var(--line);border-radius:2px;padding:14px 16px 16px;margin:0 0 16px;background:var(--paper);}
   .bench-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
   .bench-title{font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);font-family:'IBM Plex Sans',sans-serif;}
-  .assumptions-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-  @media (max-width:700px){.assumptions-grid{grid-template-columns:1fr 1fr;}}
-  @media (max-width:420px){.assumptions-grid{grid-template-columns:1fr;}}
+  .assumptions-grid{display:grid;grid-template-columns:1fr;gap:12px;}
   .assumptions-grid .field{margin-bottom:0;}
   .reset-link{background:none;border:none;color:var(--focus);font-size:11.5px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;}
 
@@ -246,7 +244,7 @@
 
   @media print{
     body{background:#fff;}
-    .identity,.hero,.live-pill,.rc-help,.modal-overlay,.scenario-toggle,.reset-link,.ghost-btn,#calcBtn{display:none !important;}
+    .identity,.hero,.live-pill,.rc-help,.modal-overlay,.scenario-toggle,.reset-link,.ghost-btn,#calcBtn,#resetFormBtn{display:none !important;}
     .doc{box-shadow:none;border:1px solid #999;}
   }
 
@@ -411,6 +409,7 @@
 
       <button class="primary-btn" id="calcBtn" type="button">Itemize my exposure</button>
       <button class="ghost-btn" id="printBtn" type="button">Download / print statement</button>
+      <button class="ghost-btn" id="resetFormBtn" type="button">Reset form</button>
     </div>
     </div>
 
@@ -536,18 +535,26 @@
 (function(){
   "use strict";
 
+  // Benchmarks below are grounded in published research rather than guesses:
+  // - Qualified-lead rate 35%: Invoca's analysis of 60M+ business calls found ~35-38%
+  //   of calls are genuine leads across industries.
+  // - Capture rate 90%: AI answering services are marketed/observed at ~90-99% capture
+  //   of missed/after-hours calls (kept at 90% here rather than claiming 100%).
+  // - Conversion rate 38% baseline, 46% for home services/trades: Invoca's home services
+  //   benchmark report found a 46% lead-to-customer conversion rate for that vertical;
+  //   other verticals use the 38-42% cross-industry average pending vertical-specific data.
   var INDUSTRIES = [
-    {id:"dental",   label:"Dental Practice",              noun:"patient",  days:22, value:450,  qualified:70, capture:85, conversion:45},
-    {id:"vet",      label:"Veterinary Clinic",             noun:"patient",  days:25, value:350,  qualified:65, capture:85, conversion:40},
-    {id:"hvac",     label:"HVAC / Plumbing",                noun:"customer", days:26, value:600,  qualified:75, capture:85, conversion:50},
-    {id:"auto",     label:"Auto Repair Shop",               noun:"customer", days:26, value:400,  qualified:70, capture:85, conversion:45},
-    {id:"legal",    label:"Law Firm / Legal Services",      noun:"client",   days:22, value:2500, qualified:55, capture:80, conversion:30},
-    {id:"medspa",   label:"Med Spa & Aesthetics",           noun:"client",   days:25, value:700,  qualified:65, capture:85, conversion:40},
-    {id:"realestate",label:"Real Estate Agency",            noun:"client",   days:26, value:6000, qualified:50, capture:80, conversion:20},
-    {id:"insurance",label:"Insurance & Financial Services", noun:"client",   days:22, value:800,  qualified:60, capture:80, conversion:35},
-    {id:"homeserv", label:"Home Services (General)",        noun:"customer", days:26, value:500,  qualified:70, capture:85, conversion:45},
-    {id:"childcare",label:"Childcare Center",               noun:"family",   days:22, value:1200, qualified:65, capture:85, conversion:40},
-    {id:"other",    label:"General / Other Business",       noun:"customer", days:24, value:400,  qualified:65, capture:80, conversion:40}
+    {id:"dental",   label:"Dental Practice",              noun:"patient",  days:22, value:450,  qualified:35, capture:90, conversion:38},
+    {id:"vet",      label:"Veterinary Clinic",             noun:"patient",  days:25, value:350,  qualified:35, capture:90, conversion:38},
+    {id:"hvac",     label:"HVAC / Plumbing",                noun:"customer", days:26, value:600,  qualified:35, capture:90, conversion:46},
+    {id:"auto",     label:"Auto Repair Shop",               noun:"customer", days:26, value:400,  qualified:35, capture:90, conversion:38},
+    {id:"legal",    label:"Law Firm / Legal Services",      noun:"client",   days:22, value:2500, qualified:35, capture:90, conversion:38},
+    {id:"medspa",   label:"Med Spa & Aesthetics",           noun:"client",   days:25, value:700,  qualified:35, capture:90, conversion:38},
+    {id:"realestate",label:"Real Estate Agency",            noun:"client",   days:26, value:6000, qualified:35, capture:90, conversion:38},
+    {id:"insurance",label:"Insurance & Financial Services", noun:"client",   days:22, value:800,  qualified:35, capture:90, conversion:38},
+    {id:"homeserv", label:"Home Services (General)",        noun:"customer", days:26, value:500,  qualified:35, capture:90, conversion:46},
+    {id:"childcare",label:"Childcare Center",               noun:"family",   days:22, value:1200, qualified:35, capture:90, conversion:38},
+    {id:"other",    label:"General / Other Business",       noun:"customer", days:24, value:400,  qualified:35, capture:90, conversion:38}
   ];
 
   var SCENARIO_DELTA = {
@@ -576,8 +583,11 @@
 
   var state = {
     scenario:"base",
-    dirty:{ qualifiedCallRate:false, solutionCaptureRate:false, callToCustomerRate:false, operatingDays:false, avgCustomerValue:false }
+    dirty:{ qualifiedCallRate:false, solutionCaptureRate:false, callToCustomerRate:false, operatingDays:false, avgCustomerValue:false },
+    baseRates:{ qualifiedCallRate:NaN, solutionCaptureRate:NaN, callToCustomerRate:NaN }
   };
+
+  var RATE_DELTA_KEY = { qualifiedCallRate:"qualified", solutionCaptureRate:"capture", callToCustomerRate:"conversion" };
 
   function currentIndustry(){
     return INDUSTRIES.find(function(i){ return i.id === el.industry.value; }) || null;
@@ -591,17 +601,42 @@
   function clamp(n,lo,hi){ return Math.max(lo,Math.min(hi,n)); }
   function num(elm){ var v=parseFloat(elm.value); return isFinite(v)?v:NaN; }
 
+  // Re-render the 3 rate fields as (base rate + current scenario's adjustment), so switching
+  // scenarios visibly changes the numbers instead of silently changing only the dollar totals.
+  function syncRateFields(){
+    var delta = SCENARIO_DELTA[state.scenario];
+    Object.keys(RATE_DELTA_KEY).forEach(function(id){
+      var base = state.baseRates[id];
+      if(isFinite(base)){
+        el[id].value = Math.round(clamp(base + delta[RATE_DELTA_KEY[id]], 0, 100));
+      }
+    });
+  }
+
   function applyIndustryDefaults(ind, force){
     if(!ind) return;
     if(force || !state.dirty.operatingDays) el.operatingDays.value = ind.days;
     if(force || !state.dirty.avgCustomerValue) el.avgCustomerValue.value = ind.value;
-    if(force || !state.dirty.qualifiedCallRate) el.qualifiedCallRate.value = ind.qualified;
-    if(force || !state.dirty.solutionCaptureRate) el.solutionCaptureRate.value = ind.capture;
-    if(force || !state.dirty.callToCustomerRate) el.callToCustomerRate.value = ind.conversion;
+    if(force || !state.dirty.qualifiedCallRate) state.baseRates.qualifiedCallRate = ind.qualified;
+    if(force || !state.dirty.solutionCaptureRate) state.baseRates.solutionCaptureRate = ind.capture;
+    if(force || !state.dirty.callToCustomerRate) state.baseRates.callToCustomerRate = ind.conversion;
+    syncRateFields();
   }
 
-  ["operatingDays","avgCustomerValue","qualifiedCallRate","solutionCaptureRate","callToCustomerRate"].forEach(function(id){
+  ["operatingDays","avgCustomerValue"].forEach(function(id){
     el[id].addEventListener("input", function(){ state.dirty[id]=true; compute(); });
+  });
+
+  Object.keys(RATE_DELTA_KEY).forEach(function(id){
+    el[id].addEventListener("input", function(){
+      state.dirty[id] = true;
+      // What the person typed is the effective rate for the *current* scenario —
+      // back that out to a base rate so the other scenarios stay consistent.
+      var typed = num(el[id]);
+      var delta = SCENARIO_DELTA[state.scenario][RATE_DELTA_KEY[id]];
+      state.baseRates[id] = isFinite(typed) ? clamp(typed - delta, 0, 100) : NaN;
+      compute();
+    });
   });
 
   industrySelect.addEventListener("change", function(){
@@ -620,6 +655,7 @@
       document.querySelectorAll(".scenario-toggle button").forEach(function(b){ b.classList.remove("active"); });
       btn.classList.add("active");
       state.scenario = btn.getAttribute("data-scenario");
+      syncRateFields();
       compute();
     });
   });
@@ -640,6 +676,40 @@
   document.getElementById("calcBtn").addEventListener("click", function(){
     compute();
     document.getElementById("results-body").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  document.getElementById("resetFormBtn").addEventListener("click", function(){
+    el.industry.value = "";
+    el.businessName.value = "";
+    el.callsPerDay.value = "";
+    el.missedCallsPerDay.value = "";
+    el.operatingDays.value = "";
+    el.avgCustomerValue.value = "";
+    el.valueBasis.value = "first";
+    el.currentSetup.value = "none";
+    el.frustration.value = "";
+    el.qualifiedCallRate.value = "";
+    el.solutionCaptureRate.value = "";
+    el.callToCustomerRate.value = "";
+    el.monthlyInvestment.value = "";
+
+    state.scenario = "base";
+    state.dirty = { qualifiedCallRate:false, solutionCaptureRate:false, callToCustomerRate:false, operatingDays:false, avgCustomerValue:false };
+    state.baseRates = { qualifiedCallRate:NaN, solutionCaptureRate:NaN, callToCustomerRate:NaN };
+    document.querySelectorAll(".scenario-toggle button").forEach(function(b){
+      b.classList.toggle("active", b.getAttribute("data-scenario") === "base");
+    });
+
+    document.getElementById("lifetime-warning").classList.remove("show");
+    document.getElementById("thirdparty-note").classList.remove("show");
+    setFieldError("f-calls","err-calls","");
+    setFieldError("f-missed","err-missed","");
+    setFieldError("f-value","err-value","");
+
+    document.getElementById("head-biz").textContent = "your business";
+
+    compute();
+    document.getElementById("industry").focus();
   });
 
   function setFieldError(fieldId, errId, msg){
@@ -666,10 +736,9 @@
     var value = num(el.avgCustomerValue);
     var investment = num(el.monthlyInvestment);
 
-    var delta = SCENARIO_DELTA[state.scenario];
-    var qualifiedRate = clamp((num(el.qualifiedCallRate)||0) + delta.qualified, 0, 100) / 100;
-    var captureRate   = clamp((num(el.solutionCaptureRate)||0) + delta.capture, 0, 100) / 100;
-    var conversionRate= clamp((num(el.callToCustomerRate)||0) + delta.conversion, 0, 100) / 100;
+    var qualifiedRate = clamp(num(el.qualifiedCallRate)||0, 0, 100) / 100;
+    var captureRate   = clamp(num(el.solutionCaptureRate)||0, 0, 100) / 100;
+    var conversionRate= clamp(num(el.callToCustomerRate)||0, 0, 100) / 100;
 
     setFieldError("f-calls","err-calls", (isFinite(calls) && calls<=0) ? "Enter a value above zero to calculate a missed-call rate." : "");
     setFieldError("f-missed","err-missed", (isFinite(missed) && isFinite(calls) && missed>calls) ? "Cannot exceed inbound calls." : "");
