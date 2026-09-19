@@ -5,7 +5,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { licensedStateCodes, licensedStates, site, states } from "@/lib/site-data";
 
 type Persona = 0 | 1 | 2;
-type ReviewState = "idle" | "form" | "declined" | "preview";
+type ReviewState = "idle" | "form" | "declined" | "submitted" | "unavailable";
 
 type Question = {
   tag: string;
@@ -207,6 +207,9 @@ const bridgeLinks = [
   { label: "Start with Legacy", href: "/continuity-bridge#bridge-legacy" },
 ] as const;
 
+const pathwayNames = ["Retirement", "Family", "Business"] as const;
+const incompleteSummary = "Checkup not completed";
+
 export function ContinuityCheckup() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>([null, null, null, null, null]);
@@ -214,6 +217,8 @@ export function ContinuityCheckup() {
   const [review, setReview] = useState<ReviewState>("idle");
   const [formError, setFormError] = useState("");
   const [reviewStateName, setReviewStateName] = useState("");
+  const [bookingUrl, setBookingUrl] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   const persona = (answers[0] ?? 1) as Persona;
@@ -251,13 +256,21 @@ export function ContinuityCheckup() {
     setReview("idle");
     setError("");
     setReviewStateName("");
+    setBookingUrl("");
+    setFormError("");
   };
 
-  const submitPreview = (event: FormEvent<HTMLFormElement>) => {
+  const submitReview = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const firstName = String(data.get("firstName") ?? "");
     const email = String(data.get("email") ?? "");
     const state = String(data.get("state") ?? "");
+    const pathway = String(data.get("pathway") ?? "");
+    const learningInterest = String(data.get("learningInterest") ?? "");
+    const consent = data.get("consent") === "on";
+    const website = String(data.get("website") ?? "");
+
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       setFormError("Enter a valid email so we can reach you.");
       return;
@@ -266,9 +279,65 @@ export function ContinuityCheckup() {
       setFormError("Choose your state so availability can be confirmed.");
       return;
     }
+
+    if (!pathway || !learningInterest) {
+      setFormError("Choose a planning starting point and learning interest.");
+      return;
+    }
+
     setFormError("");
     setReviewStateName(state);
-    setReview("preview");
+
+    if (!(licensedStates as readonly string[]).includes(state)) {
+      setReview("unavailable");
+      return;
+    }
+
+    if (!consent) {
+      setFormError("Confirm that LLFG may email you about this request.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const hasCheckupSummary = answers.slice(1, 4).every((answer) => answer !== null);
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "continuity-review",
+          firstName,
+          email,
+          state,
+          pathway,
+          summaries: {
+            continuity: hasCheckupSummary ? statusLabels[answers[1] ?? 2] : incompleteSummary,
+            certainty: hasCheckupSummary ? statusLabels[answers[2] ?? 2] : incompleteSummary,
+            legacy: hasCheckupSummary ? statusLabels[answers[3] ?? 2] : incompleteSummary,
+          },
+          learningInterest,
+          consent,
+          website,
+        }),
+      });
+      const result = (await response.json()) as { ok?: boolean; message?: string; bookingUrl?: string | null };
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || "Your request could not be saved.");
+      }
+
+      setBookingUrl(result.bookingUrl ?? "");
+      setReview("submitted");
+    } catch (submissionError) {
+      setFormError(
+        submissionError instanceof Error
+          ? submissionError.message
+          : "Your request could not be saved. Please try again.",
+      );
+      setReview("form");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (step === 5) {
@@ -314,7 +383,17 @@ export function ContinuityCheckup() {
           </div>
         </section>
 
-        <ReviewPanel review={review} setReview={setReview} formError={formError} reviewStateName={reviewStateName} onSubmit={submitPreview} />
+        <ReviewPanel
+          review={review}
+          setReview={setReview}
+          formError={formError}
+          reviewStateName={reviewStateName}
+          bookingUrl={bookingUrl}
+          isSubmitting={isSubmitting}
+          defaultPathway={pathwayNames[persona]}
+          defaultLearningInterest={learningQuestion.options[learning]}
+          onSubmit={submitReview}
+        />
 
         <button className="text-button restart-button" type="button" onClick={restart}>
           Start the Checkup again
@@ -382,7 +461,17 @@ export function ContinuityCheckup() {
       </form>
 
       {step === 0 && (
-        <ReviewPanel review={review} setReview={setReview} formError={formError} reviewStateName={reviewStateName} onSubmit={submitPreview} />
+        <ReviewPanel
+          review={review}
+          setReview={setReview}
+          formError={formError}
+          reviewStateName={reviewStateName}
+          bookingUrl={bookingUrl}
+          isSubmitting={isSubmitting}
+          defaultPathway={answers[0] === null ? "" : pathwayNames[persona]}
+          defaultLearningInterest={answers[4] === null ? "" : learningQuestion.options[answers[4]]}
+          onSubmit={submitReview}
+        />
       )}
     </div>
   );
@@ -393,12 +482,24 @@ type ReviewPanelProps = {
   setReview: (value: ReviewState) => void;
   formError: string;
   reviewStateName: string;
+  bookingUrl: string;
+  isSubmitting: boolean;
+  defaultPathway: string;
+  defaultLearningInterest: string;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 };
 
-function ReviewPanel({ review, setReview, formError, reviewStateName, onSubmit }: ReviewPanelProps) {
-  const reviewAvailable = (licensedStates as readonly string[]).includes(reviewStateName);
-
+function ReviewPanel({
+  review,
+  setReview,
+  formError,
+  reviewStateName,
+  bookingUrl,
+  isSubmitting,
+  defaultPathway,
+  defaultLearningInterest,
+  onSubmit,
+}: ReviewPanelProps) {
   return (
     <section className="review-panel" id="review" aria-labelledby="review-heading">
       <p className="eyebrow">Optional next step</p>
@@ -439,34 +540,71 @@ function ReviewPanel({ review, setReview, formError, reviewStateName, onSubmit }
                 {states.map((state) => <option key={state}>{state}</option>)}
               </select>
             </label>
+            <label>
+              <span>Planning starting point</span>
+              <select name="pathway" defaultValue={defaultPathway} required>
+                <option value="" disabled>Select a pathway</option>
+                {pathwayNames.map((pathway) => <option key={pathway}>{pathway}</option>)}
+              </select>
+            </label>
+            <label>
+              <span>What would you like to understand?</span>
+              <select name="learningInterest" defaultValue={defaultLearningInterest} required>
+                <option value="" disabled>Select a learning interest</option>
+                {learningQuestion.options.map((interest) => <option key={interest}>{interest}</option>)}
+              </select>
+            </label>
           </div>
           <p className="form-helper">
-            Licensed states: {licensedStateCodes.join(", ")}. This preview does not transmit your information.
+            Licensed states: {licensedStateCodes.join(", ")}. LLFG sends only the contact details and summary labels shown here—never your raw Checkup answers.
           </p>
+          <label className="form-consent">
+            <input name="consent" type="checkbox" />
+            <span>I agree that LLFG may email me about this Continuity Review request. See the <Link href="/privacy">Privacy Policy</Link>.</span>
+          </label>
+          <label className="form-honeypot" aria-hidden="true">
+            <span>Website</span>
+            <input name="website" tabIndex={-1} autoComplete="off" />
+          </label>
           {formError && <p className="form-alert" role="alert">{formError}</p>}
-          <button className="button" type="submit">Preview request step</button>
+          <button className="button" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Sending…" : "Request my Continuity Review"}
+          </button>
         </form>
       )}
 
-      {review === "preview" && (
+      {review === "submitted" && (
         <div className="calendar-placeholder" role="status">
           <span className="calendar-icon" aria-hidden="true">□</span>
-          {reviewAvailable ? (
+          {bookingUrl ? (
             <div>
-              <h3>Scheduling connection coming next</h3>
+              <h3>Your request is in.</h3>
               <p>
-                {reviewStateName} is within LLFG’s current licensed service area. Nothing was sent from this preview. Online scheduling is coming next. For now, call <a href={site.phoneHref}>{site.phone}</a> or email <a href={site.emailHref}>{site.email}</a>.
+                Choose a time for your private, no-pressure Continuity Review. The calendar opens in a new tab.
               </p>
+              <a className="button button-small" href={bookingUrl} target="_blank" rel="noreferrer">Choose a review time</a>
             </div>
           ) : (
             <div>
-              <h3>Keep learning with LLFG</h3>
+              <h3>Your request is in.</h3>
               <p>
-                LLFG is not currently licensed to offer insurance services in {reviewStateName}. Nothing was sent, and you have not been added to a waitlist. The Checkup and educational resources remain available to you.
+                LLFG received your request and will follow up by email. You can also call <a href={site.phoneHref}>{site.phone}</a> or email <a href={site.emailHref}>{site.email}</a>.
               </p>
-              <Link className="text-link" href="/learn">Visit the learning center <span aria-hidden="true">→</span></Link>
             </div>
           )}
+        </div>
+      )}
+
+      {review === "unavailable" && (
+        <div className="calendar-placeholder" role="status">
+          <span className="calendar-icon" aria-hidden="true">□</span>
+          <div>
+            <h3>Keep learning with LLFG</h3>
+            <p>
+              LLFG is not currently licensed to offer insurance services in {reviewStateName}. Nothing was sent, and you have not been added to a waitlist. The Checkup and educational resources remain available to you.
+            </p>
+            <Link className="text-link" href="/learn">Visit the learning center <span aria-hidden="true">→</span></Link>
+          </div>
         </div>
       )}
     </section>
