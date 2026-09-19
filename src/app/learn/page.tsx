@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 import { ReviewInvite } from "@/components/review-invite";
+import { WorkshopRegistration } from "@/components/workshop-registration";
 import { workshops } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -104,7 +105,7 @@ export default function LearnPage() {
             <div className="section-heading centered-heading heading-light">
               <p className="eyebrow eyebrow-light">Fall 2026 retirement education series</p>
               <h2 id="workshops-title">Retirement Should Feel Like Freedom.</h2>
-              <p>Ten education-first seminars and hands-on workshops are scheduled at public libraries in Dallas and Wylie. Online registration will open shortly.</p>
+              <p>Ten education-first seminars and hands-on workshops are scheduled at public libraries in Dallas and Wylie. Reserve a seat for the conversation that fits your calendar.</p>
             </div>
             <div className="workshop-card-grid">
               {workshops.map((workshop, index) => (
@@ -121,7 +122,7 @@ export default function LearnPage() {
                   <div className="workshop-card-footer">
                     <p className="workshop-location">{workshop.location}</p>
                     <p className="workshop-address">{workshop.address}</p>
-                    <span className="registration-status">Registration coming soon</span>
+                    <WorkshopRegistration workshop={workshop} />
                   </div>
                 </article>
               ))}
