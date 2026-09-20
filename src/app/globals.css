@@ -2830,3 +2830,121 @@ ul:last-child {
     margin-top: 0;
   }
 }
+
+
+/* Gemini-reference refinement: quieter luxury, architectural watermark, restrained gold */
+.home-hero {
+  isolation: isolate;
+}
+
+.home-hero::after {
+  background:
+    linear-gradient(90deg, transparent 0 14%, rgba(6, 45, 36, 0.055) 14% 14.35%, transparent 14.35% 36%, rgba(6, 45, 36, 0.055) 36% 36.35%, transparent 36.35% 58%, rgba(6, 45, 36, 0.055) 58% 58.35%, transparent 58.35% 80%, rgba(6, 45, 36, 0.055) 80% 80.35%, transparent 80.35%),
+    radial-gradient(ellipse at 50% 100%, transparent 0 42%, rgba(6, 45, 36, 0.052) 42.2% 42.7%, transparent 42.9% 100%),
+    radial-gradient(ellipse at 50% 100%, transparent 0 60%, rgba(6, 45, 36, 0.042) 60.2% 60.65%, transparent 60.85% 100%);
+  content: "";
+  height: 31rem;
+  left: 37%;
+  opacity: 0.82;
+  pointer-events: none;
+  position: absolute;
+  top: 3.7rem;
+  width: 27rem;
+  z-index: 0;
+}
+
+.home-hero-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.home-hero-copy h1 > span em {
+  color: #a77d2f;
+}
+
+.home-hero-copy .button:first-child {
+  background: #0a4537;
+  border-color: #b6903e;
+  color: #fffdf7;
+}
+
+.home-hero-copy .button:first-child:hover {
+  background: #07382d;
+  border-color: var(--gold-300);
+  color: #ffffff;
+}
+
+.hero-bridge-visual {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 34%),
+    #08352a;
+  border-color: rgba(217, 183, 93, 0.48);
+}
+
+.hero-bridge-visual blockquote > span {
+  color: #d7bb73;
+  font-size: 0.9rem;
+  font-weight: 570;
+}
+
+.hero-bridge-visual blockquote > strong {
+  color: #f7f0df;
+}
+
+.bridge-arch {
+  height: 8.7rem;
+  margin-bottom: 2rem;
+}
+
+.arch-line {
+  border-width: 1px;
+  height: 7.1rem;
+  opacity: 0.92;
+  top: 2.5rem;
+}
+
+.arch-one { width: 100%; }
+.arch-two { width: 88%; opacity: 0.82; }
+.arch-three { width: 76%; opacity: 0.74; }
+.arch-four { width: 64%; opacity: 0.66; }
+.arch-five { width: 52%; opacity: 0.58; }
+.arch-six { width: 40%; opacity: 0.5; }
+.arch-seven { width: 28%; opacity: 0.42; }
+
+.bridge-deck {
+  background: linear-gradient(90deg, rgba(217, 183, 93, 0.55), var(--gold-300), rgba(217, 183, 93, 0.55));
+}
+
+@media (min-width: 981px) {
+  .home-hero-grid {
+    min-height: clamp(39rem, 70vh, 45rem);
+    padding-bottom: clamp(4.6rem, 7vw, 6.5rem);
+    padding-top: clamp(4.2rem, 6.5vw, 5.7rem);
+  }
+
+  .home-hero-copy {
+    max-width: 49rem;
+  }
+
+  .hero-lede {
+    max-width: 40.5rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .home-hero::after {
+    left: 48%;
+    opacity: 0.5;
+    top: 7rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-hero::after {
+    display: none;
+  }
+
+  .home-hero-copy h1 > span em {
+    color: #936b23;
+  }
+}
