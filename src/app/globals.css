@@ -4678,3 +4678,274 @@ ul:last-child {
     padding: 1.15rem;
   }
 }
+
+
+/* Family Continuity page — compact premium editorial system */
+@media (min-width: 981px) {
+  .family-page-shell .family-hero {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .family-page-shell .family-hero .page-hero-grid.has-aside {
+    gap: clamp(3rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(0, 1.12fr) minmax(22rem, 0.72fr);
+  }
+
+  .family-page-shell .family-hero .page-hero-copy .eyebrow {
+    margin-bottom: 0.9rem;
+  }
+
+  .family-page-shell .family-hero .page-hero-copy h1 {
+    font-size: clamp(3rem, 4.15vw, 4.05rem);
+    line-height: 0.98;
+    margin-bottom: 1rem;
+    max-width: none;
+  }
+
+  .family-page-shell .family-hero .page-hero-copy h1 span {
+    display: block;
+  }
+
+  .family-page-shell .family-hero .hero-lede {
+    font-size: 0.98rem;
+    line-height: 1.5;
+    max-width: 39rem;
+  }
+
+  .family-page-shell .family-hero .button-row {
+    margin-top: 1.35rem;
+  }
+
+  .family-page-shell .family-hero .button {
+    min-height: 3rem;
+  }
+
+  .family-page-shell .family-hero .page-hero-aside {
+    padding: 1.75rem 1.95rem;
+  }
+
+  .family-page-shell .aside-check-list {
+    margin-top: 0.9rem;
+  }
+
+  .family-page-shell .aside-check-list li {
+    font-size: 0.82rem;
+    line-height: 1.42;
+    padding: 0.68rem 0 0.68rem 1.25rem;
+  }
+
+  .family-page-shell .family-intro {
+    padding-bottom: 2.15rem;
+    padding-top: 3rem;
+  }
+
+  .family-page-shell .family-intro .intro-statement {
+    max-width: 54rem;
+  }
+
+  .family-page-shell .family-intro .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
+  .family-page-shell .family-intro h2 {
+    font-size: clamp(2.45rem, 3.75vw, 3.45rem);
+    line-height: 0.99;
+    margin-bottom: 0.7rem;
+    max-width: 14ch;
+  }
+
+  .family-page-shell .family-intro .intro-statement > p:last-child {
+    font-size: 0.96rem;
+    line-height: 1.5;
+    max-width: 43rem;
+  }
+
+  .family-page-shell .framework-stack {
+    padding-bottom: 3.5rem;
+  }
+
+  .family-page-shell .framework-pillar {
+    gap: clamp(2rem, 4vw, 3.5rem);
+    grid-template-columns: minmax(15rem, 0.52fr) minmax(0, 1.48fr);
+    padding: 2.8rem 0;
+  }
+
+  .family-page-shell .framework-pillar-heading {
+    gap: 0.85rem;
+    top: 7.5rem;
+  }
+
+  .family-page-shell .framework-pillar-heading > span {
+    font-size: 0.62rem;
+    height: 2.65rem;
+    width: 2.65rem;
+  }
+
+  .family-page-shell .framework-pillar-heading .eyebrow {
+    margin-bottom: 0.35rem;
+  }
+
+  .family-page-shell .framework-pillar-heading h2 {
+    font-size: clamp(2rem, 2.85vw, 2.7rem);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .family-page-shell .framework-pillar-heading div > p:not(.eyebrow, .pillar-note) {
+    font-size: 0.9rem;
+    line-height: 1.48;
+    max-width: 22rem;
+  }
+
+  .family-page-shell .question-card-grid {
+    gap: 0.62rem;
+  }
+
+  .family-page-shell .question-card {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .family-page-shell .question-index {
+    font-size: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .family-page-shell .question-card h3 {
+    font-size: clamp(1.25rem, 1.65vw, 1.52rem);
+    line-height: 1.07;
+    margin-bottom: 0.4rem;
+  }
+
+  .family-page-shell .question-card > p:not(.also-affects) {
+    font-size: 0.86rem;
+    line-height: 1.48;
+  }
+
+  .family-page-shell .also-affects {
+    font-size: 0.62rem;
+    margin-top: 0.65rem;
+    padding-top: 0.45rem;
+  }
+
+  .family-page-shell .family-boundary-section {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .family-page-shell .boundary-grid {
+    gap: clamp(2rem, 4vw, 3.5rem);
+    grid-template-columns: 1fr 0.78fr;
+  }
+
+  .family-page-shell .boundary-grid .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .family-page-shell .boundary-grid h2 {
+    font-size: clamp(2.15rem, 3.2vw, 3rem);
+    line-height: 1;
+    max-width: 14ch;
+  }
+
+  .family-page-shell .boundary-card {
+    padding: 1.35rem 1.5rem;
+  }
+
+  .family-page-shell .boundary-card h3 {
+    font-size: 1.42rem;
+    line-height: 1.08;
+    margin-bottom: 0.55rem;
+  }
+
+  .family-page-shell .boundary-card p {
+    font-size: 0.85rem;
+    line-height: 1.48;
+  }
+
+  .family-page-shell .review-invite {
+    padding: 3.2rem 0;
+  }
+
+  .family-page-shell .review-invite-inner {
+    gap: 2rem;
+  }
+
+  .family-page-shell .review-invite .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .family-page-shell .review-invite h2 {
+    font-size: clamp(2.15rem, 3.1vw, 2.95rem);
+    line-height: 1;
+    margin-bottom: 0.65rem;
+    max-width: 17ch;
+  }
+
+  .family-page-shell .review-invite p:last-child {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    max-width: 42rem;
+  }
+
+  .family-page-shell .review-invite-actions {
+    gap: 0.7rem;
+  }
+
+  .family-page-shell .review-invite-actions .button {
+    min-height: 3rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .family-page-shell .family-hero,
+  .family-page-shell .family-intro,
+  .family-page-shell .family-boundary-section,
+  .family-page-shell .review-invite {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .family-page-shell .family-hero .page-hero-copy h1 span {
+    display: inline;
+  }
+
+  .family-page-shell .family-hero .page-hero-copy h1 span + span::before {
+    content: " ";
+  }
+
+  .family-page-shell .framework-stack {
+    padding-bottom: 3rem;
+  }
+
+  .family-page-shell .framework-pillar {
+    gap: 1.7rem;
+    padding: 2.5rem 0;
+  }
+
+  .family-page-shell .framework-pillar-heading {
+    top: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .family-page-shell .family-hero,
+  .family-page-shell .family-intro,
+  .family-page-shell .family-boundary-section,
+  .family-page-shell .review-invite {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .family-page-shell .framework-pillar {
+    padding: 2.15rem 0;
+  }
+
+  .family-page-shell .question-card {
+    padding: 1rem 1.05rem;
+  }
+
+  .family-page-shell .boundary-card {
+    padding: 1.15rem;
+  }
+}
