@@ -13,11 +13,17 @@ export const metadata: Metadata = {
 
 export default function ContinuityBridgePage() {
   return (
-    <>
+    <div className="continuity-page-shell">
       <main id="main-content">
         <PageHero
+          className="continuity-method-hero"
           eyebrow="The LLFG methodology"
-          title={<>Three sections. One plan that can keep moving.</>}
+          title={
+            <>
+              <span>Three sections.</span>
+              <span>One plan that can keep moving.</span>
+            </>
+          }
           description="The Continuity Bridge™ is a way to organize the questions your financial pieces need to answer together—before a product, account, or document is considered on its own."
           primary={{ href: "#explore", label: "Explore the three sections" }}
           secondary={{ href: "/checkup", label: "Take the Continuity Checkup" }}
@@ -33,7 +39,7 @@ export default function ContinuityBridgePage() {
           }
         />
 
-        <section className="content-section">
+        <section className="content-section continuity-intro">
           <div className="container intro-statement">
             <p className="eyebrow">Why a bridge?</p>
             <h2>A plan should carry people across change.</h2>
@@ -43,7 +49,7 @@ export default function ContinuityBridgePage() {
           </div>
         </section>
 
-        <section className="section section-dark" id="explore">
+        <section className="section section-dark continuity-explore-section" id="explore">
           <div className="container">
             <div className="section-heading centered-heading heading-light">
               <p className="eyebrow eyebrow-light">Explore the framework</p>
@@ -54,7 +60,7 @@ export default function ContinuityBridgePage() {
           </div>
         </section>
 
-        <section className="section section-paper">
+        <section className="section section-paper continuity-method-section">
           <div className="container">
             <div className="section-heading split-heading">
               <div>
@@ -75,7 +81,7 @@ export default function ContinuityBridgePage() {
           </div>
         </section>
 
-        <section className="section">
+        <section className="section continuity-pathways-section">
           <div className="container">
             <div className="section-heading centered-heading">
               <p className="eyebrow">See it in your situation</p>
@@ -97,6 +103,6 @@ export default function ContinuityBridgePage() {
         </section>
       </main>
       <ReviewInvite />
-    </>
+    </div>
   );
 }
