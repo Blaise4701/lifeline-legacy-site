@@ -2810,3 +2810,23 @@ ul:last-child {
     top: 2.5rem;
   }
 }
+
+
+/* Two-line desktop hero headline */
+@media (min-width: 981px) {
+  .home-hero-copy h1 {
+    font-size: clamp(3.55rem, 4.35vw, 4.35rem);
+    line-height: 1.01;
+    max-width: none;
+  }
+
+  .home-hero-copy h1 > span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .home-hero-copy h1 > span em {
+    display: inline;
+    margin-top: 0;
+  }
+}
