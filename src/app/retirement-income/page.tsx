@@ -59,7 +59,7 @@ const legacy = [
 
 export default function RetirementIncomePage() {
   return (
-    <>
+    <div className="retirement-page-shell">
       <main id="main-content">
         <PageHero
           className="retirement-hero"
@@ -115,7 +115,7 @@ export default function RetirementIncomePage() {
           />
         </div>
 
-        <section className="section section-paper">
+        <section className="section section-paper retirement-sequence-section">
           <div className="container sequence-callout">
             <div>
               <p className="eyebrow">Educational resource in development</p>
@@ -127,6 +127,6 @@ export default function RetirementIncomePage() {
         </section>
       </main>
       <ReviewInvite />
-    </>
+    </div>
   );
 }
