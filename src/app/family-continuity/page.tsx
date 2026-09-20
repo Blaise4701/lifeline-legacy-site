@@ -107,7 +107,7 @@ export default function FamilyContinuityPage() {
           </div>
         </section>
       </main>
-      <ReviewInvite />
+      <ReviewInvite path="family" />
     </div>
   );
 }

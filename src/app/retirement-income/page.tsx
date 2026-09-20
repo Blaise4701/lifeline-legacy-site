@@ -126,7 +126,7 @@ export default function RetirementIncomePage() {
           </div>
         </section>
       </main>
-      <ReviewInvite />
+      <ReviewInvite path="retirement" />
     </div>
   );
 }

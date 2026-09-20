@@ -105,7 +105,7 @@ export default function BusinessContinuityPage() {
           </div>
         </section>
       </main>
-      <ReviewInvite />
+      <ReviewInvite path="business" />
     </div>
   );
 }
