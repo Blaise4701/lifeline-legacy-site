@@ -136,7 +136,7 @@ export function ContinuityReviewForm() {
   const [contact, setContact] = useState<ContactData | null>(null);
   const [checkup, setCheckup] = useState<CheckupContext | null>(null);
   const [attribution, setAttribution] = useState<Attribution>({});
-  const [defaultPathway, setDefaultPathway] = useState<Pathway>("Retirement");
+  const [defaultPathway, setDefaultPathway] = useState<Pathway | "">("");
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingUrl, setBookingUrl] = useState("");
@@ -148,7 +148,7 @@ export function ContinuityReviewForm() {
 
     if (storedCheckup) setCheckup(storedCheckup);
     if (storedAttribution) setAttribution(storedAttribution);
-    setDefaultPathway(fromQuery ?? storedCheckup?.pathway ?? "Retirement");
+    setDefaultPathway(fromQuery ?? storedCheckup?.pathway ?? "");
   }, [params]);
 
   const prep = useMemo(
@@ -370,10 +370,6 @@ export function ContinuityReviewForm() {
                 <option value="" disabled>Select one</option>
                 {prep.planOptions.map((option) => <option key={option}>{option}</option>)}
               </select>
-            </label>
-            <label className="form-full">
-              <span>What would make this conversation useful to you? <small>(optional)</small></span>
-              <textarea name="whatWouldHelp" maxLength={500} rows={4} />
             </label>
           </div>
 
