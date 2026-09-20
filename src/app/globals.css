@@ -3196,3 +3196,73 @@ ul:last-child {
     font-size: 0.9rem;
   }
 }
+
+
+/* Final compactness pass: preserve editorial feel while reducing vertical footprint */
+@media (min-width: 981px) {
+  .pathways-overview {
+    padding-bottom: 3.35rem;
+    padding-top: 3.35rem;
+  }
+
+  .pathways-overview-heading {
+    margin-bottom: 1.95rem;
+    max-width: 54rem;
+  }
+
+  .pathways-overview-heading .eyebrow {
+    margin-bottom: 0.65rem;
+  }
+
+  .pathways-overview-heading h2 {
+    font-size: clamp(2.8rem, 4vw, 3.85rem);
+    line-height: 0.99;
+    margin-bottom: 0.72rem;
+  }
+
+  .pathways-overview-heading > p:last-child {
+    font-size: 0.96rem;
+    line-height: 1.48;
+    max-width: 32rem;
+  }
+
+  .pathway-editorial {
+    min-height: 19.75rem;
+    padding: 1.2rem clamp(1.45rem, 2.4vw, 2.15rem) 1.25rem;
+  }
+
+  .pathway-editorial-topline {
+    margin-bottom: 1rem;
+  }
+
+  .pathway-editorial .card-kicker {
+    font-size: 0.68rem;
+    padding-top: 0.2rem;
+  }
+
+  .pathway-editorial-number {
+    font-size: clamp(2rem, 2.75vw, 2.7rem);
+  }
+
+  .pathway-editorial h3 {
+    font-size: clamp(1.48rem, 1.8vw, 1.78rem);
+    line-height: 1.055;
+    margin-bottom: 0.95rem;
+    max-width: 18ch;
+  }
+
+  .pathway-editorial ul {
+    font-size: 0.92rem;
+    line-height: 1.42;
+    margin-bottom: 0.9rem;
+  }
+
+  .pathway-editorial li {
+    padding-bottom: 0.34rem;
+    padding-top: 0.34rem;
+  }
+
+  .pathway-editorial-link {
+    font-size: 0.86rem;
+  }
+}
