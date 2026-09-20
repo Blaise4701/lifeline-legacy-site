@@ -3,7 +3,8 @@ import type { MetadataRoute } from "next";
 const routes = [
   "",
   "/continuity-bridge",
-  "/checkup",\n  "/continuity-review",
+  "/checkup",
+  "/continuity-review",
   "/retirement-income",
   "/family-continuity",
   "/business-continuity",
