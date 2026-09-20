@@ -3567,3 +3567,13 @@ ul:last-child {
     min-height: 0;
   }
 }
+
+
+/* Tighten Educational Scenarios heading-to-subcopy spacing */
+.scenario-heading h2 {
+  margin-bottom: 0.3rem;
+}
+
+.scenario-heading > p:last-child {
+  margin-top: 0;
+}
