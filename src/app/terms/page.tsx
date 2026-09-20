@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { LegalPage } from "@/components/legal-page";
 import { site } from "@/lib/site-data";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Terms of Use",
   description: "Website terms for Lifeline Legacy Financial Group.",
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (
