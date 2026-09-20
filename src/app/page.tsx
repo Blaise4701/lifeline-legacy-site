@@ -27,8 +27,12 @@ export default function Home() {
         <section className="home-hero">
           <div className="container home-hero-grid">
             <div className="home-hero-copy">
-              <p className="eyebrow">Education-first planning · Dallas–Fort Worth</p>
-              <h1>You’ve built the pieces. Do they work as <em>one plan?</em></h1>
+              <p className="eyebrow home-hero-eyebrow">Education-first planning · Dallas–Fort Worth</p>
+              <h1>
+                <span>You’ve built the pieces.</span>
+                <span>Do they work as </span>
+                <em>one plan?</em>
+              </h1>
               <p className="hero-lede">
                 Most people already have pieces—retirement accounts, insurance, savings, benefits, documents, or a business. The real question is whether those pieces are coordinated to keep life moving when circumstances change.
               </p>
@@ -36,7 +40,11 @@ export default function Home() {
                 <Link className="button" href="#bridge">Explore the Continuity Bridge</Link>
                 <Link className="button button-outline" href="/checkup">Take the Continuity Checkup</Link>
               </div>
-              <p className="hero-note">No account numbers. No upfront contact form. Start with the questions.</p>
+              <p className="hero-note">
+                <span>Start with the questions</span>
+                <span>No account numbers</span>
+                <span>No upfront contact form</span>
+              </p>
             </div>
             <div className="hero-bridge-visual" aria-label="The Continuity Bridge has three connected sections: Continuity, Certainty, and Legacy">
               <div className="bridge-arch" aria-hidden="true">
@@ -46,7 +54,10 @@ export default function Home() {
                 <span className="bridge-deck" />
               </div>
               <p>The question behind every plan</p>
-              <blockquote>If life changes tomorrow, will the people who depend on you be okay?</blockquote>
+              <blockquote>
+                <span>If life changes tomorrow,</span>
+                <strong>will the people who depend on you be okay?</strong>
+              </blockquote>
               <div className="hero-pillars"><span>Continuity</span><span>Certainty</span><span>Legacy</span></div>
             </div>
           </div>
