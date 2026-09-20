@@ -13,12 +13,18 @@ export const metadata: Metadata = {
 
 const scenarios = [
   { pillar: "Continuity", title: "Income and obligations", text: "Bills, benefits, and paychecks do not line up on their own if income pauses." },
-  { pillar: "Continuity", title: "Who steps in", text: "Someone may need to act. Would they know where things are and what comes next?" },
   { pillar: "Certainty", title: "Withdrawal order", text: "Accounts opened at different times can work at cross-purposes without a written sequence." },
-  { pillar: "Certainty", title: "Benefit timing", text: "Social Security, pensions, and savings can each run on a different clock." },
   { pillar: "Legacy", title: "Beneficiaries and documents", text: "Wishes, paperwork, ownership, and beneficiaries can drift apart as life changes." },
+  { pillar: "Continuity", title: "Who steps in", text: "Someone may need to act. Would they know where things are and what comes next?" },
+  { pillar: "Certainty", title: "Benefit timing", text: "Social Security, pensions, and savings can each run on a different clock." },
   { pillar: "Legacy", title: "Business ownership", text: "A business can be a family’s largest asset with no clear plan for the next owner." },
 ] as const;
+
+const scenarioPillarNumbers = {
+  Continuity: "01",
+  Certainty: "02",
+  Legacy: "03",
+} as const;
 
 const homePathways = [
   {
@@ -155,19 +161,22 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section section-sage">
+        <section className="section section-sage scenario-section">
           <div className="container">
-            <div className="section-heading split-heading">
-              <div>
-                <p className="eyebrow">Educational scenarios</p>
-                <h2>What can become disconnected?</h2>
-              </div>
+            <div className="scenario-heading">
+              <p className="eyebrow">Educational scenarios</p>
+              <h2>What can become disconnected?</h2>
               <p>Strong individual pieces do not automatically create a coordinated plan.</p>
             </div>
             <div className="scenario-grid">
               {scenarios.map((scenario) => (
-                <article className="scenario-card" key={scenario.title}>
-                  <p className={`pillar-tag pillar-${scenario.pillar.toLowerCase()}`}>{scenario.pillar}</p>
+                <article
+                  className={`scenario-card scenario-${scenario.pillar.toLowerCase()}`}
+                  key={scenario.title}
+                >
+                  <p className={`pillar-tag pillar-${scenario.pillar.toLowerCase()}`}>
+                    <span>{scenarioPillarNumbers[scenario.pillar]}</span> · {scenario.pillar}
+                  </p>
                   <h3>{scenario.title}</h3>
                   <p>{scenario.text}</p>
                 </article>
