@@ -2494,3 +2494,2884 @@ ul:last-child {
   body { background: white; color: black; }
   .checkup-shell { border: 0; box-shadow: none; max-width: none; }
 }
+
+
+/* Premium home-page refinement — isolated visual pass */
+.site-header {
+  background: rgba(253, 251, 246, 0.985);
+  border-bottom-color: rgba(6, 45, 36, 0.1);
+  box-shadow: 0 1px 0 rgba(6, 45, 36, 0.025);
+}
+
+.header-inner {
+  min-height: 5.8rem;
+  width: min(calc(100% - 3rem), 82rem);
+}
+
+.brand-link {
+  width: 17.25rem;
+}
+
+.primary-nav {
+  gap: 1.35rem;
+}
+
+.primary-nav ul {
+  gap: 1.15rem;
+}
+
+.primary-nav li a {
+  font-size: 0.8rem;
+  font-weight: 670;
+  letter-spacing: 0.005em;
+}
+
+.primary-nav .button-small {
+  min-height: 2.85rem;
+  padding-inline: 1.15rem;
+}
+
+.home-hero {
+  background:
+    radial-gradient(circle at 86% 11%, rgba(217, 183, 93, 0.17), transparent 25rem),
+    radial-gradient(circle at 6% 88%, rgba(10, 75, 58, 0.045), transparent 31rem),
+    linear-gradient(105deg, #fdfbf6 0%, #faf6ed 64%, #edf2ed 100%);
+}
+
+.home-hero::before {
+  border-color: rgba(10, 75, 58, 0.065);
+  height: 40rem;
+  right: -14rem;
+  top: -21rem;
+  width: 40rem;
+}
+
+.home-hero-grid {
+  align-items: center;
+  gap: clamp(4rem, 7vw, 7.5rem);
+  grid-template-columns: minmax(0, 1.28fr) minmax(24.5rem, 0.72fr);
+  min-height: clamp(43rem, 74vh, 50rem);
+  padding-bottom: clamp(5.5rem, 8vw, 7.5rem);
+  padding-top: clamp(4.75rem, 7vw, 6.5rem);
+  width: min(calc(100% - 3rem), 82rem);
+}
+
+.home-hero-copy {
+  max-width: 48rem;
+}
+
+.home-hero-eyebrow {
+  margin-bottom: 1.35rem;
+}
+
+.home-hero-copy h1 {
+  font-size: clamp(3.8rem, 5.55vw, 5.55rem);
+  font-weight: 530;
+  letter-spacing: -0.048em;
+  line-height: 0.97;
+  margin-bottom: 1.75rem;
+  max-width: 12.5ch;
+}
+
+.home-hero-copy h1 span,
+.home-hero-copy h1 em {
+  display: block;
+}
+
+.home-hero-copy h1 em {
+  color: var(--emerald-700);
+  font-weight: 500;
+  margin-top: 0.06em;
+}
+
+.hero-lede {
+  color: #48564f;
+  font-size: clamp(1.08rem, 1.45vw, 1.2rem);
+  line-height: 1.7;
+  max-width: 39rem;
+}
+
+.home-hero-copy .button-row {
+  gap: 0.9rem;
+  margin-top: 2.15rem;
+}
+
+.home-hero-copy .button {
+  min-height: 3.35rem;
+  padding-inline: 1.45rem;
+}
+
+.home-hero-copy .button:first-child {
+  box-shadow: 0 10px 28px rgba(6, 45, 36, 0.12);
+}
+
+.hero-note {
+  align-items: center;
+  color: #66716c;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.73rem;
+  font-weight: 620;
+  gap: 0.65rem;
+  letter-spacing: 0.025em;
+  margin-top: 1.15rem;
+}
+
+.hero-note span + span::before {
+  color: var(--gold-accessible);
+  content: "•";
+  margin-right: 0.65rem;
+}
+
+.hero-bridge-visual {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 42%),
+    var(--emerald-950);
+  border: 1px solid rgba(217, 183, 93, 0.34);
+  box-shadow:
+    0 35px 90px rgba(6, 45, 36, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  min-height: 33rem;
+  padding: clamp(2.2rem, 3.6vw, 3.1rem);
+}
+
+.hero-bridge-visual::before {
+  background: var(--gold-400);
+  content: "";
+  height: 2px;
+  left: -1px;
+  position: absolute;
+  top: -1px;
+  width: 5.5rem;
+}
+
+.bridge-arch {
+  height: 9.1rem;
+  margin: 0 0 1.9rem;
+}
+
+.arch-line {
+  border-width: 1.5px;
+  height: 6.9rem;
+  top: 2.85rem;
+}
+
+.bridge-deck {
+  bottom: 0.15rem;
+  height: 2px;
+}
+
+.hero-bridge-visual > p {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  margin-bottom: 1.1rem;
+}
+
+.hero-bridge-visual blockquote {
+  margin: 0 0 2.5rem;
+}
+
+.hero-bridge-visual blockquote > span {
+  color: rgba(255, 255, 255, 0.68);
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.7rem;
+}
+
+.hero-bridge-visual blockquote > strong {
+  color: var(--white);
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(2.15rem, 2.6vw, 2.75rem);
+  font-weight: 520;
+  letter-spacing: -0.025em;
+  line-height: 1.09;
+  max-width: 12ch;
+}
+
+.hero-pillars {
+  border-top-color: rgba(217, 183, 93, 0.36);
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.64rem;
+  font-weight: 690;
+  letter-spacing: 0.13em;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+@media (max-width: 1120px) {
+  .header-inner,
+  .home-hero-grid {
+    width: min(calc(100% - 2.5rem), 76rem);
+  }
+
+  .brand-link {
+    width: 15rem;
+  }
+
+  .home-hero-grid {
+    gap: 3.5rem;
+    grid-template-columns: minmax(0, 1.15fr) minmax(22rem, 0.85fr);
+  }
+
+  .home-hero-copy h1 {
+    font-size: clamp(3.55rem, 6vw, 4.8rem);
+  }
+}
+
+@media (max-width: 980px) {
+  .header-inner,
+  .home-hero-grid {
+    width: min(calc(100% - 2.5rem), var(--max));
+  }
+
+  .header-inner {
+    min-height: 5.3rem;
+  }
+
+  .home-hero-grid {
+    gap: 3.75rem;
+    grid-template-columns: 1fr;
+    padding-top: 4.75rem;
+  }
+
+  .home-hero-copy {
+    max-width: 46rem;
+  }
+
+  .home-hero-copy h1 {
+    max-width: 11ch;
+  }
+
+  .hero-bridge-visual {
+    max-width: 39rem;
+    min-height: 30rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .header-inner,
+  .home-hero-grid {
+    width: min(calc(100% - 1.5rem), var(--max));
+  }
+
+  .home-hero-grid {
+    gap: 3rem;
+    padding-bottom: 4.5rem;
+    padding-top: 4rem;
+  }
+
+  .home-hero-copy h1 {
+    font-size: clamp(2.95rem, 13vw, 3.75rem);
+    letter-spacing: -0.04em;
+    line-height: 0.99;
+    max-width: none;
+  }
+
+  .hero-lede {
+    font-size: 1.03rem;
+    line-height: 1.65;
+  }
+
+  .hero-note {
+    align-items: flex-start;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .hero-note span + span::before {
+    content: "—";
+    display: inline-block;
+    margin-right: 0.45rem;
+  }
+
+  .hero-bridge-visual {
+    min-height: 27rem;
+    padding: 2rem 1.45rem 1.6rem;
+  }
+
+  .hero-bridge-visual blockquote > strong {
+    font-size: clamp(2rem, 10vw, 2.55rem);
+    max-width: 13ch;
+  }
+
+  .bridge-arch {
+    height: 7.8rem;
+  }
+
+  .arch-line {
+    height: 5.8rem;
+    top: 2.5rem;
+  }
+}
+
+
+/* Two-line desktop hero headline */
+@media (min-width: 981px) {
+  .home-hero-copy h1 {
+    font-size: clamp(3.55rem, 4.35vw, 4.35rem);
+    line-height: 1.01;
+    max-width: none;
+  }
+
+  .home-hero-copy h1 > span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .home-hero-copy h1 > span em {
+    display: inline;
+    margin-top: 0;
+  }
+}
+
+
+/* Gemini-reference refinement: quieter luxury, architectural watermark, restrained gold */
+.home-hero {
+  isolation: isolate;
+}
+
+.home-hero::after {
+  background:
+    linear-gradient(90deg, transparent 0 14%, rgba(6, 45, 36, 0.055) 14% 14.35%, transparent 14.35% 36%, rgba(6, 45, 36, 0.055) 36% 36.35%, transparent 36.35% 58%, rgba(6, 45, 36, 0.055) 58% 58.35%, transparent 58.35% 80%, rgba(6, 45, 36, 0.055) 80% 80.35%, transparent 80.35%),
+    radial-gradient(ellipse at 50% 100%, transparent 0 42%, rgba(6, 45, 36, 0.052) 42.2% 42.7%, transparent 42.9% 100%),
+    radial-gradient(ellipse at 50% 100%, transparent 0 60%, rgba(6, 45, 36, 0.042) 60.2% 60.65%, transparent 60.85% 100%);
+  content: "";
+  height: 31rem;
+  left: 37%;
+  opacity: 0.82;
+  pointer-events: none;
+  position: absolute;
+  top: 3.7rem;
+  width: 27rem;
+  z-index: 0;
+}
+
+.home-hero-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.home-hero-copy h1 > span em {
+  color: #a77d2f;
+}
+
+.home-hero-copy .button:first-child {
+  background: #0a4537;
+  border-color: #b6903e;
+  color: #fffdf7;
+}
+
+.home-hero-copy .button:first-child:hover {
+  background: #07382d;
+  border-color: var(--gold-300);
+  color: #ffffff;
+}
+
+.hero-bridge-visual {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 34%),
+    #08352a;
+  border-color: rgba(217, 183, 93, 0.48);
+}
+
+.hero-bridge-visual blockquote > span {
+  color: #d7bb73;
+  font-size: 0.9rem;
+  font-weight: 570;
+}
+
+.hero-bridge-visual blockquote > strong {
+  color: #f7f0df;
+}
+
+.bridge-arch {
+  height: 8.7rem;
+  margin-bottom: 2rem;
+}
+
+.arch-line {
+  border-width: 1px;
+  height: 7.1rem;
+  opacity: 0.92;
+  top: 2.5rem;
+}
+
+.arch-one { width: 100%; }
+.arch-two { width: 88%; opacity: 0.82; }
+.arch-three { width: 76%; opacity: 0.74; }
+.arch-four { width: 64%; opacity: 0.66; }
+.arch-five { width: 52%; opacity: 0.58; }
+.arch-six { width: 40%; opacity: 0.5; }
+.arch-seven { width: 28%; opacity: 0.42; }
+
+.bridge-deck {
+  background: linear-gradient(90deg, rgba(217, 183, 93, 0.55), var(--gold-300), rgba(217, 183, 93, 0.55));
+}
+
+@media (min-width: 981px) {
+  .home-hero-grid {
+    min-height: clamp(39rem, 70vh, 45rem);
+    padding-bottom: clamp(4.6rem, 7vw, 6.5rem);
+    padding-top: clamp(4.2rem, 6.5vw, 5.7rem);
+  }
+
+  .home-hero-copy {
+    max-width: 49rem;
+  }
+
+  .hero-lede {
+    max-width: 40.5rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .home-hero::after {
+    left: 48%;
+    opacity: 0.5;
+    top: 7rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-hero::after {
+    display: none;
+  }
+
+  .home-hero-copy h1 > span em {
+    color: #936b23;
+  }
+}
+
+
+/* Premium starting-points section */
+.pathways-overview {
+  background:
+    radial-gradient(ellipse at 92% 2%, rgba(200, 155, 57, 0.07), transparent 24rem),
+    var(--cream-100);
+  overflow: hidden;
+  position: relative;
+}
+
+.pathways-overview::after {
+  border: 1px solid rgba(6, 45, 36, 0.045);
+  border-radius: 50% 50% 0 0;
+  bottom: -22rem;
+  content: "";
+  height: 34rem;
+  pointer-events: none;
+  position: absolute;
+  right: -7rem;
+  width: 48rem;
+}
+
+.pathways-overview > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.pathways-overview-heading {
+  margin-bottom: clamp(3.3rem, 6vw, 5rem);
+  max-width: 62rem;
+}
+
+.pathways-overview-heading .eyebrow {
+  margin-bottom: 1.25rem;
+}
+
+.pathways-overview-heading h2 {
+  font-size: clamp(3rem, 5.1vw, 4.7rem);
+  letter-spacing: -0.045em;
+  line-height: 0.99;
+  margin-bottom: 1.45rem;
+  max-width: none;
+}
+
+.pathways-overview-heading h2 span {
+  display: block;
+}
+
+.pathways-overview-heading > p:last-child {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 38rem;
+}
+
+.pathways-editorial-grid {
+  border-bottom: 1px solid rgba(6, 45, 36, 0.16);
+  border-top: 1px solid rgba(166, 125, 47, 0.72);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pathway-editorial {
+  display: flex;
+  flex-direction: column;
+  min-height: 27rem;
+  padding: 2rem clamp(1.6rem, 3vw, 2.5rem) 2.2rem;
+  position: relative;
+}
+
+.pathway-editorial + .pathway-editorial {
+  border-left: 1px solid rgba(6, 45, 36, 0.14);
+}
+
+.pathway-editorial-topline {
+  align-items: start;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2.25rem;
+}
+
+.pathway-editorial .card-kicker {
+  margin: 0;
+  padding-top: 0.3rem;
+}
+
+.pathway-editorial-number {
+  color: rgba(6, 45, 36, 0.26);
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 4vw, 3.6rem);
+  font-weight: 560;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  transition: color 180ms ease;
+}
+
+.pathway-editorial h3 {
+  font-size: clamp(1.7rem, 2.35vw, 2.15rem);
+  font-weight: 540;
+  line-height: 1.08;
+  margin-bottom: 2rem;
+  max-width: 17ch;
+}
+
+.pathway-editorial ul {
+  color: var(--muted);
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+}
+
+.pathway-editorial li {
+  border-top: 1px solid rgba(6, 45, 36, 0.09);
+  padding: 0.62rem 0 0.62rem 1rem;
+  position: relative;
+}
+
+.pathway-editorial li::before {
+  color: #a77d2f;
+  content: "—";
+  left: 0;
+  position: absolute;
+}
+
+.pathway-editorial-link {
+  margin-top: auto;
+  text-decoration-thickness: 1px;
+}
+
+.pathway-editorial:hover .pathway-editorial-number {
+  color: rgba(166, 125, 47, 0.7);
+}
+
+@media (max-width: 980px) {
+  .pathways-overview-heading {
+    max-width: 46rem;
+  }
+
+  .pathways-editorial-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pathway-editorial {
+    min-height: 0;
+    padding: 2rem 0 2.4rem;
+  }
+
+  .pathway-editorial + .pathway-editorial {
+    border-left: 0;
+    border-top: 1px solid rgba(6, 45, 36, 0.14);
+  }
+
+  .pathway-editorial h3 {
+    max-width: 24ch;
+  }
+}
+
+@media (max-width: 700px) {
+  .pathways-overview-heading {
+    margin-bottom: 2.8rem;
+  }
+
+  .pathways-overview-heading h2 {
+    font-size: clamp(2.65rem, 12vw, 3.65rem);
+    line-height: 1;
+  }
+
+  .pathways-overview-heading > p:last-child {
+    font-size: 1rem;
+  }
+
+  .pathway-editorial-topline {
+    margin-bottom: 1.5rem;
+  }
+
+  .pathway-editorial h3 {
+    font-size: clamp(1.65rem, 7vw, 2rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .pathway-editorial-number {
+    font-size: 2.6rem;
+  }
+}
+
+
+/* Tighten premium starting-points section to fit comfortably within one desktop viewport */
+@media (min-width: 981px) {
+  .pathways-overview {
+    padding-bottom: 4.2rem;
+    padding-top: 4.2rem;
+  }
+
+  .pathways-overview-heading {
+    margin-bottom: 2.6rem;
+    max-width: 58rem;
+  }
+
+  .pathways-overview-heading .eyebrow {
+    margin-bottom: 0.85rem;
+  }
+
+  .pathways-overview-heading h2 {
+    font-size: clamp(2.9rem, 4.45vw, 4.2rem);
+    line-height: 0.98;
+    margin-bottom: 1rem;
+  }
+
+  .pathways-overview-heading > p:last-child {
+    font-size: 1rem;
+    line-height: 1.55;
+    max-width: 34rem;
+  }
+
+  .pathway-editorial {
+    min-height: 22.5rem;
+    padding-bottom: 1.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .pathway-editorial-topline {
+    margin-bottom: 1.45rem;
+  }
+
+  .pathway-editorial-number {
+    font-size: clamp(2.25rem, 3.2vw, 3.05rem);
+  }
+
+  .pathway-editorial h3 {
+    font-size: clamp(1.55rem, 2vw, 1.95rem);
+    line-height: 1.06;
+    margin-bottom: 1.35rem;
+  }
+
+  .pathway-editorial ul {
+    margin-bottom: 1.25rem;
+  }
+
+  .pathway-editorial li {
+    padding-bottom: 0.46rem;
+    padding-top: 0.46rem;
+  }
+
+  .pathway-editorial-link {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* Final compactness pass: preserve editorial feel while reducing vertical footprint */
+@media (min-width: 981px) {
+  .pathways-overview {
+    padding-bottom: 3.35rem;
+    padding-top: 3.35rem;
+  }
+
+  .pathways-overview-heading {
+    margin-bottom: 1.95rem;
+    max-width: 54rem;
+  }
+
+  .pathways-overview-heading .eyebrow {
+    margin-bottom: 0.65rem;
+  }
+
+  .pathways-overview-heading h2 {
+    font-size: clamp(2.8rem, 4vw, 3.85rem);
+    line-height: 0.99;
+    margin-bottom: 0.72rem;
+  }
+
+  .pathways-overview-heading > p:last-child {
+    font-size: 0.96rem;
+    line-height: 1.48;
+    max-width: 32rem;
+  }
+
+  .pathway-editorial {
+    min-height: 19.75rem;
+    padding: 1.2rem clamp(1.45rem, 2.4vw, 2.15rem) 1.25rem;
+  }
+
+  .pathway-editorial-topline {
+    margin-bottom: 1rem;
+  }
+
+  .pathway-editorial .card-kicker {
+    font-size: 0.68rem;
+    padding-top: 0.2rem;
+  }
+
+  .pathway-editorial-number {
+    font-size: clamp(2rem, 2.75vw, 2.7rem);
+  }
+
+  .pathway-editorial h3 {
+    font-size: clamp(1.48rem, 1.8vw, 1.78rem);
+    line-height: 1.055;
+    margin-bottom: 0.95rem;
+    max-width: 18ch;
+  }
+
+  .pathway-editorial ul {
+    font-size: 0.92rem;
+    line-height: 1.42;
+    margin-bottom: 0.9rem;
+  }
+
+  .pathway-editorial li {
+    padding-bottom: 0.34rem;
+    padding-top: 0.34rem;
+  }
+
+  .pathway-editorial-link {
+    font-size: 0.86rem;
+  }
+}
+
+
+/* Compact Continuity Bridge section while preserving the premium editorial feel */
+@media (min-width: 981px) {
+  .bridge-section {
+    padding-bottom: 4rem;
+    padding-top: 4rem;
+  }
+
+  .bridge-section .section-heading {
+    margin-bottom: 2rem;
+  }
+
+  .bridge-section .section-heading h2 {
+    font-size: clamp(2.8rem, 4vw, 3.8rem);
+  }
+
+  .bridge-section .section-heading > p:last-child {
+    font-size: 1rem;
+    line-height: 1.55;
+    max-width: 38rem;
+  }
+
+  .pillar-tabs button {
+    font-size: 1.12rem;
+    padding: 0.9rem 1.05rem;
+  }
+
+  .pillar-tabs button span {
+    font-size: 0.6rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .pillar-panel {
+    min-height: 20.5rem;
+    padding: 2rem 2.25rem;
+  }
+
+  .pillar-panel-heading {
+    gap: 1rem;
+    margin-bottom: 1.7rem;
+    max-width: 43rem;
+  }
+
+  .pillar-number {
+    height: 2.65rem;
+    width: 2.65rem;
+  }
+
+  .pillar-panel-heading h3 {
+    font-size: 2.05rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .pillar-panel-heading p {
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  .pillar-content-grid {
+    gap: 1.6rem;
+  }
+
+  .pillar-content-grid .detail-label {
+    margin-bottom: 0.5rem;
+  }
+
+  .section-dark .line-list li {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    padding: 0.48rem 0;
+  }
+
+  .missing-card {
+    padding: 1rem 1.1rem;
+  }
+
+  .missing-card p:last-child {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .bridge-action {
+    margin-top: 1.35rem;
+  }
+
+  .bridge-action .button {
+    min-height: 3rem;
+  }
+}
+
+
+/* Compact Continuity Checkup section */
+@media (min-width: 981px) {
+  .checkup-callout-section {
+    padding-bottom: 3.2rem;
+    padding-top: 3.2rem;
+  }
+
+  .checkup-callout {
+    align-items: center;
+    gap: clamp(2.4rem, 4vw, 4rem);
+    grid-template-columns: minmax(0, 0.92fr) minmax(28rem, 1.08fr);
+  }
+
+  .checkup-callout > div:first-child {
+    max-width: 40rem;
+  }
+
+  .checkup-callout h2 {
+    font-size: clamp(2.8rem, 4vw, 3.9rem);
+    line-height: 0.98;
+    margin-bottom: 0.9rem;
+    max-width: 10ch;
+  }
+
+  .checkup-callout > div:first-child > p:not(.eyebrow) {
+    font-size: 0.98rem;
+    line-height: 1.55;
+    max-width: 36rem;
+  }
+
+  .check-list {
+    margin-bottom: 1.45rem;
+    margin-top: 1.35rem;
+  }
+
+  .check-list li {
+    font-size: 0.94rem;
+    line-height: 1.4;
+    padding-bottom: 0.3rem;
+    padding-top: 0.3rem;
+  }
+
+  .checkup-callout .button {
+    min-height: 3rem;
+  }
+
+  .sample-question-card {
+    min-height: 0;
+    padding: 1.8rem 2rem 1.65rem;
+    transform: none;
+  }
+
+  .sample-question-card .question-tag {
+    margin-bottom: 0.85rem;
+  }
+
+  .sample-question-card h3 {
+    font-size: clamp(1.95rem, 2.6vw, 2.75rem);
+    line-height: 1.03;
+    margin-bottom: 1.15rem;
+    max-width: 13ch;
+  }
+
+  .sample-options {
+    gap: 0.55rem;
+    margin-bottom: 1.1rem;
+    margin-top: 1.05rem;
+  }
+
+  .sample-options span {
+    min-height: 3.45rem;
+    padding: 0.7rem 0.95rem;
+  }
+
+  .sample-caption {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    margin-top: 0.85rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .checkup-callout-section {
+    padding-bottom: 4rem;
+    padding-top: 4rem;
+  }
+
+  .checkup-callout {
+    gap: 2.5rem;
+  }
+
+  .sample-question-card {
+    padding: 1.8rem;
+  }
+}
+
+
+/* Use the sample-question card width more effectively on desktop */
+@media (min-width: 981px) {
+  .sample-question-card h3 {
+    font-size: clamp(1.85rem, 2.25vw, 2.45rem);
+    line-height: 1.02;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+}
+
+
+/* Compact, pillar-coded Educational Scenarios */
+.scenario-section {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(17, 99, 77, 0.035), transparent 22rem),
+    var(--sage-50);
+}
+
+.scenario-heading {
+  margin-bottom: 2rem;
+  max-width: 48rem;
+}
+
+.scenario-heading .eyebrow {
+  margin-bottom: 0.7rem;
+}
+
+.scenario-heading h2 {
+  font-size: clamp(2.7rem, 4.2vw, 3.9rem);
+  line-height: 0.99;
+  margin-bottom: 0.8rem;
+  max-width: 13ch;
+}
+
+.scenario-heading > p:last-child {
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  max-width: 36rem;
+}
+
+.scenario-section .scenario-grid {
+  gap: 0.8rem;
+}
+
+.scenario-section .scenario-card {
+  border: 1px solid rgba(6, 45, 36, 0.09);
+  border-top-width: 3px;
+  min-height: 10.75rem;
+  padding: 1.25rem 1.35rem 1.2rem;
+}
+
+.scenario-section .scenario-card h3 {
+  font-size: clamp(1.35rem, 1.8vw, 1.6rem);
+  line-height: 1.06;
+  margin-bottom: 0.6rem;
+}
+
+.scenario-section .scenario-card > p:last-child {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.scenario-section .pillar-tag {
+  font-size: 0.64rem;
+  letter-spacing: 0.11em;
+  margin-bottom: 0.9rem;
+}
+
+.scenario-section .pillar-tag span {
+  font-weight: 800;
+}
+
+.scenario-continuity {
+  background: #e4eee7;
+  border-top-color: #27614e !important;
+}
+
+.scenario-certainty {
+  background: #f3ebd8;
+  border-top-color: #9b762d !important;
+}
+
+.scenario-legacy {
+  background: #e7e9e4;
+  border-top-color: #586a61 !important;
+}
+
+.scenario-section .fine-print {
+  margin-top: 0.9rem;
+}
+
+@media (min-width: 981px) {
+  .scenario-section {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .scenario-heading {
+    margin-bottom: 1.6rem;
+  }
+
+  .scenario-heading h2 {
+    font-size: clamp(2.45rem, 11vw, 3.35rem);
+  }
+
+  .scenario-section .scenario-card {
+    min-height: 0;
+  }
+}
+
+
+/* Tighten Educational Scenarios heading-to-subcopy spacing */
+.scenario-heading h2 {
+  margin-bottom: 0.3rem;
+}
+
+.scenario-heading > p:last-child {
+  margin-top: 0;
+}
+
+
+/* Compact retirement-income hero */
+@media (min-width: 981px) {
+  .retirement-hero {
+    padding-bottom: 3.6rem;
+    padding-top: 3.6rem;
+  }
+
+  .retirement-hero .page-hero-grid.has-aside {
+    gap: clamp(3rem, 5vw, 5rem);
+    grid-template-columns: minmax(0, 1.12fr) minmax(23rem, 0.72fr);
+  }
+
+  .retirement-hero .page-hero-copy .eyebrow {
+    margin-bottom: 1rem;
+  }
+
+  .retirement-hero .page-hero-copy h1 {
+    font-size: clamp(3.2rem, 4.35vw, 4.35rem);
+    line-height: 0.97;
+    margin-bottom: 1.15rem;
+    max-width: none;
+  }
+
+  .retirement-hero .page-hero-copy h1 span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .retirement-hero .hero-lede {
+    font-size: 1rem;
+    line-height: 1.55;
+    max-width: 39rem;
+  }
+
+  .retirement-hero .page-hero-copy .button-row {
+    margin-top: 1.45rem;
+  }
+
+  .retirement-hero .page-hero-aside {
+    padding: 2rem 2.25rem;
+  }
+
+  .retirement-hero .page-hero-aside > div > .eyebrow {
+    margin-bottom: 0.7rem;
+  }
+
+  .retirement-hero .before-after > div {
+    padding: 1rem 0;
+  }
+
+  .retirement-hero .before-after h2 {
+    font-size: 1.85rem;
+    margin: 0.18rem 0;
+  }
+
+  .retirement-hero .before-after p {
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 980px) {
+  .retirement-hero .page-hero-copy h1 span {
+    display: inline;
+    white-space: normal;
+  }
+
+  .retirement-hero .page-hero-copy h1 span + span::before {
+    content: " ";
+  }
+}
+
+
+/* Retirement page — compact premium system */
+.retirement-page-shell .retirement-intro {
+  padding-bottom: 2rem;
+  padding-top: 3.1rem;
+}
+
+.retirement-page-shell .intro-statement {
+  max-width: 54rem;
+}
+
+.retirement-page-shell .intro-statement .eyebrow {
+  margin-bottom: 0.65rem;
+}
+
+.retirement-page-shell .intro-statement h2 {
+  font-size: clamp(2.5rem, 4vw, 3.65rem);
+  line-height: 0.99;
+  margin-bottom: 0.75rem;
+  max-width: 17ch;
+}
+
+.retirement-page-shell .intro-statement > p:last-child {
+  font-size: 0.98rem;
+  line-height: 1.52;
+  max-width: 43rem;
+}
+
+.retirement-page-shell .framework-stack {
+  padding-bottom: 3.6rem;
+}
+
+.retirement-page-shell .framework-pillar {
+  gap: clamp(2rem, 4vw, 3.5rem);
+  grid-template-columns: minmax(15rem, 0.52fr) minmax(0, 1.48fr);
+  padding: 3rem 0;
+}
+
+.retirement-page-shell .framework-pillar-heading {
+  gap: 0.9rem;
+  top: 7.5rem;
+}
+
+.retirement-page-shell .framework-pillar-heading > span {
+  font-size: 0.64rem;
+  height: 2.7rem;
+  width: 2.7rem;
+}
+
+.retirement-page-shell .framework-pillar-heading .eyebrow {
+  margin-bottom: 0.4rem;
+}
+
+.retirement-page-shell .framework-pillar-heading h2 {
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.retirement-page-shell .framework-pillar-heading div > p:not(.eyebrow, .pillar-note) {
+  font-size: 0.92rem;
+  line-height: 1.48;
+  max-width: 24rem;
+}
+
+.retirement-page-shell .pillar-note {
+  font-size: 0.74rem;
+  line-height: 1.45;
+  margin-top: 0.8rem;
+  padding: 0.7rem 0.8rem;
+}
+
+.retirement-page-shell .question-card-grid {
+  gap: 0.65rem;
+}
+
+.retirement-page-shell .question-card {
+  padding: 1.15rem 1.3rem 1.2rem;
+}
+
+.retirement-page-shell .question-index {
+  font-size: 0.62rem;
+  margin-bottom: 0.55rem;
+}
+
+.retirement-page-shell .question-card h3 {
+  font-size: clamp(1.28rem, 1.7vw, 1.58rem);
+  line-height: 1.08;
+  margin-bottom: 0.45rem;
+}
+
+.retirement-page-shell .question-card > p:not(.also-affects) {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.retirement-page-shell .also-affects {
+  font-size: 0.64rem;
+  margin-top: 0.7rem;
+  padding-top: 0.5rem;
+}
+
+.retirement-page-shell .retirement-sequence-section {
+  padding-bottom: 3.1rem;
+  padding-top: 3.1rem;
+}
+
+.retirement-page-shell .sequence-callout {
+  gap: 2rem;
+}
+
+.retirement-page-shell .sequence-callout .eyebrow {
+  margin-bottom: 0.55rem;
+}
+
+.retirement-page-shell .sequence-callout h2 {
+  font-size: clamp(2rem, 3vw, 2.85rem);
+  line-height: 1;
+  margin-bottom: 0.55rem;
+}
+
+.retirement-page-shell .sequence-callout p:last-child {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.retirement-page-shell .sequence-callout .button {
+  min-height: 3rem;
+}
+
+.retirement-page-shell .review-invite {
+  padding: 3.4rem 0;
+}
+
+.retirement-page-shell .review-invite-inner {
+  gap: 2rem;
+}
+
+.retirement-page-shell .review-invite .eyebrow {
+  margin-bottom: 0.6rem;
+}
+
+.retirement-page-shell .review-invite h2 {
+  font-size: clamp(2.2rem, 3.35vw, 3.15rem);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  max-width: 17ch;
+}
+
+.retirement-page-shell .review-invite p:last-child {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.retirement-page-shell .review-invite-actions {
+  gap: 0.7rem;
+}
+
+.retirement-page-shell .review-invite-actions .button {
+  min-height: 3rem;
+}
+
+@media (max-width: 980px) {
+  .retirement-page-shell .retirement-intro {
+    padding-bottom: 2.5rem;
+    padding-top: 3rem;
+  }
+
+  .retirement-page-shell .framework-stack {
+    padding-bottom: 3rem;
+  }
+
+  .retirement-page-shell .framework-pillar {
+    gap: 1.7rem;
+    padding: 2.6rem 0;
+  }
+
+  .retirement-page-shell .framework-pillar-heading {
+    top: auto;
+  }
+
+  .retirement-page-shell .retirement-sequence-section,
+  .retirement-page-shell .review-invite {
+    padding-bottom: 3.3rem;
+    padding-top: 3.3rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .retirement-page-shell .retirement-intro {
+    padding-top: 2.6rem;
+  }
+
+  .retirement-page-shell .intro-statement h2 {
+    font-size: clamp(2.35rem, 10vw, 3.1rem);
+  }
+
+  .retirement-page-shell .framework-pillar {
+    padding: 2.2rem 0;
+  }
+
+  .retirement-page-shell .framework-pillar-heading {
+    gap: 0.65rem;
+  }
+
+  .retirement-page-shell .question-card {
+    padding: 1.05rem 1.1rem;
+  }
+
+  .retirement-page-shell .sequence-callout {
+    gap: 1.3rem;
+  }
+}
+
+
+/* About page — compact premium editorial system */
+@media (min-width: 981px) {
+  .about-page-shell .about-hero {
+    padding-bottom: 3.2rem;
+    padding-top: 3.2rem;
+  }
+
+  .about-page-shell .about-hero-grid {
+    gap: clamp(3rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(18rem, 0.78fr) minmax(0, 1.22fr);
+  }
+
+  .about-page-shell .about-photo {
+    min-height: 29rem;
+  }
+
+  .about-page-shell .about-hero h1 {
+    font-size: clamp(3rem, 4.2vw, 4rem);
+    line-height: 0.98;
+    margin-bottom: 0.3rem;
+  }
+
+  .about-page-shell .about-title {
+    font-size: 0.72rem;
+  }
+
+  .about-page-shell .about-opening {
+    font-size: clamp(1.75rem, 2.4vw, 2.2rem);
+    line-height: 1.08;
+    margin: 1.05rem 0 0.8rem;
+    max-width: 21ch;
+  }
+
+  .about-page-shell .about-hero .hero-lede {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    max-width: 38rem;
+  }
+
+  .about-page-shell .about-hero .button-row {
+    margin-top: 1.35rem;
+  }
+
+  .about-page-shell .about-hero .button {
+    min-height: 3rem;
+  }
+
+  .about-page-shell .about-story-section {
+    padding-bottom: 3.3rem;
+    padding-top: 3.3rem;
+  }
+
+  .about-page-shell .story-grid {
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(15rem, 0.72fr) minmax(0, 1.28fr);
+  }
+
+  .about-page-shell .story-grid h2 {
+    font-size: clamp(2.2rem, 3.2vw, 3rem);
+    line-height: 1;
+    margin-bottom: 0;
+  }
+
+  .about-page-shell .story-pull-quote {
+    font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+    line-height: 1.28;
+    margin-top: 1.35rem;
+    padding-left: 1rem;
+  }
+
+  .about-page-shell .founder-story-prose {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    max-width: 46rem;
+  }
+
+  .about-page-shell .founder-story-prose > p + p {
+    margin-top: 0.85rem;
+  }
+
+  .about-page-shell .story-losses {
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    line-height: 1.18;
+  }
+
+  .about-page-shell .founder-purpose {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .about-page-shell .founder-purpose-grid {
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(15rem, 0.72fr) minmax(0, 1.28fr);
+  }
+
+  .about-page-shell .founder-purpose h2 {
+    font-size: clamp(2.3rem, 3.3vw, 3.1rem);
+    line-height: 1;
+  }
+
+  .about-page-shell .founder-purpose-copy {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    max-width: 46rem;
+  }
+
+  .about-page-shell .founder-purpose-copy > p + p {
+    margin-top: 0.85rem;
+  }
+
+  .about-page-shell .founder-purpose-question {
+    margin: 1.55rem 0;
+    padding: 1.25rem 0;
+  }
+
+  .about-page-shell .founder-purpose-question p {
+    font-size: 0.64rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .about-page-shell .founder-purpose-question strong {
+    font-size: clamp(1.65rem, 2.6vw, 2.35rem);
+    line-height: 1.08;
+    max-width: 22ch;
+  }
+
+  .about-page-shell .about-values-section {
+    padding-bottom: 2.7rem;
+    padding-top: 2.7rem;
+  }
+
+  .about-page-shell .values-grid {
+    gap: 0.75rem;
+  }
+
+  .about-page-shell .values-grid article {
+    padding: 1.35rem 1.45rem;
+  }
+
+  .about-page-shell .values-grid article > span {
+    font-size: 0.62rem;
+  }
+
+  .about-page-shell .values-grid h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0.45rem;
+    margin-top: 0.8rem;
+  }
+
+  .about-page-shell .values-grid p {
+    font-size: 0.84rem;
+    line-height: 1.45;
+  }
+
+  .about-page-shell .about-contact-section {
+    padding-bottom: 2.5rem;
+    padding-top: 2.5rem;
+  }
+
+  .about-page-shell .contact-band {
+    gap: 2rem;
+    padding: 1.8rem 0;
+  }
+
+  .about-page-shell .contact-band .eyebrow {
+    margin-bottom: 0.5rem;
+  }
+
+  .about-page-shell .contact-band h2 {
+    font-size: clamp(2rem, 3vw, 2.75rem);
+    line-height: 1;
+    margin-bottom: 0.55rem;
+  }
+
+  .about-page-shell .contact-band p:last-child,
+  .about-page-shell .contact-band address {
+    font-size: 0.88rem;
+  }
+
+  .about-page-shell .review-invite {
+    padding: 3.3rem 0;
+  }
+
+  .about-page-shell .review-invite-inner {
+    gap: 2rem;
+  }
+
+  .about-page-shell .review-invite .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .about-page-shell .review-invite h2 {
+    font-size: clamp(2.2rem, 3.2vw, 3rem);
+    line-height: 1;
+    margin-bottom: 0.7rem;
+    max-width: 17ch;
+  }
+
+  .about-page-shell .review-invite p:last-child {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 42rem;
+  }
+
+  .about-page-shell .review-invite-actions {
+    gap: 0.7rem;
+  }
+
+  .about-page-shell .review-invite-actions .button {
+    min-height: 3rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .about-page-shell .about-hero {
+    padding-bottom: 3.5rem;
+    padding-top: 3.5rem;
+  }
+
+  .about-page-shell .about-photo {
+    min-height: 30rem;
+  }
+
+  .about-page-shell .about-story-section,
+  .about-page-shell .founder-purpose,
+  .about-page-shell .about-values-section,
+  .about-page-shell .about-contact-section,
+  .about-page-shell .review-invite {
+    padding-bottom: 3.5rem;
+    padding-top: 3.5rem;
+  }
+
+  .about-page-shell .story-grid,
+  .about-page-shell .founder-purpose-grid {
+    gap: 2.5rem;
+  }
+
+  .about-page-shell .founder-story-prose,
+  .about-page-shell .founder-purpose-copy {
+    font-size: 0.98rem;
+  }
+
+  .about-page-shell .contact-band {
+    padding: 1.5rem 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .about-page-shell .about-hero {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .about-page-shell .about-photo {
+    min-height: 24rem;
+  }
+
+  .about-page-shell .about-opening {
+    margin-top: 1rem;
+  }
+
+  .about-page-shell .about-story-section,
+  .about-page-shell .founder-purpose,
+  .about-page-shell .about-values-section,
+  .about-page-shell .about-contact-section,
+  .about-page-shell .review-invite {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .about-page-shell .values-grid article {
+    padding: 1.2rem;
+  }
+}
+
+
+/* Learning Center — compact premium editorial system */
+@media (min-width: 981px) {
+  .learn-page-shell .learn-hero {
+    padding-bottom: 3.5rem;
+    padding-top: 3.5rem;
+  }
+
+  .learn-page-shell .learn-hero .page-hero-copy {
+    max-width: 48rem;
+  }
+
+  .learn-page-shell .learn-hero .page-hero-copy h1 {
+    font-size: clamp(3.05rem, 4.2vw, 4.2rem);
+    line-height: 0.98;
+    margin-bottom: 1rem;
+    max-width: 11.5ch;
+  }
+
+  .learn-page-shell .learn-hero .hero-lede {
+    font-size: 0.98rem;
+    line-height: 1.55;
+    max-width: 40rem;
+  }
+
+  .learn-page-shell .learn-hero .button-row {
+    margin-top: 1.4rem;
+  }
+
+  .learn-page-shell .learn-hero .button {
+    min-height: 3rem;
+  }
+
+  .learn-page-shell .learn-resources-section {
+    padding-bottom: 3.5rem;
+    padding-top: 3.5rem;
+  }
+
+  .learn-page-shell .learn-resources-section .section-heading {
+    margin-bottom: 2rem;
+  }
+
+  .learn-page-shell .learn-resources-section .split-heading {
+    align-items: end;
+    gap: 2.5rem;
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .learn-page-shell .learn-resources-section .section-heading h2 {
+    font-size: clamp(2.45rem, 3.6vw, 3.35rem);
+    line-height: 1;
+    max-width: 14ch;
+  }
+
+  .learn-page-shell .learn-resources-section .section-heading > p:last-child {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    max-width: 31rem;
+  }
+
+  .learn-page-shell .resource-grid {
+    gap: 0.7rem;
+  }
+
+  .learn-page-shell .resource-card {
+    min-height: 15.75rem;
+    padding: 1.25rem 1.35rem;
+  }
+
+  .learn-page-shell .resource-card .card-kicker {
+    font-size: 0.62rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .learn-page-shell .resource-card h3 {
+    font-size: 1.38rem;
+    line-height: 1.08;
+    margin-bottom: 0.55rem;
+  }
+
+  .learn-page-shell .resource-card > p:not(.card-kicker) {
+    font-size: 0.84rem;
+    line-height: 1.48;
+    margin-bottom: 1rem;
+  }
+
+  .learn-page-shell .resource-card .text-link,
+  .learn-page-shell .status-label {
+    font-size: 0.7rem;
+  }
+
+  .learn-page-shell .learn-workshops-section {
+    padding-bottom: 3.8rem;
+    padding-top: 3.8rem;
+  }
+
+  .learn-page-shell .learn-workshops-section .section-heading {
+    margin-bottom: 2.2rem;
+  }
+
+  .learn-page-shell .learn-workshops-section .section-heading h2 {
+    font-size: clamp(2.55rem, 3.7vw, 3.5rem);
+    line-height: 0.98;
+    margin-bottom: 0.65rem;
+  }
+
+  .learn-page-shell .learn-workshops-section .section-heading > p:last-child {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 42rem;
+  }
+
+  .learn-page-shell .workshop-card-grid {
+    gap: 0.75rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .learn-page-shell .workshop-card {
+    min-height: 20rem;
+    padding: 1.15rem 1.2rem;
+  }
+
+  .learn-page-shell .workshop-meta {
+    gap: 0.55rem;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .learn-page-shell .workshop-meta > span,
+  .learn-page-shell .workshop-format {
+    font-size: 0.58rem;
+  }
+
+  .learn-page-shell .workshop-meta time {
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+
+  .learn-page-shell .workshop-card h3 {
+    font-size: clamp(1.25rem, 1.55vw, 1.5rem);
+    line-height: 1.06;
+    margin-bottom: 0.65rem;
+  }
+
+  .learn-page-shell .workshop-card > p {
+    font-size: 0.79rem;
+    line-height: 1.45;
+  }
+
+  .learn-page-shell .workshop-card-footer {
+    margin-top: 0.85rem;
+    padding-top: 0.7rem;
+  }
+
+  .learn-page-shell .workshop-location {
+    font-size: 0.72rem;
+  }
+
+  .learn-page-shell .workshop-address {
+    font-size: 0.68rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .learn-page-shell .workshop-register-button {
+    min-height: 2.45rem;
+    padding: 0.55rem 0.8rem;
+  }
+
+  .learn-page-shell .workshop-registration-form {
+    padding: 0.8rem;
+  }
+
+  .learn-page-shell .learn-guided-section {
+    padding-bottom: 2.9rem;
+    padding-top: 2.9rem;
+  }
+
+  .learn-page-shell .learn-guided-section .sequence-callout {
+    gap: 2rem;
+  }
+
+  .learn-page-shell .learn-guided-section .sequence-callout h2 {
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .learn-page-shell .learn-guided-section .sequence-callout p:last-child {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 40rem;
+  }
+
+  .learn-page-shell .learn-guided-section .button {
+    min-height: 3rem;
+  }
+
+  .learn-page-shell .review-invite {
+    padding: 3.2rem 0;
+  }
+
+  .learn-page-shell .review-invite-inner {
+    gap: 2rem;
+  }
+
+  .learn-page-shell .review-invite h2 {
+    font-size: clamp(2.15rem, 3.1vw, 2.95rem);
+    line-height: 1;
+    margin-bottom: 0.65rem;
+    max-width: 17ch;
+  }
+
+  .learn-page-shell .review-invite p:last-child {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    max-width: 42rem;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 981px) {
+  .learn-page-shell .workshop-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .learn-page-shell .workshop-card {
+    min-height: 18rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .learn-page-shell .learn-hero,
+  .learn-page-shell .learn-resources-section,
+  .learn-page-shell .learn-workshops-section,
+  .learn-page-shell .learn-guided-section,
+  .learn-page-shell .review-invite {
+    padding-bottom: 3.5rem;
+    padding-top: 3.5rem;
+  }
+
+  .learn-page-shell .resource-card,
+  .learn-page-shell .workshop-card {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .learn-page-shell .learn-hero,
+  .learn-page-shell .learn-resources-section,
+  .learn-page-shell .learn-workshops-section,
+  .learn-page-shell .learn-guided-section,
+  .learn-page-shell .review-invite {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .learn-page-shell .learn-resources-section .section-heading,
+  .learn-page-shell .learn-workshops-section .section-heading {
+    margin-bottom: 1.6rem;
+  }
+
+  .learn-page-shell .resource-card,
+  .learn-page-shell .workshop-card {
+    padding: 1.1rem;
+  }
+}
+
+
+/* Business Continuity page — compact premium editorial system */
+@media (min-width: 981px) {
+  .business-page-shell .business-hero {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .business-page-shell .business-hero .page-hero-grid.has-aside {
+    gap: clamp(3rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(0, 1.12fr) minmax(22rem, 0.72fr);
+  }
+
+  .business-page-shell .business-hero .page-hero-copy .eyebrow {
+    margin-bottom: 0.9rem;
+  }
+
+  .business-page-shell .business-hero .page-hero-copy h1 {
+    font-size: clamp(3rem, 4.15vw, 4.05rem);
+    line-height: 0.98;
+    margin-bottom: 1rem;
+    max-width: none;
+  }
+
+  .business-page-shell .business-hero .page-hero-copy h1 span {
+    display: block;
+  }
+
+  .business-page-shell .business-hero .hero-lede {
+    font-size: 0.98rem;
+    line-height: 1.5;
+    max-width: 39rem;
+  }
+
+  .business-page-shell .business-hero .button-row {
+    margin-top: 1.35rem;
+  }
+
+  .business-page-shell .business-hero .button {
+    min-height: 3rem;
+  }
+
+  .business-page-shell .business-hero .page-hero-aside {
+    padding: 1.8rem 2rem;
+  }
+
+  .business-page-shell .dual-plan > div {
+    padding: 0.9rem 0;
+  }
+
+  .business-page-shell .dual-plan strong {
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  .business-page-shell .business-intro {
+    padding-bottom: 2.2rem;
+    padding-top: 3rem;
+  }
+
+  .business-page-shell .business-intro .intro-statement {
+    max-width: 54rem;
+  }
+
+  .business-page-shell .business-intro .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
+  .business-page-shell .business-intro h2 {
+    font-size: clamp(2.45rem, 3.75vw, 3.5rem);
+    line-height: 0.99;
+    margin-bottom: 0.7rem;
+    max-width: 14ch;
+  }
+
+  .business-page-shell .business-intro .intro-statement > p:last-child {
+    font-size: 0.96rem;
+    line-height: 1.5;
+    max-width: 43rem;
+  }
+
+  .business-page-shell .framework-stack {
+    padding-bottom: 3.5rem;
+  }
+
+  .business-page-shell .framework-pillar {
+    gap: clamp(2rem, 4vw, 3.5rem);
+    grid-template-columns: minmax(15rem, 0.52fr) minmax(0, 1.48fr);
+    padding: 2.8rem 0;
+  }
+
+  .business-page-shell .framework-pillar-heading {
+    gap: 0.85rem;
+    top: 7.5rem;
+  }
+
+  .business-page-shell .framework-pillar-heading > span {
+    font-size: 0.62rem;
+    height: 2.65rem;
+    width: 2.65rem;
+  }
+
+  .business-page-shell .framework-pillar-heading .eyebrow {
+    margin-bottom: 0.35rem;
+  }
+
+  .business-page-shell .framework-pillar-heading h2 {
+    font-size: clamp(2rem, 2.85vw, 2.7rem);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .business-page-shell .framework-pillar-heading div > p:not(.eyebrow, .pillar-note) {
+    font-size: 0.9rem;
+    line-height: 1.48;
+    max-width: 22rem;
+  }
+
+  .business-page-shell .question-card-grid {
+    gap: 0.62rem;
+  }
+
+  .business-page-shell .question-card {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .business-page-shell .question-index {
+    font-size: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .business-page-shell .question-card h3 {
+    font-size: clamp(1.25rem, 1.65vw, 1.52rem);
+    line-height: 1.07;
+    margin-bottom: 0.4rem;
+  }
+
+  .business-page-shell .question-card > p:not(.also-affects) {
+    font-size: 0.86rem;
+    line-height: 1.48;
+  }
+
+  .business-page-shell .also-affects {
+    font-size: 0.62rem;
+    margin-top: 0.65rem;
+    padding-top: 0.45rem;
+  }
+
+  .business-page-shell .business-boundary-section {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .business-page-shell .boundary-grid {
+    gap: clamp(2rem, 4vw, 3.5rem);
+    grid-template-columns: 1fr 0.78fr;
+  }
+
+  .business-page-shell .boundary-grid .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .business-page-shell .boundary-grid h2 {
+    font-size: clamp(2.15rem, 3.2vw, 3rem);
+    line-height: 1;
+    max-width: 14ch;
+  }
+
+  .business-page-shell .boundary-card {
+    padding: 1.35rem 1.5rem;
+  }
+
+  .business-page-shell .boundary-card h3 {
+    font-size: 1.45rem;
+    line-height: 1.08;
+    margin-bottom: 0.55rem;
+  }
+
+  .business-page-shell .boundary-card p {
+    font-size: 0.86rem;
+    line-height: 1.48;
+  }
+
+  .business-page-shell .review-invite {
+    padding: 3.2rem 0;
+  }
+
+  .business-page-shell .review-invite-inner {
+    gap: 2rem;
+  }
+
+  .business-page-shell .review-invite .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .business-page-shell .review-invite h2 {
+    font-size: clamp(2.15rem, 3.1vw, 2.95rem);
+    line-height: 1;
+    margin-bottom: 0.65rem;
+    max-width: 17ch;
+  }
+
+  .business-page-shell .review-invite p:last-child {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    max-width: 42rem;
+  }
+
+  .business-page-shell .review-invite-actions {
+    gap: 0.7rem;
+  }
+
+  .business-page-shell .review-invite-actions .button {
+    min-height: 3rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .business-page-shell .business-hero,
+  .business-page-shell .business-intro,
+  .business-page-shell .business-boundary-section,
+  .business-page-shell .review-invite {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .business-page-shell .business-hero .page-hero-copy h1 span {
+    display: inline;
+  }
+
+  .business-page-shell .business-hero .page-hero-copy h1 span + span::before {
+    content: " ";
+  }
+
+  .business-page-shell .framework-stack {
+    padding-bottom: 3rem;
+  }
+
+  .business-page-shell .framework-pillar {
+    gap: 1.7rem;
+    padding: 2.5rem 0;
+  }
+
+  .business-page-shell .framework-pillar-heading {
+    top: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .business-page-shell .business-hero,
+  .business-page-shell .business-intro,
+  .business-page-shell .business-boundary-section,
+  .business-page-shell .review-invite {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .business-page-shell .framework-pillar {
+    padding: 2.15rem 0;
+  }
+
+  .business-page-shell .question-card {
+    padding: 1rem 1.05rem;
+  }
+
+  .business-page-shell .boundary-card {
+    padding: 1.15rem;
+  }
+}
+
+
+/* Family Continuity page — compact premium editorial system */
+@media (min-width: 981px) {
+  .family-page-shell .family-hero {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .family-page-shell .family-hero .page-hero-grid.has-aside {
+    gap: clamp(3rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(0, 1.12fr) minmax(22rem, 0.72fr);
+  }
+
+  .family-page-shell .family-hero .page-hero-copy .eyebrow {
+    margin-bottom: 0.9rem;
+  }
+
+  .family-page-shell .family-hero .page-hero-copy h1 {
+    font-size: clamp(3rem, 4.15vw, 4.05rem);
+    line-height: 0.98;
+    margin-bottom: 1rem;
+    max-width: none;
+  }
+
+  .family-page-shell .family-hero .page-hero-copy h1 span {
+    display: block;
+  }
+
+  .family-page-shell .family-hero .hero-lede {
+    font-size: 0.98rem;
+    line-height: 1.5;
+    max-width: 39rem;
+  }
+
+  .family-page-shell .family-hero .button-row {
+    margin-top: 1.35rem;
+  }
+
+  .family-page-shell .family-hero .button {
+    min-height: 3rem;
+  }
+
+  .family-page-shell .family-hero .page-hero-aside {
+    padding: 1.75rem 1.95rem;
+  }
+
+  .family-page-shell .aside-check-list {
+    margin-top: 0.9rem;
+  }
+
+  .family-page-shell .aside-check-list li {
+    font-size: 0.82rem;
+    line-height: 1.42;
+    padding: 0.68rem 0 0.68rem 1.25rem;
+  }
+
+  .family-page-shell .family-intro {
+    padding-bottom: 2.15rem;
+    padding-top: 3rem;
+  }
+
+  .family-page-shell .family-intro .intro-statement {
+    max-width: 54rem;
+  }
+
+  .family-page-shell .family-intro .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
+  .family-page-shell .family-intro h2 {
+    font-size: clamp(2.45rem, 3.75vw, 3.45rem);
+    line-height: 0.99;
+    margin-bottom: 0.7rem;
+    max-width: 14ch;
+  }
+
+  .family-page-shell .family-intro .intro-statement > p:last-child {
+    font-size: 0.96rem;
+    line-height: 1.5;
+    max-width: 43rem;
+  }
+
+  .family-page-shell .framework-stack {
+    padding-bottom: 3.5rem;
+  }
+
+  .family-page-shell .framework-pillar {
+    gap: clamp(2rem, 4vw, 3.5rem);
+    grid-template-columns: minmax(15rem, 0.52fr) minmax(0, 1.48fr);
+    padding: 2.8rem 0;
+  }
+
+  .family-page-shell .framework-pillar-heading {
+    gap: 0.85rem;
+    top: 7.5rem;
+  }
+
+  .family-page-shell .framework-pillar-heading > span {
+    font-size: 0.62rem;
+    height: 2.65rem;
+    width: 2.65rem;
+  }
+
+  .family-page-shell .framework-pillar-heading .eyebrow {
+    margin-bottom: 0.35rem;
+  }
+
+  .family-page-shell .framework-pillar-heading h2 {
+    font-size: clamp(2rem, 2.85vw, 2.7rem);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .family-page-shell .framework-pillar-heading div > p:not(.eyebrow, .pillar-note) {
+    font-size: 0.9rem;
+    line-height: 1.48;
+    max-width: 22rem;
+  }
+
+  .family-page-shell .question-card-grid {
+    gap: 0.62rem;
+  }
+
+  .family-page-shell .question-card {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .family-page-shell .question-index {
+    font-size: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .family-page-shell .question-card h3 {
+    font-size: clamp(1.25rem, 1.65vw, 1.52rem);
+    line-height: 1.07;
+    margin-bottom: 0.4rem;
+  }
+
+  .family-page-shell .question-card > p:not(.also-affects) {
+    font-size: 0.86rem;
+    line-height: 1.48;
+  }
+
+  .family-page-shell .also-affects {
+    font-size: 0.62rem;
+    margin-top: 0.65rem;
+    padding-top: 0.45rem;
+  }
+
+  .family-page-shell .family-boundary-section {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .family-page-shell .boundary-grid {
+    gap: clamp(2rem, 4vw, 3.5rem);
+    grid-template-columns: 1fr 0.78fr;
+  }
+
+  .family-page-shell .boundary-grid .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .family-page-shell .boundary-grid h2 {
+    font-size: clamp(2.15rem, 3.2vw, 3rem);
+    line-height: 1;
+    max-width: 14ch;
+  }
+
+  .family-page-shell .boundary-card {
+    padding: 1.35rem 1.5rem;
+  }
+
+  .family-page-shell .boundary-card h3 {
+    font-size: 1.42rem;
+    line-height: 1.08;
+    margin-bottom: 0.55rem;
+  }
+
+  .family-page-shell .boundary-card p {
+    font-size: 0.85rem;
+    line-height: 1.48;
+  }
+
+  .family-page-shell .review-invite {
+    padding: 3.2rem 0;
+  }
+
+  .family-page-shell .review-invite-inner {
+    gap: 2rem;
+  }
+
+  .family-page-shell .review-invite .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .family-page-shell .review-invite h2 {
+    font-size: clamp(2.15rem, 3.1vw, 2.95rem);
+    line-height: 1;
+    margin-bottom: 0.65rem;
+    max-width: 17ch;
+  }
+
+  .family-page-shell .review-invite p:last-child {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    max-width: 42rem;
+  }
+
+  .family-page-shell .review-invite-actions {
+    gap: 0.7rem;
+  }
+
+  .family-page-shell .review-invite-actions .button {
+    min-height: 3rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .family-page-shell .family-hero,
+  .family-page-shell .family-intro,
+  .family-page-shell .family-boundary-section,
+  .family-page-shell .review-invite {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .family-page-shell .family-hero .page-hero-copy h1 span {
+    display: inline;
+  }
+
+  .family-page-shell .family-hero .page-hero-copy h1 span + span::before {
+    content: " ";
+  }
+
+  .family-page-shell .framework-stack {
+    padding-bottom: 3rem;
+  }
+
+  .family-page-shell .framework-pillar {
+    gap: 1.7rem;
+    padding: 2.5rem 0;
+  }
+
+  .family-page-shell .framework-pillar-heading {
+    top: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .family-page-shell .family-hero,
+  .family-page-shell .family-intro,
+  .family-page-shell .family-boundary-section,
+  .family-page-shell .review-invite {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .family-page-shell .framework-pillar {
+    padding: 2.15rem 0;
+  }
+
+  .family-page-shell .question-card {
+    padding: 1rem 1.05rem;
+  }
+
+  .family-page-shell .boundary-card {
+    padding: 1.15rem;
+  }
+}
+
+
+/* Global header — compact premium treatment */
+.utility-inner {
+  min-height: 1.45rem;
+}
+
+.utility-bar {
+  font-size: 0.64rem;
+  line-height: 1.2;
+}
+
+.header-inner {
+  min-height: 4.65rem;
+}
+
+.brand-link {
+  width: 15.25rem;
+}
+
+.primary-nav {
+  gap: 0.9rem;
+}
+
+.primary-nav ul {
+  gap: 0.82rem;
+}
+
+.primary-nav li a {
+  font-size: 0.77rem;
+}
+
+.primary-nav .button-small {
+  min-height: 2.35rem;
+  padding: 0.48rem 0.9rem;
+}
+
+@media (max-width: 1120px) {
+  .brand-link {
+    width: 14.25rem;
+  }
+
+  .primary-nav {
+    gap: 0.7rem;
+  }
+
+  .primary-nav ul {
+    gap: 0.62rem;
+  }
+
+  .primary-nav li a {
+    font-size: 0.73rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .header-inner {
+    min-height: 4.45rem;
+  }
+
+  .brand-link {
+    width: 13.25rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .header-inner {
+    min-height: 4.1rem;
+  }
+
+  .brand-link {
+    width: 11.75rem;
+  }
+}
+
+
+/* Continuity Bridge methodology page — compact premium editorial system */
+@media (min-width: 981px) {
+  .continuity-page-shell .continuity-method-hero {
+    padding-bottom: 3.35rem;
+    padding-top: 3.35rem;
+  }
+
+  .continuity-page-shell .continuity-method-hero .page-hero-grid.has-aside {
+    gap: clamp(3rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.72fr);
+  }
+
+  .continuity-page-shell .continuity-method-hero .page-hero-copy .eyebrow {
+    margin-bottom: 0.85rem;
+  }
+
+  .continuity-page-shell .continuity-method-hero .page-hero-copy h1 {
+    font-size: clamp(3rem, 4.05vw, 4rem);
+    line-height: 0.98;
+    margin-bottom: 1rem;
+    max-width: none;
+  }
+
+  .continuity-page-shell .continuity-method-hero .page-hero-copy h1 span {
+    display: block;
+  }
+
+  .continuity-page-shell .continuity-method-hero .hero-lede {
+    font-size: 0.97rem;
+    line-height: 1.5;
+    max-width: 39rem;
+  }
+
+  .continuity-page-shell .continuity-method-hero .button-row {
+    margin-top: 1.35rem;
+  }
+
+  .continuity-page-shell .continuity-method-hero .button {
+    min-height: 3rem;
+  }
+
+  .continuity-page-shell .continuity-method-hero .page-hero-aside {
+    padding: 1.7rem 1.9rem;
+  }
+
+  .continuity-page-shell .method-card > .eyebrow {
+    margin-bottom: 0.75rem;
+  }
+
+  .continuity-page-shell .numbered-method li {
+    gap: 0.65rem;
+    grid-template-columns: auto minmax(6.25rem, 0.7fr) 1fr;
+    padding: 0.68rem 0;
+  }
+
+  .continuity-page-shell .numbered-method span {
+    font-size: 0.6rem;
+  }
+
+  .continuity-page-shell .numbered-method strong {
+    font-size: 1.03rem;
+  }
+
+  .continuity-page-shell .numbered-method small {
+    font-size: 0.7rem;
+    line-height: 1.35;
+  }
+
+  .continuity-page-shell .continuity-intro {
+    padding-bottom: 2.8rem;
+    padding-top: 3rem;
+  }
+
+  .continuity-page-shell .continuity-intro .intro-statement {
+    max-width: 54rem;
+  }
+
+  .continuity-page-shell .continuity-intro .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .continuity-page-shell .continuity-intro h2 {
+    font-size: clamp(2.35rem, 3.6vw, 3.3rem);
+    line-height: 0.99;
+    margin-bottom: 0.65rem;
+    max-width: 15ch;
+  }
+
+  .continuity-page-shell .continuity-intro .intro-statement > p:last-child {
+    font-size: 0.94rem;
+    line-height: 1.5;
+    max-width: 43rem;
+  }
+
+  .continuity-page-shell .continuity-explore-section {
+    padding-bottom: 3.6rem;
+    padding-top: 3.6rem;
+  }
+
+  .continuity-page-shell .continuity-explore-section .section-heading {
+    margin-bottom: 1.9rem;
+  }
+
+  .continuity-page-shell .continuity-explore-section .section-heading .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .continuity-page-shell .continuity-explore-section .section-heading h2 {
+    font-size: clamp(2.4rem, 3.5vw, 3.25rem);
+    line-height: 0.98;
+    margin-bottom: 0.55rem;
+  }
+
+  .continuity-page-shell .continuity-explore-section .section-heading > p:last-child {
+    font-size: 0.88rem;
+    line-height: 1.45;
+    max-width: 35rem;
+  }
+
+  .continuity-page-shell .pillar-tabs button {
+    font-size: 0.98rem;
+    min-height: 3.1rem;
+    padding: 0.72rem 0.9rem;
+  }
+
+  .continuity-page-shell .pillar-tabs button span {
+    font-size: 0.58rem;
+    margin-bottom: 0.12rem;
+  }
+
+  .continuity-page-shell .pillar-panel {
+    min-height: 17.5rem;
+    padding: 1.45rem 1.65rem;
+  }
+
+  .continuity-page-shell .pillar-panel-heading {
+    gap: 0.8rem;
+    margin-bottom: 1.25rem;
+    max-width: 40rem;
+  }
+
+  .continuity-page-shell .pillar-number {
+    font-size: 0.66rem;
+    height: 2.3rem;
+    width: 2.3rem;
+  }
+
+  .continuity-page-shell .pillar-panel-heading h3 {
+    font-size: 1.72rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .continuity-page-shell .pillar-panel-heading p {
+    font-size: 0.86rem;
+    line-height: 1.4;
+  }
+
+  .continuity-page-shell .pillar-content-grid {
+    gap: 1rem;
+  }
+
+  .continuity-page-shell .section-dark .detail-label {
+    font-size: 0.58rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .continuity-page-shell .section-dark .line-list li {
+    font-size: 0.78rem;
+    line-height: 1.35;
+    padding: 0.34rem 0;
+  }
+
+  .continuity-page-shell .missing-card {
+    padding: 0.8rem 0.9rem;
+  }
+
+  .continuity-page-shell .missing-card p:last-child {
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .continuity-page-shell .bridge-action {
+    margin-top: 1rem;
+  }
+
+  .continuity-page-shell .bridge-action .button {
+    min-height: 2.8rem;
+  }
+
+  .continuity-page-shell .continuity-method-section {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .continuity-page-shell .continuity-method-section .section-heading {
+    margin-bottom: 1.8rem;
+  }
+
+  .continuity-page-shell .continuity-method-section .split-heading {
+    gap: 2.5rem;
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+
+  .continuity-page-shell .continuity-method-section .section-heading h2 {
+    font-size: clamp(2.25rem, 3.35vw, 3.1rem);
+    line-height: 0.99;
+    max-width: 14ch;
+  }
+
+  .continuity-page-shell .continuity-method-section .section-heading > p:last-child {
+    font-size: 0.86rem;
+    line-height: 1.48;
+    max-width: 31rem;
+  }
+
+  .continuity-page-shell .principle-grid {
+    gap: 0.7rem;
+  }
+
+  .continuity-page-shell .principle-grid article {
+    padding: 1.25rem 1.35rem;
+  }
+
+  .continuity-page-shell .principle-grid article > span {
+    font-size: 0.6rem;
+  }
+
+  .continuity-page-shell .principle-grid h3 {
+    font-size: 1.3rem;
+    line-height: 1.08;
+    margin-bottom: 0.45rem;
+    margin-top: 0.8rem;
+  }
+
+  .continuity-page-shell .principle-grid p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .continuity-page-shell .continuity-pathways-section {
+    padding-bottom: 3.5rem;
+    padding-top: 3.5rem;
+  }
+
+  .continuity-page-shell .continuity-pathways-section .section-heading {
+    margin-bottom: 1.8rem;
+  }
+
+  .continuity-page-shell .continuity-pathways-section .section-heading .eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .continuity-page-shell .continuity-pathways-section .section-heading h2 {
+    font-size: clamp(2.25rem, 3.3vw, 3.05rem);
+    line-height: 0.99;
+    max-width: 16ch;
+  }
+
+  .continuity-page-shell .feature-path-grid {
+    gap: 0.8rem;
+  }
+
+  .continuity-page-shell .feature-path-grid > article {
+    padding: 1.25rem 1.2rem 0;
+  }
+
+  .continuity-page-shell .feature-path-grid h3 {
+    font-size: 1.35rem;
+    line-height: 1.06;
+    margin-bottom: 0.7rem;
+    min-height: 3.8rem;
+  }
+
+  .continuity-page-shell .feature-path-grid .card-kicker {
+    font-size: 0.6rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .continuity-page-shell .feature-path-grid .line-list {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .continuity-page-shell .feature-path-grid .line-list li {
+    padding: 0.38rem 0;
+  }
+
+  .continuity-page-shell .feature-path-grid .text-link {
+    font-size: 0.78rem;
+  }
+
+  .continuity-page-shell .review-invite {
+    padding: 3.15rem 0;
+  }
+
+  .continuity-page-shell .review-invite-inner {
+    gap: 2rem;
+  }
+
+  .continuity-page-shell .review-invite h2 {
+    font-size: clamp(2.1rem, 3vw, 2.9rem);
+    line-height: 1;
+    margin-bottom: 0.65rem;
+    max-width: 17ch;
+  }
+
+  .continuity-page-shell .review-invite p:last-child {
+    font-size: 0.88rem;
+    line-height: 1.48;
+    max-width: 42rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .continuity-page-shell .continuity-method-hero,
+  .continuity-page-shell .continuity-intro,
+  .continuity-page-shell .continuity-explore-section,
+  .continuity-page-shell .continuity-method-section,
+  .continuity-page-shell .continuity-pathways-section,
+  .continuity-page-shell .review-invite {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+
+  .continuity-page-shell .continuity-method-hero .page-hero-copy h1 span {
+    display: inline;
+  }
+
+  .continuity-page-shell .continuity-method-hero .page-hero-copy h1 span + span::before {
+    content: " ";
+  }
+}
+
+@media (max-width: 700px) {
+  .continuity-page-shell .continuity-method-hero,
+  .continuity-page-shell .continuity-intro,
+  .continuity-page-shell .continuity-explore-section,
+  .continuity-page-shell .continuity-method-section,
+  .continuity-page-shell .continuity-pathways-section,
+  .continuity-page-shell .review-invite {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+  }
+
+  .continuity-page-shell .principle-grid article,
+  .continuity-page-shell .feature-path-grid > article {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
