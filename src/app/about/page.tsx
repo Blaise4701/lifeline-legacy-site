@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { ReviewInvite } from "@/components/review-invite";
 import { site } from "@/lib/site-data";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "About Blaise Tamo",
-  description:
-    "Read the founder story behind Lifeline Legacy Financial Group and the lived experience that shaped the Continuity Bridge™ Framework.",
-};
+  description: "Meet Blaise Tamo, Founder of Lifeline Legacy Financial Group and creator of the Continuity Bridge™ framework serving families and business owners in Dallas–Fort Worth.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

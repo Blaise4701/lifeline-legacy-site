@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 import { ReviewInvite } from "@/components/review-invite";
 import { WorkshopRegistration } from "@/components/workshop-registration";
 import { workshops } from "@/lib/site-data";
 
-export const metadata: Metadata = {
-  title: "Learning Center",
-  description:
-    "Plain-language guides, workshops, and educational frameworks for retirement income, family continuity, business continuity, and legacy planning.",
-};
+export const metadata = pageMetadata({
+  title: "Retirement Planning Workshops & Financial Education",
+  description: "Explore retirement planning workshops, guides, and financial education in Dallas–Fort Worth covering retirement income, continuity, protection, and legacy planning.",
+  path: "/learn",
+});
 
 const resources = [
   {

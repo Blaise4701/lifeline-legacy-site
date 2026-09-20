@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/page-hero";
 import { PillarQuestionSection } from "@/components/pillar-question-section";
 import { ReviewInvite } from "@/components/review-invite";
 
-export const metadata: Metadata = {
-  title: "Business Continuity Planning",
-  description:
-    "Educational questions for coordinating owner interruption, key people, business obligations, ownership transition, and personal legacy.",
-};
+export const metadata = pageMetadata({
+  title: "Business Continuity & Succession Planning in DFW",
+  description: "Explore business continuity and succession planning questions for owner interruption, key people, obligations, ownership transition, and owner legacy.",
+  path: "/business-continuity",
+});
 
 const continuity = [
   {

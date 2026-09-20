@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { ContinuityBridge } from "@/components/continuity-bridge";
 import { ReviewInvite } from "@/components/review-invite";
 import { pathways, site, workshops } from "@/lib/site-data";
 
-export const metadata: Metadata = {
-  title: "Education-First Retirement & Legacy Planning | Lifeline Legacy Financial Group",
-  description:
-    "Explore the Continuity Bridge™—an education-first framework for coordinating retirement income, family protection, business continuity, and legacy planning.",
-};
+export const metadata = pageMetadata({
+  title: "Retirement Income & Continuity Planning in DFW",
+  description: "Education-first retirement income, family protection, business continuity, and legacy planning for Dallas–Fort Worth families and business owners.",
+  path: "/",
+});
 
 const scenarios = [
   { pillar: "Continuity", title: "Income and obligations", text: "Bills, benefits, and paychecks do not line up on their own if income pauses." },

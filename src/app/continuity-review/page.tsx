@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Suspense } from "react";
 import { ContinuityReviewForm } from "@/components/continuity-review-form";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Request a Continuity Review",
-  description:
-    "Request a private Continuity Review with Lifeline Legacy Financial Group after exploring your retirement, family, or business continuity questions.",
-};
+  description: "Request a private Continuity Review with Lifeline Legacy Financial Group after exploring your retirement, family, or business continuity questions.",
+  path: "/continuity-review",
+  noindex: true,
+});
 
 export default function ContinuityReviewPage() {
   return (

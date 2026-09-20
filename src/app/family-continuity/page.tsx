@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/page-hero";
 import { PillarQuestionSection } from "@/components/pillar-question-section";
 import { ReviewInvite } from "@/components/review-invite";
 
-export const metadata: Metadata = {
-  title: "Family Continuity Planning",
-  description:
-    "Educational questions for coordinating household income, protection, responsibilities, documents, and beneficiaries through the Continuity Bridge™.",
-};
+export const metadata = pageMetadata({
+  title: "Family Protection & Continuity Planning in DFW",
+  description: "Explore family continuity planning for income protection, responsibilities, beneficiaries, documents, and the people who may need to act when life changes.",
+  path: "/family-continuity",
+});
 
 const continuity = [
   {

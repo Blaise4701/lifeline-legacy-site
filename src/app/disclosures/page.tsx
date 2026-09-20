@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { LegalPage } from "@/components/legal-page";
 import { disclosure, licensedStateCodes, site } from "@/lib/site-data";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Disclosures",
   description: "Important insurance, education, and professional-scope disclosures for Lifeline Legacy Financial Group.",
-};
+  path: "/disclosures",
+});
 
 export default function DisclosuresPage() {
   return (
