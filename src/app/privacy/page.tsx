@@ -15,11 +15,11 @@ export default function PrivacyPage() {
       title="Privacy Policy"
       intro="This policy explains the information this website may collect, why it is used, and the choices available to you."
     >
-      <p className="effective-date">Effective date: to be set at launch</p>
+      <p className="effective-date">Effective date: September 20, 2026</p>
 
       <h2>Information you choose to provide</h2>
       <p>The educational pages and Continuity Checkup can be used without providing account numbers, balances, Social Security numbers, or other sensitive financial credentials.</p>
-      <p>When online review scheduling is connected, you may choose to provide your first name, email address, state, selected learning pathway, and the three descriptive labels shown in your Checkup summary. Raw answers should not be sent to advertising platforms.</p>
+      <p>When you request a Continuity Review, you may choose to provide your first name, email address, mobile number, state, selected pathway, preparation answers, and—only with your permission—the descriptive labels from your Checkup summary. Raw Checkup answers are not sent to Lifeline Legacy through the Checkup itself.</p>
 
       <h2>How information may be used</h2>
       <p>Information you submit may be used to respond to your request, confirm whether insurance services are available in your state, schedule a conversation, provide requested educational material, maintain records, and protect the website from misuse.</p>
