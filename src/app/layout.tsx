@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/fraunces";
 import "@fontsource-variable/public-sans";
+import { AttributionCapture } from "@/components/attribution-capture";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <AttributionCapture />
         <SiteHeader />
         {children}
         <SiteFooter />
