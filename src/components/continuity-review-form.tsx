@@ -152,8 +152,8 @@ export function ContinuityReviewForm() {
   }, [params]);
 
   const prep = useMemo(
-    () => prepOptions[contact?.pathway ?? defaultPathway],
-    [contact?.pathway, defaultPathway],
+    () => prepOptions[contact?.pathway ?? "Retirement"],
+    [contact?.pathway],
   );
 
   async function submitContact(event: FormEvent<HTMLFormElement>) {
