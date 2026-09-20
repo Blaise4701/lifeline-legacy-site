@@ -30,8 +30,7 @@ export default function Home() {
               <p className="eyebrow home-hero-eyebrow">Education-first planning · Dallas–Fort Worth</p>
               <h1>
                 <span>You’ve built the pieces.</span>
-                <span>Do they work as </span>
-                <em>one plan?</em>
+                <span>Do they work as <em>one plan?</em></span>
               </h1>
               <p className="hero-lede">
                 Most people already have pieces—retirement accounts, insurance, savings, benefits, documents, or a business. The real question is whether those pieces are coordinated to keep life moving when circumstances change.
