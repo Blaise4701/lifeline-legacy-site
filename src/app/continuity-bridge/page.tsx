@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ContinuityBridge } from "@/components/continuity-bridge";
 import { PageHero } from "@/components/page-hero";
 import { ReviewInvite } from "@/components/review-invite";
 import { pathways, pillars } from "@/lib/site-data";
 
-export const metadata: Metadata = {
-  title: "The Continuity Bridge™ Framework",
-  description:
-    "Learn how the Continuity Bridge™ coordinates Continuity, Certainty, and Legacy across retirement, family, and business planning.",
-};
+export const metadata = pageMetadata({
+  title: "Continuity Bridge™ Financial Planning Framework",
+  description: "Explore the Continuity Bridge™ framework for coordinating Continuity, Certainty, and Legacy across retirement, family, and business planning.",
+  path: "/continuity-bridge",
+});
 
 export default function ContinuityBridgePage() {
   return (
