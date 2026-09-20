@@ -3266,3 +3266,93 @@ ul:last-child {
     font-size: 0.86rem;
   }
 }
+
+
+/* Compact Continuity Bridge section while preserving the premium editorial feel */
+@media (min-width: 981px) {
+  .bridge-section {
+    padding-bottom: 4rem;
+    padding-top: 4rem;
+  }
+
+  .bridge-section .section-heading {
+    margin-bottom: 2rem;
+  }
+
+  .bridge-section .section-heading h2 {
+    font-size: clamp(2.8rem, 4vw, 3.8rem);
+  }
+
+  .bridge-section .section-heading > p:last-child {
+    font-size: 1rem;
+    line-height: 1.55;
+    max-width: 38rem;
+  }
+
+  .pillar-tabs button {
+    font-size: 1.12rem;
+    padding: 0.9rem 1.05rem;
+  }
+
+  .pillar-tabs button span {
+    font-size: 0.6rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .pillar-panel {
+    min-height: 20.5rem;
+    padding: 2rem 2.25rem;
+  }
+
+  .pillar-panel-heading {
+    gap: 1rem;
+    margin-bottom: 1.7rem;
+    max-width: 43rem;
+  }
+
+  .pillar-number {
+    height: 2.65rem;
+    width: 2.65rem;
+  }
+
+  .pillar-panel-heading h3 {
+    font-size: 2.05rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .pillar-panel-heading p {
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  .pillar-content-grid {
+    gap: 1.6rem;
+  }
+
+  .pillar-content-grid .detail-label {
+    margin-bottom: 0.5rem;
+  }
+
+  .section-dark .line-list li {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    padding: 0.48rem 0;
+  }
+
+  .missing-card {
+    padding: 1rem 1.1rem;
+  }
+
+  .missing-card p:last-child {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .bridge-action {
+    margin-top: 1.35rem;
+  }
+
+  .bridge-action .button {
+    min-height: 3rem;
+  }
+}
