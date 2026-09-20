@@ -64,9 +64,10 @@ const resources = [
 
 export default function LearnPage() {
   return (
-    <>
+    <div className="learn-page-shell">
       <main id="main-content">
         <PageHero
+          className="learn-hero"
           eyebrow="The LLFG learning center"
           title={<>Learn the structure before you choose a solution.</>}
           description="Better decisions begin with better questions. Explore plain-language guides and conversations that show how income, protection, people, and documents fit together."
@@ -74,7 +75,7 @@ export default function LearnPage() {
           secondary={{ href: "/checkup", label: "Take the Continuity Checkup" }}
         />
 
-        <section className="section" id="resources">
+        <section className="section learn-resources-section" id="resources">
           <div className="container">
             <div className="section-heading split-heading">
               <div>
@@ -100,7 +101,7 @@ export default function LearnPage() {
           </div>
         </section>
 
-        <section className="section section-dark" id="workshops" aria-labelledby="workshops-title">
+        <section className="section section-dark learn-workshops-section" id="workshops" aria-labelledby="workshops-title">
           <div className="container">
             <div className="section-heading centered-heading heading-light">
               <p className="eyebrow eyebrow-light">Fall 2026 retirement education series</p>
@@ -130,7 +131,7 @@ export default function LearnPage() {
           </div>
         </section>
 
-        <section className="section section-paper">
+        <section className="section section-paper learn-guided-section">
           <div className="container sequence-callout">
             <div>
               <p className="eyebrow">Prefer a guided starting point?</p>
@@ -142,6 +143,6 @@ export default function LearnPage() {
         </section>
       </main>
       <ReviewInvite />
-    </>
+    </div>
   );
 }

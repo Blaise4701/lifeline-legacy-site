@@ -13,11 +13,38 @@ export const metadata: Metadata = {
 
 const scenarios = [
   { pillar: "Continuity", title: "Income and obligations", text: "Bills, benefits, and paychecks do not line up on their own if income pauses." },
-  { pillar: "Continuity", title: "Who steps in", text: "Someone may need to act. Would they know where things are and what comes next?" },
   { pillar: "Certainty", title: "Withdrawal order", text: "Accounts opened at different times can work at cross-purposes without a written sequence." },
-  { pillar: "Certainty", title: "Benefit timing", text: "Social Security, pensions, and savings can each run on a different clock." },
   { pillar: "Legacy", title: "Beneficiaries and documents", text: "Wishes, paperwork, ownership, and beneficiaries can drift apart as life changes." },
+  { pillar: "Continuity", title: "Who steps in", text: "Someone may need to act. Would they know where things are and what comes next?" },
+  { pillar: "Certainty", title: "Benefit timing", text: "Social Security, pensions, and savings can each run on a different clock." },
   { pillar: "Legacy", title: "Business ownership", text: "A business can be a family’s largest asset with no clear plan for the next owner." },
+] as const;
+
+const scenarioPillarNumbers = {
+  Continuity: "01",
+  Certainty: "02",
+  Legacy: "03",
+} as const;
+
+const homePathways = [
+  {
+    ...pathways[0],
+    label: "Retirement",
+    title: "Turn your retirement pieces into a written income plan.",
+    cta: "Explore retirement planning",
+  },
+  {
+    ...pathways[1],
+    label: "Families",
+    title: "Keep the household steady when life changes.",
+    cta: "Explore family planning",
+  },
+  {
+    ...pathways[2],
+    label: "Business",
+    title: "Protect the business, the owner, and the people who depend on both.",
+    cta: "Explore business planning",
+  },
 ] as const;
 
 export default function Home() {
@@ -27,8 +54,11 @@ export default function Home() {
         <section className="home-hero">
           <div className="container home-hero-grid">
             <div className="home-hero-copy">
-              <p className="eyebrow">Education-first planning · Dallas–Fort Worth</p>
-              <h1>You’ve built the pieces. Do they work as <em>one plan?</em></h1>
+              <p className="eyebrow home-hero-eyebrow">Education-first planning · Dallas–Fort Worth</p>
+              <h1>
+                <span>You’ve built the pieces.</span>
+                <span>Do they work as <em>one plan?</em></span>
+              </h1>
               <p className="hero-lede">
                 Most people already have pieces—retirement accounts, insurance, savings, benefits, documents, or a business. The real question is whether those pieces are coordinated to keep life moving when circumstances change.
               </p>
@@ -36,41 +66,58 @@ export default function Home() {
                 <Link className="button" href="#bridge">Explore the Continuity Bridge</Link>
                 <Link className="button button-outline" href="/checkup">Take the Continuity Checkup</Link>
               </div>
-              <p className="hero-note">No account numbers. No upfront contact form. Start with the questions.</p>
+              <p className="hero-note">
+                <span>Start with the questions</span>
+                <span>No account numbers</span>
+                <span>No upfront contact form</span>
+              </p>
             </div>
             <div className="hero-bridge-visual" aria-label="The Continuity Bridge has three connected sections: Continuity, Certainty, and Legacy">
               <div className="bridge-arch" aria-hidden="true">
                 <span className="arch-line arch-one" />
                 <span className="arch-line arch-two" />
                 <span className="arch-line arch-three" />
+                <span className="arch-line arch-four" />
+                <span className="arch-line arch-five" />
+                <span className="arch-line arch-six" />
+                <span className="arch-line arch-seven" />
                 <span className="bridge-deck" />
               </div>
               <p>The question behind every plan</p>
-              <blockquote>If life changes tomorrow, will the people who depend on you be okay?</blockquote>
+              <blockquote>
+                <span>If life changes tomorrow,</span>
+                <strong>will the people who depend on you be okay?</strong>
+              </blockquote>
               <div className="hero-pillars"><span>Continuity</span><span>Certainty</span><span>Legacy</span></div>
             </div>
           </div>
         </section>
 
-        <section className="section section-paper">
+        <section className="section section-paper pathways-overview">
           <div className="container">
-            <div className="section-heading split-heading">
-              <div>
-                <p className="eyebrow">Start where you are</p>
-                <h2>Different starting points. One connected method.</h2>
-              </div>
-              <p>Each situation raises different questions. All three move across the same Continuity Bridge™.</p>
+            <div className="pathways-overview-heading">
+              <p className="eyebrow">Start where you are</p>
+              <h2>
+                <span>Different starting points.</span>
+                <span>One connected method.</span>
+              </h2>
+              <p>Each situation begins differently. Every path moves through the same Continuity Bridge™.</p>
             </div>
-            <div className="pathway-card-grid">
-              {pathways.map((pathway, index) => (
-                <article className="pathway-card" key={pathway.label}>
-                  <span className="card-number">0{index + 1}</span>
-                  <p className="card-kicker">{pathway.label}</p>
+
+            <div className="pathways-editorial-grid">
+              {homePathways.map((pathway, index) => (
+                <article className="pathway-editorial" key={pathway.href}>
+                  <div className="pathway-editorial-topline">
+                    <p className="card-kicker">{pathway.label}</p>
+                    <span className="pathway-editorial-number" aria-hidden="true">0{index + 1}</span>
+                  </div>
                   <h3>{pathway.title}</h3>
                   <ul>
                     {pathway.points.slice(0, 3).map((point) => <li key={point}>{point}</li>)}
                   </ul>
-                  <Link className="text-link" href={pathway.href}>Explore {pathway.label.toLowerCase()} planning <span aria-hidden="true">→</span></Link>
+                  <Link className="text-link pathway-editorial-link" href={pathway.href}>
+                    {pathway.cta} <span aria-hidden="true">→</span>
+                  </Link>
                 </article>
               ))}
             </div>
@@ -114,19 +161,22 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section section-sage">
+        <section className="section section-sage scenario-section">
           <div className="container">
-            <div className="section-heading split-heading">
-              <div>
-                <p className="eyebrow">Educational scenarios</p>
-                <h2>What can become disconnected?</h2>
-              </div>
+            <div className="scenario-heading">
+              <p className="eyebrow">Educational scenarios</p>
+              <h2>What can become disconnected?</h2>
               <p>Strong individual pieces do not automatically create a coordinated plan.</p>
             </div>
             <div className="scenario-grid">
               {scenarios.map((scenario) => (
-                <article className="scenario-card" key={scenario.title}>
-                  <p className={`pillar-tag pillar-${scenario.pillar.toLowerCase()}`}>{scenario.pillar}</p>
+                <article
+                  className={`scenario-card scenario-${scenario.pillar.toLowerCase()}`}
+                  key={scenario.title}
+                >
+                  <p className={`pillar-tag pillar-${scenario.pillar.toLowerCase()}`}>
+                    <span>{scenarioPillarNumbers[scenario.pillar]}</span> · {scenario.pillar}
+                  </p>
                   <h3>{scenario.title}</h3>
                   <p>{scenario.text}</p>
                 </article>

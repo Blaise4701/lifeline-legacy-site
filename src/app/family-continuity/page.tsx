@@ -53,11 +53,17 @@ const legacy = [
 
 export default function FamilyContinuityPage() {
   return (
-    <>
+    <div className="family-page-shell">
       <main id="main-content">
         <PageHero
+          className="family-hero"
           eyebrow="Family planning · The Continuity Bridge™"
-          title={<>Protecting a family is more than owning a policy.</>}
+          title={
+            <>
+              <span>Protecting a family is more</span>
+              <span>than owning a policy.</span>
+            </>
+          }
           description="Protection becomes useful when income, responsibilities, documents, and the people who may need to act are coordinated around the same plan."
           primary={{ href: "#family-questions", label: "Explore the family questions" }}
           secondary={{ href: "/checkup", label: "Take the Continuity Checkup" }}
@@ -74,7 +80,7 @@ export default function FamilyContinuityPage() {
           }
         />
 
-        <section className="content-section" id="family-questions">
+        <section className="content-section family-intro" id="family-questions">
           <div className="container intro-statement">
             <p className="eyebrow">Seven connected questions</p>
             <h2>Start with how the family would keep functioning.</h2>
@@ -88,7 +94,7 @@ export default function FamilyContinuityPage() {
           <PillarQuestionSection number="03" pillar="Legacy" description="Aligning the people, documents, and intentions that carry the family forward." questions={legacy} />
         </div>
 
-        <section className="section section-sage">
+        <section className="section section-sage family-boundary-section">
           <div className="container boundary-grid">
             <div>
               <p className="eyebrow">What coordination can do</p>
@@ -101,7 +107,7 @@ export default function FamilyContinuityPage() {
           </div>
         </section>
       </main>
-      <ReviewInvite />
-    </>
+      <ReviewInvite path="family" />
+    </div>
   );
 }

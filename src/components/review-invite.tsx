@@ -1,6 +1,14 @@
 import Link from "next/link";
 
-export function ReviewInvite() {
+type ReviewInviteProps = {
+  path?: "retirement" | "family" | "business";
+};
+
+export function ReviewInvite({ path }: ReviewInviteProps) {
+  const reviewHref = path
+    ? `/continuity-review?path=${path}&source=${path}`
+    : "/continuity-review";
+
   return (
     <section className="review-invite" aria-labelledby="review-invite-title">
       <div className="container review-invite-inner">
@@ -12,7 +20,7 @@ export function ReviewInvite() {
           </p>
         </div>
         <div className="review-invite-actions">
-          <Link className="button button-gold" href="/checkup#review">
+          <Link className="button button-gold" href={reviewHref}>
             Request a Continuity Review
           </Link>
           <Link className="text-link text-link-light" href="/checkup">
