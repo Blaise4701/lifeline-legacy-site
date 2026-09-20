@@ -468,6 +468,11 @@ export async function POST(request: Request) {
     source = `LLFG Website · ${normalizedSource(submission.attribution.source || "website")}`;
 
     if (submission.type === "continuity-review-complete") {
+      customFields.push({
+        key: "llfg_learning_interest",
+        fieldValue: submission.primaryConcern,
+      });
+
       if (submission.shareCheckup && submission.checkup) {
         customFields.push(
           { key: "llfg_continuity_summary", fieldValue: submission.checkup.summaries.continuity },
@@ -550,6 +555,7 @@ export async function POST(request: Request) {
       "llfg-review-prepared",
       "llfg-continuity-review-request",
       `llfg-stage-${slug(submission.stage)}`,
+      `llfg-concern-${slug(submission.primaryConcern)}`,
       `llfg-plan-${slug(submission.planStatus)}`,
     ];
 
