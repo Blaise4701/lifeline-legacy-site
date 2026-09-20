@@ -53,11 +53,17 @@ const legacy = [
 
 export default function BusinessContinuityPage() {
   return (
-    <>
+    <div className="business-page-shell">
       <main id="main-content">
         <PageHero
+          className="business-hero"
           eyebrow="Business owners · The Continuity Bridge™"
-          title={<>The business may be the asset. The owner may be the system.</>}
+          title={
+            <>
+              <span>The business may be the asset.</span>
+              <span>The owner may be the system.</span>
+            </>
+          }
           description="Business continuity connects what happens to the company with what happens to the owner, the household, employees, partners, and the value intended for the next chapter."
           primary={{ href: "#business-questions", label: "Explore the owner questions" }}
           secondary={{ href: "/checkup", label: "Take the Continuity Checkup" }}
@@ -72,7 +78,7 @@ export default function BusinessContinuityPage() {
           }
         />
 
-        <section className="content-section" id="business-questions">
+        <section className="content-section business-intro" id="business-questions">
           <div className="container intro-statement">
             <p className="eyebrow">Seven connected questions</p>
             <h2>Plan for the company and the person behind it.</h2>
@@ -86,7 +92,7 @@ export default function BusinessContinuityPage() {
           <PillarQuestionSection number="03" pillar="Legacy" description="Transferring ownership, responsibility, and value with less confusion." questions={legacy} />
         </div>
 
-        <section className="section section-sage">
+        <section className="section section-sage business-boundary-section">
           <div className="container boundary-grid">
             <div>
               <p className="eyebrow">A useful distinction</p>
@@ -99,7 +105,7 @@ export default function BusinessContinuityPage() {
           </div>
         </section>
       </main>
-      <ReviewInvite />
-    </>
+      <ReviewInvite path="business" />
+    </div>
   );
 }
