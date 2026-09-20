@@ -50,6 +50,10 @@ export default function Home() {
                 <span className="arch-line arch-one" />
                 <span className="arch-line arch-two" />
                 <span className="arch-line arch-three" />
+                <span className="arch-line arch-four" />
+                <span className="arch-line arch-five" />
+                <span className="arch-line arch-six" />
+                <span className="arch-line arch-seven" />
                 <span className="bridge-deck" />
               </div>
               <p>The question behind every plan</p>
