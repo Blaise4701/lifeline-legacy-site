@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ContinuityCheckup } from "@/components/continuity-checkup";
 
-export const metadata: Metadata = {
-  title: "Continuity Checkup",
-  description:
-    "Answer five plain-language questions and receive an educational summary organized by Continuity, Certainty, and Legacy.",
-};
+export const metadata = pageMetadata({
+  title: "Financial Continuity Checkup",
+  description: "Answer five plain-language questions and receive an educational summary organized around Continuity, Certainty, and Legacy—without entering account balances or numbers.",
+  path: "/checkup",
+});
 
 export default function CheckupPage() {
   return (
