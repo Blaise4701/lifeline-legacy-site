@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 import { PillarQuestionSection } from "@/components/pillar-question-section";
 import { ReviewInvite } from "@/components/review-invite";
 
-export const metadata: Metadata = {
-  title: "Retirement Income Planning",
-  description:
-    "Eight questions your written retirement income plan should answer, organized through the Continuity Bridge™.",
-};
+export const metadata = pageMetadata({
+  title: "Retirement Income Planning in Dallas–Fort Worth",
+  description: "Learn the eight questions a written retirement income plan should answer, including Social Security, withdrawal order, taxes, healthcare, market risk, and survivor income.",
+  path: "/retirement-income",
+});
 
 const continuity = [
   {
