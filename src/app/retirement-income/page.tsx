@@ -59,11 +59,18 @@ const legacy = [
 
 export default function RetirementIncomePage() {
   return (
-    <>
+    <div className="retirement-page-shell">
       <main id="main-content">
         <PageHero
+          className="retirement-hero"
           eyebrow="Retirement income · The Continuity Bridge™"
-          title={<>From accumulating assets to coordinating dependable income.</>}
+          title={
+            <>
+              <span>From accumulating assets</span>
+              <span>to coordinating dependable</span>
+              <span>income.</span>
+            </>
+          }
           description="For decades, the goal was to build. Retirement asks a different question: how do the pieces turn into income you can rely on, for as long as you need it?"
           primary={{ href: "#questions", label: "Explore the eight questions" }}
           secondary={{ href: "/checkup", label: "Take the Continuity Checkup" }}
@@ -108,7 +115,7 @@ export default function RetirementIncomePage() {
           />
         </div>
 
-        <section className="section section-paper">
+        <section className="section section-paper retirement-sequence-section">
           <div className="container sequence-callout">
             <div>
               <p className="eyebrow">Educational resource in development</p>
@@ -119,7 +126,7 @@ export default function RetirementIncomePage() {
           </div>
         </section>
       </main>
-      <ReviewInvite />
-    </>
+      <ReviewInvite path="retirement" />
+    </div>
   );
 }
