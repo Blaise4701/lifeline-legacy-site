@@ -12,7 +12,7 @@ export function ReviewInvite() {
           </p>
         </div>
         <div className="review-invite-actions">
-          <Link className="button button-gold" href="/checkup#review">
+          <Link className="button button-gold" href="/continuity-review">
             Request a Continuity Review
           </Link>
           <Link className="text-link text-link-light" href="/checkup">
