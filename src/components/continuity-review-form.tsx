@@ -241,7 +241,6 @@ export function ContinuityReviewForm() {
     const stage = String(data.get("stage") ?? "");
     const primaryConcern = String(data.get("primaryConcern") ?? "");
     const planStatus = String(data.get("planStatus") ?? "");
-    const whatWouldHelp = String(data.get("whatWouldHelp") ?? "").trim();
 
     if (!stage || !primaryConcern || !planStatus) {
       setFormError("Answer the three preparation questions to continue.");
@@ -260,7 +259,6 @@ export function ContinuityReviewForm() {
           stage,
           primaryConcern,
           planStatus,
-          whatWouldHelp,
           shareCheckup,
           checkup: shareCheckup ? checkup : null,
           attribution: {
