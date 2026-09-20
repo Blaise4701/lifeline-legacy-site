@@ -3453,3 +3453,14 @@ ul:last-child {
     padding: 1.8rem;
   }
 }
+
+
+/* Use the sample-question card width more effectively on desktop */
+@media (min-width: 981px) {
+  .sample-question-card h3 {
+    font-size: clamp(1.85rem, 2.25vw, 2.45rem);
+    line-height: 1.02;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+}
