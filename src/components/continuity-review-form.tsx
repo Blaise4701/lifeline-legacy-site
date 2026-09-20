@@ -148,7 +148,7 @@ export function ContinuityReviewForm() {
 
     if (storedCheckup) setCheckup(storedCheckup);
     if (storedAttribution) setAttribution(storedAttribution);
-    setDefaultPathway(fromQuery ?? storedCheckup?.pathway ?? "");
+    setDefaultPathway(fromQuery ?? "");
   }, [params]);
 
   const prep = useMemo(
@@ -428,7 +428,8 @@ export function ContinuityReviewForm() {
           </label>
           <label className="form-full">
             <span>What would you like to review?</span>
-            <select name="pathway" key={defaultPathway} defaultValue={defaultPathway} required>
+            <select name="pathway" key={defaultPathway || "choose"} defaultValue={defaultPathway} required>
+              <option value="" disabled>Choose a pathway</option>
               {PATHWAYS.map((pathway) => <option key={pathway}>{pathway}</option>)}
             </select>
           </label>
