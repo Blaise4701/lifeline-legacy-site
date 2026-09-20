@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@fontsource-variable/fraunces";
 import "@fontsource-variable/public-sans";
 import { AttributionCapture } from "@/components/attribution-capture";
+import { SeoStructuredData } from "@/components/seo-structured-data";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
@@ -14,27 +15,26 @@ export const metadata: Metadata = {
     template: "%s | Lifeline Legacy Financial Group",
   },
   description:
-    "Education-first retirement income, family protection, business continuity, and legacy planning through the Continuity Bridge™.",
+    "Education-first retirement income, family protection, business continuity, and legacy planning for families and business owners in Dallas–Fort Worth.",
   applicationName: "Lifeline Legacy Financial Group",
-  keywords: [
-    "retirement income planning",
-    "life insurance education",
-    "annuities",
-    "legacy protection",
-    "business continuity",
-    "Dallas Fort Worth",
-  ],
+  creator: "Lifeline Legacy Financial Group",
+  publisher: "Lifeline Legacy Financial Group",
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Lifeline Legacy Financial Group",
     title: "Lifeline Legacy Financial Group",
     description:
-      "Education first. A clearer way to coordinate continuity, certainty, and legacy.",
+      "Education-first planning built around Continuity, Certainty, and Legacy.",
+    url: "https://lifelinelegacyfinancial.com",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
 };
 
@@ -42,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <SeoStructuredData />
         <AttributionCapture />
         <SiteHeader />
         {children}
