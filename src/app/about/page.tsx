@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="about-page-shell">
       <main id="main-content">
         <section className="about-hero">
           <div className="container about-hero-grid">
@@ -41,7 +41,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="section">
+        <section className="section about-story-section">
           <div className="container story-grid">
             <div className="story-aside">
               <p className="eyebrow">The founder story</p>
@@ -77,7 +77,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="section section-sage">
+        <section className="section section-sage about-values-section">
           <div className="container values-grid">
             <article><span>01</span><h3>Educate first</h3><p>Begin with the questions, language, and structure people need to make an informed decision.</p></article>
             <article><span>02</span><h3>Invite second</h3><p>Offer a conversation after the visitor has context—not as the price of receiving it.</p></article>
@@ -85,7 +85,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="section">
+        <section className="section about-contact-section">
           <div className="container contact-band">
             <div>
               <p className="eyebrow">Lifeline Legacy Financial Group</p>
@@ -101,6 +101,6 @@ export default function AboutPage() {
         </section>
       </main>
       <ReviewInvite />
-    </>
+    </div>
   );
 }
