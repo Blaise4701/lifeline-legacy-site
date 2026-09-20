@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
+import { canonicalSiteUrl } from "@/lib/seo";
 
 const routes = [
   "",
   "/continuity-bridge",
   "/checkup",
-  "/continuity-review",
   "/retirement-income",
   "/family-continuity",
   "/business-continuity",
@@ -17,9 +17,6 @@ const routes = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({
-    url: `https://lifelinelegacyfinancial.com${route}`,
-    lastModified: new Date(),
-    changeFrequency: route === "" ? "monthly" : "yearly",
-    priority: route === "" ? 1 : route === "/checkup" ? 0.9 : route === "/continuity-review" ? 0.8 : 0.7,
+    url: `${canonicalSiteUrl}${route}`,
   }));
 }
