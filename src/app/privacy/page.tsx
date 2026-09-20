@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { LegalPage } from "@/components/legal-page";
 import { licensedStateCodes, site } from "@/lib/site-data";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Privacy Policy",
   description: "Privacy information for Lifeline Legacy Financial Group website visitors.",
-};
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (
