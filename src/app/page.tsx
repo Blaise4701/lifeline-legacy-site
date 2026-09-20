@@ -20,6 +20,27 @@ const scenarios = [
   { pillar: "Legacy", title: "Business ownership", text: "A business can be a family’s largest asset with no clear plan for the next owner." },
 ] as const;
 
+const homePathways = [
+  {
+    ...pathways[0],
+    label: "Retirement",
+    title: "Turn your retirement pieces into a written income plan.",
+    cta: "Explore retirement planning",
+  },
+  {
+    ...pathways[1],
+    label: "Families",
+    title: "Keep the household steady when life changes.",
+    cta: "Explore family planning",
+  },
+  {
+    ...pathways[2],
+    label: "Business",
+    title: "Protect the business, the owner, and the people who depend on both.",
+    cta: "Explore business planning",
+  },
+] as const;
+
 export default function Home() {
   return (
     <>
@@ -66,25 +87,31 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section section-paper">
+        <section className="section section-paper pathways-overview">
           <div className="container">
-            <div className="section-heading split-heading">
-              <div>
-                <p className="eyebrow">Start where you are</p>
-                <h2>Different starting points. One connected method.</h2>
-              </div>
-              <p>Each situation raises different questions. All three move across the same Continuity Bridge™.</p>
+            <div className="pathways-overview-heading">
+              <p className="eyebrow">Start where you are</p>
+              <h2>
+                <span>Different starting points.</span>
+                <span>One connected method.</span>
+              </h2>
+              <p>Each situation begins differently. Every path moves through the same Continuity Bridge™.</p>
             </div>
-            <div className="pathway-card-grid">
-              {pathways.map((pathway, index) => (
-                <article className="pathway-card" key={pathway.label}>
-                  <span className="card-number">0{index + 1}</span>
-                  <p className="card-kicker">{pathway.label}</p>
+
+            <div className="pathways-editorial-grid">
+              {homePathways.map((pathway, index) => (
+                <article className="pathway-editorial" key={pathway.href}>
+                  <div className="pathway-editorial-topline">
+                    <p className="card-kicker">{pathway.label}</p>
+                    <span className="pathway-editorial-number" aria-hidden="true">0{index + 1}</span>
+                  </div>
                   <h3>{pathway.title}</h3>
                   <ul>
                     {pathway.points.slice(0, 3).map((point) => <li key={point}>{point}</li>)}
                   </ul>
-                  <Link className="text-link" href={pathway.href}>Explore {pathway.label.toLowerCase()} planning <span aria-hidden="true">→</span></Link>
+                  <Link className="text-link pathway-editorial-link" href={pathway.href}>
+                    {pathway.cta} <span aria-hidden="true">→</span>
+                  </Link>
                 </article>
               ))}
             </div>
