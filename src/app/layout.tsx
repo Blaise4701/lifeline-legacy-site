@@ -5,6 +5,7 @@ import { AttributionCapture } from "@/components/attribution-capture";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
+import "./review.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lifelinelegacyfinancial.com"),
