@@ -3464,3 +3464,106 @@ ul:last-child {
     text-wrap: balance;
   }
 }
+
+
+/* Compact, pillar-coded Educational Scenarios */
+.scenario-section {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(17, 99, 77, 0.035), transparent 22rem),
+    var(--sage-50);
+}
+
+.scenario-heading {
+  margin-bottom: 2rem;
+  max-width: 48rem;
+}
+
+.scenario-heading .eyebrow {
+  margin-bottom: 0.7rem;
+}
+
+.scenario-heading h2 {
+  font-size: clamp(2.7rem, 4.2vw, 3.9rem);
+  line-height: 0.99;
+  margin-bottom: 0.8rem;
+  max-width: 13ch;
+}
+
+.scenario-heading > p:last-child {
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  max-width: 36rem;
+}
+
+.scenario-section .scenario-grid {
+  gap: 0.8rem;
+}
+
+.scenario-section .scenario-card {
+  border: 1px solid rgba(6, 45, 36, 0.09);
+  border-top-width: 3px;
+  min-height: 10.75rem;
+  padding: 1.25rem 1.35rem 1.2rem;
+}
+
+.scenario-section .scenario-card h3 {
+  font-size: clamp(1.35rem, 1.8vw, 1.6rem);
+  line-height: 1.06;
+  margin-bottom: 0.6rem;
+}
+
+.scenario-section .scenario-card > p:last-child {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.scenario-section .pillar-tag {
+  font-size: 0.64rem;
+  letter-spacing: 0.11em;
+  margin-bottom: 0.9rem;
+}
+
+.scenario-section .pillar-tag span {
+  font-weight: 800;
+}
+
+.scenario-continuity {
+  background: #e4eee7;
+  border-top-color: #27614e !important;
+}
+
+.scenario-certainty {
+  background: #f3ebd8;
+  border-top-color: #9b762d !important;
+}
+
+.scenario-legacy {
+  background: #e7e9e4;
+  border-top-color: #586a61 !important;
+}
+
+.scenario-section .fine-print {
+  margin-top: 0.9rem;
+}
+
+@media (min-width: 981px) {
+  .scenario-section {
+    padding-bottom: 3.4rem;
+    padding-top: 3.4rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .scenario-heading {
+    margin-bottom: 1.6rem;
+  }
+
+  .scenario-heading h2 {
+    font-size: clamp(2.45rem, 11vw, 3.35rem);
+  }
+
+  .scenario-section .scenario-card {
+    min-height: 0;
+  }
+}
