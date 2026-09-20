@@ -12,6 +12,7 @@ type PageHeroProps = {
   primary?: HeroLink;
   secondary?: HeroLink;
   aside?: React.ReactNode;
+  className?: string;
 };
 
 export function PageHero({
@@ -21,9 +22,10 @@ export function PageHero({
   primary,
   secondary,
   aside,
+  className,
 }: PageHeroProps) {
   return (
-    <section className="page-hero">
+    <section className={`page-hero ${className ?? ""}`}>
       <div className={`container page-hero-grid ${aside ? "has-aside" : ""}`}>
         <div className="page-hero-copy">
           <p className="eyebrow">{eyebrow}</p>
