@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 const routes = [
   "",
   "/continuity-bridge",
-  "/checkup",
+  "/checkup",\n  "/continuity-review",
   "/retirement-income",
   "/family-continuity",
   "/business-continuity",
@@ -19,6 +19,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `https://lifelinelegacyfinancial.com${route}`,
     lastModified: new Date(),
     changeFrequency: route === "" ? "monthly" : "yearly",
-    priority: route === "" ? 1 : route === "/checkup" ? 0.9 : 0.7,
+    priority: route === "" ? 1 : route === "/checkup" ? 0.9 : route === "/continuity-review" ? 0.8 : 0.7,
   }));
 }
