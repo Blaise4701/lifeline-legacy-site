@@ -15,7 +15,7 @@ export default function TermsPage() {
       title="Terms of Use"
       intro="These terms describe the educational purpose of this website and the limits of the information provided."
     >
-      <p className="effective-date">Effective date: to be set at launch</p>
+      <p className="effective-date">Effective date: September 20, 2026</p>
 
       <h2>Educational information only</h2>
       <p>Website content, examples, questions, Checkup summaries, workshops, and guides are for general educational purposes. They are not individualized legal, tax, investment, accounting, or financial advice.</p>
