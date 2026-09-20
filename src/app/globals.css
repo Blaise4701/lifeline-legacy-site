@@ -3650,3 +3650,219 @@ ul:last-child {
     content: " ";
   }
 }
+
+
+/* Retirement page — compact premium system */
+.retirement-page-shell .retirement-intro {
+  padding-bottom: 2rem;
+  padding-top: 3.1rem;
+}
+
+.retirement-page-shell .intro-statement {
+  max-width: 54rem;
+}
+
+.retirement-page-shell .intro-statement .eyebrow {
+  margin-bottom: 0.65rem;
+}
+
+.retirement-page-shell .intro-statement h2 {
+  font-size: clamp(2.5rem, 4vw, 3.65rem);
+  line-height: 0.99;
+  margin-bottom: 0.75rem;
+  max-width: 17ch;
+}
+
+.retirement-page-shell .intro-statement > p:last-child {
+  font-size: 0.98rem;
+  line-height: 1.52;
+  max-width: 43rem;
+}
+
+.retirement-page-shell .framework-stack {
+  padding-bottom: 3.6rem;
+}
+
+.retirement-page-shell .framework-pillar {
+  gap: clamp(2rem, 4vw, 3.5rem);
+  grid-template-columns: minmax(15rem, 0.52fr) minmax(0, 1.48fr);
+  padding: 3rem 0;
+}
+
+.retirement-page-shell .framework-pillar-heading {
+  gap: 0.9rem;
+  top: 7.5rem;
+}
+
+.retirement-page-shell .framework-pillar-heading > span {
+  font-size: 0.64rem;
+  height: 2.7rem;
+  width: 2.7rem;
+}
+
+.retirement-page-shell .framework-pillar-heading .eyebrow {
+  margin-bottom: 0.4rem;
+}
+
+.retirement-page-shell .framework-pillar-heading h2 {
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.retirement-page-shell .framework-pillar-heading div > p:not(.eyebrow, .pillar-note) {
+  font-size: 0.92rem;
+  line-height: 1.48;
+  max-width: 24rem;
+}
+
+.retirement-page-shell .pillar-note {
+  font-size: 0.74rem;
+  line-height: 1.45;
+  margin-top: 0.8rem;
+  padding: 0.7rem 0.8rem;
+}
+
+.retirement-page-shell .question-card-grid {
+  gap: 0.65rem;
+}
+
+.retirement-page-shell .question-card {
+  padding: 1.15rem 1.3rem 1.2rem;
+}
+
+.retirement-page-shell .question-index {
+  font-size: 0.62rem;
+  margin-bottom: 0.55rem;
+}
+
+.retirement-page-shell .question-card h3 {
+  font-size: clamp(1.28rem, 1.7vw, 1.58rem);
+  line-height: 1.08;
+  margin-bottom: 0.45rem;
+}
+
+.retirement-page-shell .question-card > p:not(.also-affects) {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.retirement-page-shell .also-affects {
+  font-size: 0.64rem;
+  margin-top: 0.7rem;
+  padding-top: 0.5rem;
+}
+
+.retirement-page-shell .retirement-sequence-section {
+  padding-bottom: 3.1rem;
+  padding-top: 3.1rem;
+}
+
+.retirement-page-shell .sequence-callout {
+  gap: 2rem;
+}
+
+.retirement-page-shell .sequence-callout .eyebrow {
+  margin-bottom: 0.55rem;
+}
+
+.retirement-page-shell .sequence-callout h2 {
+  font-size: clamp(2rem, 3vw, 2.85rem);
+  line-height: 1;
+  margin-bottom: 0.55rem;
+}
+
+.retirement-page-shell .sequence-callout p:last-child {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.retirement-page-shell .sequence-callout .button {
+  min-height: 3rem;
+}
+
+.retirement-page-shell .review-invite {
+  padding: 3.4rem 0;
+}
+
+.retirement-page-shell .review-invite-inner {
+  gap: 2rem;
+}
+
+.retirement-page-shell .review-invite .eyebrow {
+  margin-bottom: 0.6rem;
+}
+
+.retirement-page-shell .review-invite h2 {
+  font-size: clamp(2.2rem, 3.35vw, 3.15rem);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  max-width: 17ch;
+}
+
+.retirement-page-shell .review-invite p:last-child {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.retirement-page-shell .review-invite-actions {
+  gap: 0.7rem;
+}
+
+.retirement-page-shell .review-invite-actions .button {
+  min-height: 3rem;
+}
+
+@media (max-width: 980px) {
+  .retirement-page-shell .retirement-intro {
+    padding-bottom: 2.5rem;
+    padding-top: 3rem;
+  }
+
+  .retirement-page-shell .framework-stack {
+    padding-bottom: 3rem;
+  }
+
+  .retirement-page-shell .framework-pillar {
+    gap: 1.7rem;
+    padding: 2.6rem 0;
+  }
+
+  .retirement-page-shell .framework-pillar-heading {
+    top: auto;
+  }
+
+  .retirement-page-shell .retirement-sequence-section,
+  .retirement-page-shell .review-invite {
+    padding-bottom: 3.3rem;
+    padding-top: 3.3rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .retirement-page-shell .retirement-intro {
+    padding-top: 2.6rem;
+  }
+
+  .retirement-page-shell .intro-statement h2 {
+    font-size: clamp(2.35rem, 10vw, 3.1rem);
+  }
+
+  .retirement-page-shell .framework-pillar {
+    padding: 2.2rem 0;
+  }
+
+  .retirement-page-shell .framework-pillar-heading {
+    gap: 0.65rem;
+  }
+
+  .retirement-page-shell .question-card {
+    padding: 1.05rem 1.1rem;
+  }
+
+  .retirement-page-shell .sequence-callout {
+    gap: 1.3rem;
+  }
+}
