@@ -12,11 +12,17 @@ const greeting: GuideMessage = {
     "Hi, I’m the Lifeline Guide. I can help you understand retirement income, family protection, business continuity, legacy planning, and the Continuity Bridge™. What would you like to explore?",
 };
 
+type GuideSuggestedStep = {
+  href: string;
+  label: string;
+  description: string;
+};
+
 type GuideApiResponse = {
   reply?: string;
   error?: string;
   intent?: string;
-  reviewUrl?: string;
+  suggestedStep?: GuideSuggestedStep | null;
 };
 
 export function LifelineGuide() {
@@ -25,6 +31,7 @@ export function LifelineGuide() {
   const [draft, setDraft] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
+  const [suggestedStep, setSuggestedStep] = useState<GuideSuggestedStep | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const canSend = draft.trim().length > 0 && !isSending;
@@ -44,6 +51,7 @@ export function LifelineGuide() {
     setMessages([greeting]);
     setDraft("");
     setError("");
+    setSuggestedStep(null);
     window.setTimeout(() => textareaRef.current?.focus(), 80);
   }
 
@@ -57,6 +65,7 @@ export function LifelineGuide() {
     setMessages((current) => [...current, userMessage]);
     setDraft("");
     setError("");
+    setSuggestedStep(null);
     setIsSending(true);
 
     try {
@@ -76,6 +85,7 @@ export function LifelineGuide() {
         ...current,
         { role: "assistant", content: payload.reply as string },
       ]);
+      setSuggestedStep(payload.suggestedStep ?? null);
     } catch (requestError) {
       setError(
         requestError instanceof Error
@@ -173,13 +183,16 @@ export function LifelineGuide() {
             ) : null}
           </div>
 
-          <div className="lifeline-guide-review-strip">
-            <div>
-              <strong>Want help applying this to your situation?</strong>
-              <span>Move from general education to a private Continuity Review.</span>
+          {suggestedStep ? (
+            <div className="lifeline-guide-next-step">
+              <div>
+                <span>Suggested next step</span>
+                <strong>{suggestedStep.label}</strong>
+                <p>{suggestedStep.description}</p>
+              </div>
+              <a href={suggestedStep.href}>Explore →</a>
             </div>
-            <a href="/continuity-review">Start Review</a>
-          </div>
+          ) : null}
 
           <form className="lifeline-guide-form" onSubmit={onSubmit}>
             <label htmlFor="lifeline-guide-question">
