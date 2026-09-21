@@ -70,6 +70,57 @@ function extractOutputText(payload: OpenAIResponsePayload): string {
   return parts.join("\n").trim();
 }
 
+function getSuggestedStep(intent: GuideIntent, message: string) {
+  if (
+    /(?:talk|speak|meet) (?:to|with) someone|look at my situation|schedule|appointment|book (?:a|my)|continuity review|personal help|review my/i.test(
+      message,
+    )
+  ) {
+    return {
+      href: "/continuity-review",
+      label: "Request a Continuity Review",
+      description: "Bring a Lifeline Legacy professional into the conversation.",
+    };
+  }
+
+  const steps: Partial<
+    Record<GuideIntent, { href: string; label: string; description: string }>
+  > = {
+    retirement: {
+      href: "/retirement-income",
+      label: "Explore Retirement Income",
+      description: "See the eight questions a written retirement-income plan should answer.",
+    },
+    family: {
+      href: "/family-continuity",
+      label: "Explore Family Continuity",
+      description: "See the seven questions that connect income, protection, people, and documents.",
+    },
+    business: {
+      href: "/business-continuity",
+      label: "Explore Business Continuity",
+      description: "Connect owner interruption, operations, ownership, retirement, and legacy.",
+    },
+    legacy: {
+      href: "/continuity-bridge",
+      label: "Explore the Continuity Bridge",
+      description: "See how beneficiaries, ownership, documents, and intentions connect.",
+    },
+    workshop: {
+      href: "/learn#workshops",
+      label: "View Workshops",
+      description: "See the current Lifeline Legacy educational event schedule.",
+    },
+    continuity: {
+      href: "/continuity-bridge",
+      label: "Explore the Continuity Bridge",
+      description: "Go deeper into Continuity, Certainty, and Legacy.",
+    },
+  };
+
+  return steps[intent] ?? null;
+}
+
 function buildBusinessContext(): string {
   const now = Date.now();
   const upcoming = workshops
@@ -154,7 +205,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         model,
         store: false,
-        instructions: `${LIFELINE_GUIDE_INSTRUCTIONS}\n\nAPPROVED BUSINESS CONTEXT\n${buildBusinessContext()}`,
+        instructions: `${LIFELINE_GUIDE_INSTRUCTIONS}\n\nLIFELINE LEGACY APPROVED KNOWLEDGE\n${LIFELINE_GUIDE_KNOWLEDGE}\n\nCURRENT APPROVED BUSINESS CONTEXT\n${buildBusinessContext()}`,
         input: messages,
         max_output_tokens: 700,
         reasoning: { effort: "none" },
@@ -187,10 +238,12 @@ export async function POST(request: Request) {
       );
     }
 
+    const intent = classifyGuideIntent(latestUserMessage.content);
+
     return NextResponse.json({
       reply,
-      intent: classifyGuideIntent(latestUserMessage.content),
-      reviewUrl: "/continuity-review",
+      intent,
+      suggestedStep: getSuggestedStep(intent, latestUserMessage.content),
     });
   } catch (error) {
     console.error(
