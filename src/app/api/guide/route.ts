@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import {
   LIFELINE_GUIDE_INSTRUCTIONS,
   classifyGuideIntent,
+  type GuideIntent,
   type GuideMessage,
 } from "@/lib/lifeline-guide";
+import { LIFELINE_GUIDE_KNOWLEDGE } from "@/lib/lifeline-guide-knowledge";
 import {
   disclosure,
   licensedStates,
