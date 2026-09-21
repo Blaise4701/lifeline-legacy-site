@@ -5476,109 +5476,25 @@ ul:last-child {
 }
 
 
-/* Homepage opening view — keep hero centered and fully visible on first load */
-body:has(.home-hero) .utility-bar {
-  display: none;
-}
-
+/* Homepage hero — preserve e4a5adf composition with slightly more vertical rhythm */
 @media (min-width: 981px) {
-  body:has(.home-hero) .header-inner {
-    min-height: 4.55rem;
-  }
-
-  .home-hero-grid {
-    align-items: center;
-    gap: clamp(2.75rem, 4vw, 4rem);
-    min-height: calc(100svh - 4.55rem);
-    padding-bottom: 1.65rem;
-    padding-top: 1.65rem;
-  }
-
-  .home-hero-copy {
-    max-width: 49rem;
-  }
-
   .home-hero-copy .eyebrow {
-    margin-bottom: 0.85rem;
+    margin-bottom: 1.15rem;
   }
 
   .home-hero-copy h1 {
-    font-size: clamp(3.25rem, 3.9vw, 3.95rem);
-    line-height: 0.985;
-    margin-bottom: 0.9rem;
+    margin-bottom: 1.2rem;
   }
 
   .home-hero-copy .hero-lede {
-    font-size: clamp(0.98rem, 1.2vw, 1.08rem);
-    line-height: 1.5;
-    max-width: 40rem;
+    line-height: 1.62;
   }
 
   .home-hero-copy .button-row {
-    margin-top: 1.2rem;
-  }
-
-  .home-hero-copy .button {
-    min-height: 2.8rem;
-    padding-block: 0.62rem;
+    margin-top: 1.65rem;
   }
 
   .home-hero-copy .hero-note {
-    font-size: 0.72rem;
-    margin-top: 0.55rem;
-  }
-
-  .hero-bridge-visual {
-    min-height: 27.75rem;
-    padding: 1.55rem 1.8rem 1.35rem;
-  }
-
-  .hero-bridge-visual .bridge-arch {
-    height: 6.5rem;
-    margin-bottom: 1.05rem;
-  }
-
-  .hero-bridge-visual .arch-line {
-    height: 5.1rem;
-    top: 1.8rem;
-  }
-
-  .hero-bridge-visual > p {
-    margin-bottom: 0.55rem;
-  }
-
-  .hero-bridge-visual blockquote {
-    margin-bottom: 1.25rem;
-  }
-
-  .hero-bridge-visual blockquote > span {
-    font-size: 0.78rem;
-    margin-bottom: 0.4rem;
-  }
-
-  .hero-bridge-visual blockquote > strong {
-    font-size: clamp(1.85rem, 2.1vw, 2.2rem);
-    line-height: 1.03;
-  }
-
-  .hero-pillars {
-    padding-top: 0.6rem;
-  }
-}
-
-@media (max-height: 860px) and (min-width: 981px) {
-  .home-hero-grid {
-    align-items: start;
-    min-height: 0;
-    padding-bottom: 1.25rem;
-    padding-top: 1.25rem;
-  }
-
-  .home-hero-copy h1 {
-    font-size: clamp(3.05rem, 3.7vw, 3.7rem);
-  }
-
-  .hero-bridge-visual {
-    min-height: 25.75rem;
+    margin-top: 0.85rem;
   }
 }
