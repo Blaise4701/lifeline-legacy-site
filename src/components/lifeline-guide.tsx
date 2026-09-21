@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, KeyboardEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   guideStarterQuestions,
   type GuideMessage,
@@ -33,6 +33,8 @@ export function LifelineGuide() {
   const [error, setError] = useState("");
   const [suggestedStep, setSuggestedStep] = useState<GuideSuggestedStep | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const latestAssistantRef = useRef<HTMLDivElement>(null);
 
   const canSend = draft.trim().length > 0 && !isSending;
   const showStarters = messages.length === 1;
@@ -41,6 +43,27 @@ export function LifelineGuide() {
     () => messages.filter((message) => message.content.trim().length > 0),
     [messages],
   );
+
+  useEffect(() => {
+    const latestMessage = messages[messages.length - 1];
+    const container = messagesRef.current;
+    const latestAssistant = latestAssistantRef.current;
+
+    if (
+      messages.length > 1 &&
+      latestMessage?.role === "assistant" &&
+      container &&
+      latestAssistant
+    ) {
+      const top =
+        latestAssistant.offsetTop - container.offsetTop - 12;
+
+      container.scrollTo({
+        top: Math.max(0, top),
+        behavior: "smooth",
+      });
+    }
+  }, [messages]);
 
   function openGuide() {
     setIsOpen(true);
@@ -143,16 +166,22 @@ export function LifelineGuide() {
             </div>
           </header>
 
-          <div className="lifeline-guide-messages">
-            {messages.map((message, index) => (
+          <div className="lifeline-guide-messages" ref={messagesRef}>
+            {messages.map((message, index) => {
+              const isLatestAssistant =
+                message.role === "assistant" && index === messages.length - 1;
+
+              return (
               <div
+                ref={isLatestAssistant ? latestAssistantRef : undefined}
                 className={`lifeline-guide-message lifeline-guide-message-${message.role}`}
                 key={`${message.role}-${index}`}
               >
                 <span>{message.role === "assistant" ? "Lifeline Guide" : "You"}</span>
                 <p>{message.content}</p>
               </div>
-            ))}
+              );
+            })}
 
             {isSending ? (
               <div className="lifeline-guide-message lifeline-guide-message-assistant lifeline-guide-thinking">
