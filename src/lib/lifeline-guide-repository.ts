@@ -36,7 +36,9 @@ type RecordGuideEventInput = {
 
 function getConfig() {
   const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key =
+    process.env.SUPABASE_SECRET_KEY ??
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !key) return null;
 
@@ -50,11 +52,18 @@ async function supabaseRequest(
   const config = getConfig();
   if (!config) return;
 
+  const authHeaders: Record<string, string> = {
+    apikey: config.key,
+  };
+
+  if (!config.key.startsWith("sb_secret_")) {
+    authHeaders.Authorization = `Bearer ${config.key}`;
+  }
+
   const response = await fetch(`${config.url}/rest/v1/${path}`, {
     ...init,
     headers: {
-      apikey: config.key,
-      Authorization: `Bearer ${config.key}`,
+      ...authHeaders,
       "Content-Type": "application/json",
       ...(init.headers ?? {}),
     },
