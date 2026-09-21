@@ -5498,3 +5498,21 @@ ul:last-child {
     margin-top: 0.85rem;
   }
 }
+
+
+/* Home hero — match the green panel height to the left content block */
+@media (min-width: 981px) {
+  .home-hero-grid {
+    align-items: stretch;
+  }
+
+  .home-hero-copy {
+    align-self: start;
+  }
+
+  .hero-bridge-visual {
+    align-self: stretch;
+    height: auto;
+    min-height: 0;
+  }
+}
