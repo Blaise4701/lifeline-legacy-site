@@ -181,18 +181,18 @@ export function LifelineGuide() {
                 <a href="/continuity-review">Start a Continuity Review instead →</a>
               </div>
             ) : null}
-          </div>
 
-          {suggestedStep ? (
-            <div className="lifeline-guide-next-step">
-              <div>
-                <span>Suggested next step</span>
-                <strong>{suggestedStep.label}</strong>
-                <p>{suggestedStep.description}</p>
+            {suggestedStep && !isSending ? (
+              <div className="lifeline-guide-next-step">
+                <div>
+                  <span>Suggested next step</span>
+                  <strong>{suggestedStep.label}</strong>
+                  <p>{suggestedStep.description}</p>
+                </div>
+                <a href={suggestedStep.href}>Explore →</a>
               </div>
-              <a href={suggestedStep.href}>Explore →</a>
-            </div>
-          ) : null}
+            ) : null}
+          </div>
 
           <form className="lifeline-guide-form" onSubmit={onSubmit}>
             <label htmlFor="lifeline-guide-question">
