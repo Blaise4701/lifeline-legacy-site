@@ -218,14 +218,37 @@ export async function POST(request: Request) {
     const payload = (await openAIResponse.json()) as OpenAIResponsePayload;
 
     if (!openAIResponse.ok) {
-      console.error("Lifeline Guide model request failed", openAIResponse.status);
-      return NextResponse.json(
-        {
-          error:
-            "The Lifeline Guide could not answer right now. Please try again or start a Continuity Review.",
-        },
-        { status: 502 },
+      const providerMessage =
+        typeof payload.error?.message === "string" ? payload.error.message : "";
+
+      console.error(
+        "Lifeline Guide model request failed",
+        openAIResponse.status,
+        providerMessage.slice(0, 300),
       );
+
+      let error =
+        "The Lifeline Guide could not answer right now. Please try again.";
+
+      if (openAIResponse.status === 401 || openAIResponse.status === 403) {
+        error =
+          "The Lifeline Guide API key is not being accepted. Please verify the Preview API key and its project permissions.";
+      } else if (openAIResponse.status === 429) {
+        error =
+          "The Lifeline Guide has reached an API billing, credit, or usage limit. Please check the OpenAI API project's billing and limits.";
+      } else if (
+        /model|permission|access/i.test(providerMessage) &&
+        openAIResponse.status >= 400 &&
+        openAIResponse.status < 500
+      ) {
+        error =
+          "The Lifeline Guide model is not available to this API project. Please check the OpenAI project's model permissions.";
+      } else if (openAIResponse.status === 400) {
+        error =
+          "The Lifeline Guide request configuration needs an adjustment. The Preview build is working, but the OpenAI request was rejected.";
+      }
+
+      return NextResponse.json({ error }, { status: 502 });
     }
 
     const reply = extractOutputText(payload);
