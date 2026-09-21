@@ -35,6 +35,9 @@ export function LifelineGuide() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const latestAssistantRef = useRef<HTMLDivElement>(null);
+  const sessionIdRef = useRef("");
+  const landingPathRef = useRef("");
+  const openedLoggedRef = useRef(false);
 
   const canSend = draft.trim().length > 0 && !isSending;
   const showStarters = messages.length === 1;
@@ -65,8 +68,72 @@ export function LifelineGuide() {
     }
   }, [messages]);
 
+  function getSessionContext() {
+    if (typeof window === "undefined") {
+      return { sessionId: "", landingPath: "/", currentPath: "/" };
+    }
+
+    if (!sessionIdRef.current) {
+      const storedSessionId = window.sessionStorage.getItem(
+        "lifeline-guide-session-id",
+      );
+      const sessionId = storedSessionId || window.crypto.randomUUID();
+      window.sessionStorage.setItem("lifeline-guide-session-id", sessionId);
+      sessionIdRef.current = sessionId;
+    }
+
+    if (!landingPathRef.current) {
+      const storedLandingPath = window.sessionStorage.getItem(
+        "lifeline-guide-landing-path",
+      );
+      const landingPath =
+        storedLandingPath || window.location.pathname || "/";
+      window.sessionStorage.setItem(
+        "lifeline-guide-landing-path",
+        landingPath,
+      );
+      landingPathRef.current = landingPath;
+    }
+
+    return {
+      sessionId: sessionIdRef.current,
+      landingPath: landingPathRef.current,
+      currentPath: window.location.pathname || "/",
+    };
+  }
+
+  function recordEvent(
+    eventType:
+      | "guide_opened"
+      | "suggested_step_clicked"
+      | "checkup_started"
+      | "continuity_review_started",
+    eventValue?: string,
+  ) {
+    const context = getSessionContext();
+    if (!context.sessionId) return;
+
+    void fetch("/api/guide/event", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: context.sessionId,
+        eventType,
+        eventValue,
+        pagePath: context.currentPath,
+      }),
+      keepalive: true,
+    }).catch(() => undefined);
+  }
+
   function openGuide() {
     setIsOpen(true);
+
+    if (!openedLoggedRef.current) {
+      openedLoggedRef.current = true;
+      recordEvent("guide_opened");
+    }
+
     window.setTimeout(() => textareaRef.current?.focus(), 80);
   }
 
@@ -92,10 +159,16 @@ export function LifelineGuide() {
     setIsSending(true);
 
     try {
+      const context = getSessionContext();
       const response = await fetch("/api/guide", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages }),
+        body: JSON.stringify({
+          messages: nextMessages,
+          sessionId: context.sessionId,
+          landingPath: context.landingPath,
+          currentPath: context.currentPath,
+        }),
       });
 
       const payload = (await response.json()) as GuideApiResponse;
@@ -218,7 +291,24 @@ export function LifelineGuide() {
                   <strong>{suggestedStep.label}</strong>
                   <p>{suggestedStep.description}</p>
                 </div>
-                <a href={suggestedStep.href}>Explore →</a>
+                <a
+                  href={suggestedStep.href}
+                  onClick={() => {
+                    const eventType =
+                      suggestedStep.href === "/continuity-review"
+                        ? "continuity_review_started"
+                        : suggestedStep.href.startsWith("/checkup")
+                          ? "checkup_started"
+                          : "suggested_step_clicked";
+
+                    recordEvent(
+                      eventType,
+                      `${suggestedStep.label} | ${suggestedStep.href}`,
+                    );
+                  }}
+                >
+                  Explore →
+                </a>
               </div>
             ) : null}
           </div>
@@ -243,7 +333,9 @@ export function LifelineGuide() {
             </div>
             <p className="lifeline-guide-disclaimer">
               Educational information only—not legal, tax, investment, or individualized financial advice.
-              Please do not share account numbers, Social Security numbers, passwords, or medical details.
+              Conversations may be stored in redacted form and reviewed to improve the Guide. Please do not share
+              account numbers, Social Security numbers, passwords, or medical details.{" "}
+              <a href="/privacy">Privacy</a>
             </p>
           </form>
         </section>
