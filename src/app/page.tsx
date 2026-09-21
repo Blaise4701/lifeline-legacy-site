@@ -86,7 +86,11 @@ export default function Home() {
               <p>The question behind every plan</p>
               <blockquote>
                 <span>If life changes tomorrow,</span>
-                <strong>will the people who depend on you be okay?</strong>
+                <strong>
+                  will the people who depend on
+                  <br />
+                  you be okay?
+                </strong>
               </blockquote>
               <div className="hero-pillars"><span>Continuity</span><span>Certainty</span><span>Legacy</span></div>
             </div>
