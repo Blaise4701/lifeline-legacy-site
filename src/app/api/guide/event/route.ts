@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
-  void recordGuideEvent({
+  await recordGuideEvent({
     sessionId,
     eventType: eventType as
       | "guide_opened"
