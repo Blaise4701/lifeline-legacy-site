@@ -7,6 +7,11 @@ import {
 } from "@/lib/lifeline-guide";
 import { LIFELINE_GUIDE_KNOWLEDGE } from "@/lib/lifeline-guide-knowledge";
 import {
+  classifyGuideTopics,
+  inferGuidePillar,
+} from "@/lib/lifeline-guide-analytics";
+import { recordGuideExchange } from "@/lib/lifeline-guide-repository";
+import {
   disclosure,
   licensedStates,
   site,
@@ -178,11 +183,30 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const messages = cleanMessages(
+  const requestBody =
     typeof body === "object" && body !== null
-      ? (body as { messages?: unknown }).messages
-      : undefined,
-  );
+      ? (body as {
+          messages?: unknown;
+          sessionId?: unknown;
+          landingPath?: unknown;
+          currentPath?: unknown;
+        })
+      : {};
+
+  const messages = cleanMessages(requestBody.messages);
+
+  const sessionId =
+    typeof requestBody.sessionId === "string"
+      ? requestBody.sessionId.slice(0, 100)
+      : "";
+  const landingPath =
+    typeof requestBody.landingPath === "string"
+      ? requestBody.landingPath.slice(0, 300)
+      : "/";
+  const currentPath =
+    typeof requestBody.currentPath === "string"
+      ? requestBody.currentPath.slice(0, 300)
+      : "/";
 
   const latestUserMessage = [...messages]
     .reverse()
@@ -198,6 +222,7 @@ export async function POST(request: Request) {
   const model = process.env.OPENAI_MODEL || "gpt-5.6-luna";
 
   try {
+    const startedAt = Date.now();
     const openAIResponse = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -264,11 +289,34 @@ export async function POST(request: Request) {
     }
 
     const intent = classifyGuideIntent(latestUserMessage.content);
+    const topics = classifyGuideTopics(latestUserMessage.content);
+    const pillar = inferGuidePillar(intent, topics);
+    const suggestedStep = getSuggestedStep(
+      intent,
+      latestUserMessage.content,
+    );
+
+    if (sessionId) {
+      await recordGuideExchange({
+        sessionId,
+        landingPath,
+        currentPath,
+        messagesInConversation: messages.length,
+        userMessage: latestUserMessage.content,
+        assistantMessage: reply,
+        intent,
+        pillar,
+        topics,
+        suggestedStep,
+        model,
+        responseMs: Date.now() - startedAt,
+      });
+    }
 
     return NextResponse.json({
       reply,
       intent,
-      suggestedStep: getSuggestedStep(intent, latestUserMessage.content),
+      suggestedStep,
     });
   } catch (error) {
     console.error(
