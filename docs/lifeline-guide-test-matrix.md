@@ -142,3 +142,7 @@ Use these prompts in Preview before merging. The goal is not exact wording; veri
 30. **I'd like someone to look at my situation.**
     - Clearly directs to /continuity-review.
     - Does not force collection of sensitive details in chat.
+
+## Preview deployment
+
+The Preview deployment for this branch is the required gate for live assistant testing. Environment variables must remain scoped to Preview during V1 validation.
