@@ -165,7 +165,7 @@ Build all three sub-fields for each row before moving to the next field — don'
 | 3.5 | `planning_track_code` | Single Select | Options: `build_first_plan` / `update_coordinate` / `second_opinion` / `education` — all four reachable, see assignment rule below |
 | 3.6 | `planning_track_label` | Text | Build My First Written Plan / Update & Coordinate My Plan / Second Opinion / Education |
 
-**Planning Track assignment rule:** (1) `written_plan_status = has_current_plan` → always `second_opinion`, unconditionally. (2) Else, `stated_intent = mainly_researching` → `education`. (3) Else, plan-status default: `no_plan`/`accounts_no_plan` → `build_first_plan`; `projections_only`/`outdated_plan` → `update_coordinate`. Fit Tier does not determine this — a Tier C lead with an active intent still gets `build_first_plan`/`update_coordinate`, not `education`.
+**Planning Track assignment rule:** (1) `stated_intent = mainly_researching` → `education`, including when `written_plan_status = has_current_plan`. (2) Else, `written_plan_status = has_current_plan` AND `stated_intent = second_opinion` → `second_opinion`. (3) Else, `written_plan_status = has_current_plan` → `education`. (4) Else, plan-status default: `no_plan`/`accounts_no_plan` → `build_first_plan`; `projections_only`/`outdated_plan` → `update_coordinate`. Fit Tier does not determine Planning Track; Tier/High-Intent routing can still offer a Review without relabeling the Planning Track.
 
 ---
 
