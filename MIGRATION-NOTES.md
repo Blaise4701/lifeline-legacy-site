@@ -19,3 +19,13 @@ This package is shaped as additive paths for the existing Next.js repository. It
 
 ## Do not merge to production yet
 The consent text remains explicitly marked `COMPLIANCE REVIEW REQUIRED`, OTP is demo-only, GHL writes are not wired, and Fit/Tier calculation remains client-side in this reviewer preview.
+
+
+## Phase 1 GHL bridge — v2.12
+
+- Added `/api/retirement-stress-test` as a server-only GHL bridge.
+- Fit Score, Fit Tier, Planning Track, Engagement Level, owner recommendation, and pipeline stage are recomputed server-side from stable answer/event codes.
+- The route discovers the current GHL custom-field IDs and the `Retirement Acquisition Engine` pipeline/stage IDs at runtime instead of hard-coding UI-generated keys.
+- Verified preview submissions upsert the contact and create/update a single opportunity in the locked pipeline.
+- The bridge is intentionally disabled when `VERCEL_ENV=production` until live OTP and compliance approval are complete.
+- No workflow, SMS, email, AI conversation, or nurture action is triggered by this code.
