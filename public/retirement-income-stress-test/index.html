@@ -405,7 +405,7 @@
     <div class="rev-section-label" style="margin-top:18px;">Simulate engagement events (no natural trigger in a static preview)</div>
     <p class="rev-note" style="margin-bottom:10px;">These five events require a real session history, email/SMS system, webinar platform, or completed booking flow — none of which exist in this preview. Firing them here uses the exact same point values and dedup logic as the real event (Section 3.2); this is a QA convenience, not a shortcut around the rubric.</p>
     <div class="sim-btn-row" id="revSimControls"></div>
-    <p class="rev-note" style="margin:16px 0 0; padding-top:12px; border-top:1px solid #2A2822;">Fit Model v1.6 &middot; Engagement Model v1.3 (0–35 range label corrected v2.0, point values unchanged) &middot; Stress-Test Build v2.10 &mdash; store these alongside every GHL contact so future scoring changes can be audited and recalculated from raw answers.</p>
+    <p class="rev-note" style="margin:16px 0 0; padding-top:12px; border-top:1px solid #2A2822;">Fit Model v1.6 &middot; Engagement Model v1.3 (0–35 range label corrected v2.0, point values unchanged) &middot; Stress-Test Build v2.11 &mdash; store these alongside every GHL contact so future scoring changes can be audited and recalculated from raw answers.</p>
   </div>
 </div>
 
@@ -536,6 +536,17 @@ const OWNER_MATRIX = {
   'A-High':'Blaise + AI/Admin support', 'A-Medium':'Admin/AI \u2192 Blaise escalation', 'A-Low':'AI/Admin (high-value re-engagement, retains Tier A)',
   'B-High':'Admin/AI, Blaise if intent strong', 'B-Medium':'AI + automation', 'B-Low':'Automation/AI',
   'C-High':'Automation/AI', 'C-Medium':'Automation', 'C-Low':'Automation'
+};
+const OWNER_ENUM = {
+  'A-High':{code:'blaise_support',label:'Blaise + Support'},
+  'A-Medium':{code:'ai_admin',label:'AI + Admin'},
+  'A-Low':{code:'ai_admin',label:'AI + Admin'},
+  'B-High':{code:'ai_admin',label:'AI + Admin'},
+  'B-Medium':{code:'ai',label:'AI Agent'},
+  'B-Low':{code:'automation',label:'Automation'},
+  'C-High':{code:'automation',label:'Automation'},
+  'C-Medium':{code:'automation',label:'Automation'},
+  'C-Low':{code:'automation',label:'Automation'}
 };
 
 const ATTRIBUTION = (()=>{
@@ -892,7 +903,7 @@ function renderReviewer(){
   /* ---- FIT CLASSIFICATION — scored inputs only, nothing else mixed in ---- */
   html += `<div class="rev-section-label">Fit Classification \u2014 scored inputs only</div>`;
   html += `<div class="rev-score-line"><span>Fit Score</span><span>${scored ? state.fitScore + ' / 100' : '\u2014'}</span></div>`;
-  html += `<div class="rev-score-line" style="margin-bottom:8px;"><span>Fit Tier</span><span>${tierDisplay()}</span></div>`;
+  html += `<div class="rev-score-line" style="margin-bottom:8px;"><span>Fit Tier</span><span>${scored ? state.fitTier : '—'}</span></div>`;
   if(scored){
     html += state.fitBreakdown.map(([label,pts])=>`<div class="rev-score-line"><span>${label}</span><span>${pts>=0?'+':''}${pts}</span></div>`).join('');
     html += `<div class="rev-score-line total"><span>TOTAL</span><span>${state.fitScore}</span></div>`;
