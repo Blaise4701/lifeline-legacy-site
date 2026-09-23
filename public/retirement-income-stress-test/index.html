@@ -568,7 +568,11 @@ const state = {
   planningTrack: null,
   verification: 'Pending',
   currentScreen: 1,
-  demoOtp: null
+  demoOtp: null,
+  ghlSyncStatus: 'Not submitted',
+  ghlContactId: null,
+  ghlOpportunityId: null,
+  ghlSubmitted: false
 };
 
 const PHASES = {
@@ -749,6 +753,94 @@ function submitConsent(){
   goTo(10);
 }
 
+function stressTestAttributionPayload(){
+  const p = new URLSearchParams(location.search);
+  const read = (key)=> p.get(key) || '';
+  return {
+    source: read('utm_source'),
+    medium: read('utm_medium'),
+    campaign: read('utm_campaign'),
+    adSet: read('utm_adset') || read('adset'),
+    ad: read('utm_ad') || read('ad'),
+    adAngle: read('ad_angle'),
+    creative: read('creative') || read('utm_content'),
+    landingPage: location.pathname,
+    utmSource: read('utm_source'),
+    utmMedium: read('utm_medium'),
+    utmCampaign: read('utm_campaign'),
+    utmContent: read('utm_content'),
+    utmTerm: read('utm_term')
+  };
+}
+
+function firedEngagementEvents(){
+  return Object.keys(ENGAGEMENT_EVENTS).filter(key => !!state.answers['_eng_'+key]);
+}
+
+async function syncVerifiedStressTestToGhl(){
+  if(state.ghlSubmitted) return;
+  const a = state.answers;
+  if(
+    state.verification !== 'Verified' ||
+    !a.first_name || !a.last_name || !a.email_normalized || !a.mobile_normalized ||
+    !a.sms_consent || !a.consent_timestamp
+  ){
+    state.ghlSyncStatus = 'Not ready';
+    renderReviewer();
+    return;
+  }
+
+  state.ghlSubmitted = true;
+  state.ghlSyncStatus = 'Saving to GHL…';
+  renderReviewer();
+
+  const payload = {
+    firstName: a.first_name,
+    lastName: a.last_name,
+    emailRaw: a.email_raw,
+    email: a.email_normalized,
+    mobileRaw: a.mobile_raw,
+    phone: a.mobile_normalized,
+    consentCaptured: true,
+    consentTimestamp: a.consent_timestamp,
+    verificationStatus: 'Verified',
+    otpVerifiedTimestamp: new Date().toISOString(),
+    answers: {
+      retirementHorizon: a.retirement_horizon,
+      investableAssets: a.investable_assets,
+      accountInventory: a.account_inventory || [],
+      primaryConcern: a.primary_concern,
+      writtenPlanStatus: a.written_plan_status,
+      statedIntent: a.stated_intent
+    },
+    engagementEvents: firedEngagementEvents(),
+    attribution: stressTestAttributionPayload()
+  };
+
+  try{
+    const response = await fetch('/api/retirement-stress-test', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(()=>({}));
+    if(!response.ok || !result.ok){
+      state.ghlSyncStatus = 'Failed' + (result.message ? ': ' + result.message : '');
+      state.ghlSubmitted = false;
+      renderReviewer();
+      return;
+    }
+    state.ghlContactId = result.contactId || null;
+    state.ghlOpportunityId = result.opportunityId || null;
+    state.ghlSyncStatus = 'Saved — ' + (result.pipelineStage || 'pipeline updated');
+    renderReviewer();
+  }catch(_error){
+    state.ghlSyncStatus = 'Failed: network error';
+    state.ghlSubmitted = false;
+    renderReviewer();
+  }
+}
+
 function regenOtp(){
   state.demoOtp = String(Math.floor(100000 + Math.random()*900000));
   document.getElementById('demoCode').textContent = state.demoOtp;
@@ -765,8 +857,13 @@ function wireOtpInputs(){
 }
 function verifyOtp(){
   const entered = Array.from(document.querySelectorAll('.otp-d')).map(i=>i.value).join('');
-  if(entered === state.demoOtp){ state.verification = 'Verified'; goTo(11); }
-  else{ document.getElementById('otpError').style.display='block'; }
+  if(entered === state.demoOtp){
+    state.verification = 'Verified';
+    goTo(11);
+    void syncVerifiedStressTestToGhl();
+  } else {
+    document.getElementById('otpError').style.display='block';
+  }
 }
 
 function renderResults(){
@@ -921,7 +1018,12 @@ function renderReviewer(){
   html += kv('Consent Captured', a.sms_consent ? `true \u2014 ${a.consent_timestamp}` : 'false');
   html += kv('Acquisition Cohort', ATTRIBUTION.acquisition_cohort.split(' (')[0]);
   html += kv('Current Screen', `${state.currentScreen} / 11`);
-  html += kv('Assigned Follow-Up Owner', scored ? (OWNER_MATRIX[ownerKey] || '\u2014') : '\u2014');
+  const owner = OWNER_ENUM[ownerKey];
+  html += kv('Recommended Follow-Up Owner', scored && owner ? owner.label + ' (' + owner.code + ')' : '\u2014');
+  html += kv('Actual Assigned Owner', 'Unassigned');
+  html += kv('GHL Sync', state.ghlSyncStatus);
+  if(state.ghlContactId) html += kv('GHL Contact ID', state.ghlContactId);
+  if(state.ghlOpportunityId) html += kv('GHL Opportunity ID', state.ghlOpportunityId);
   html += `<div class="k full" style="margin-top:2px;">Next Action</div><div class="v full">${nextActionFor()}</div>`;
   html += `<div class="k full" style="margin-top:2px;">Recommended Education</div><div class="v full">${eduDebugInfo(a.primary_concern, a.retirement_horizon)}</div>`;
   html += `<div class="k full" style="margin-top:2px;">Account Inventory</div><div class="v full">${(a.account_inventory||[]).map(x=>ACCOUNT_LABELS[x]).join(', ') || '\u2014'}</div>`;
