@@ -405,7 +405,7 @@
     <div class="rev-section-label" style="margin-top:18px;">Simulate engagement events (no natural trigger in a static preview)</div>
     <p class="rev-note" style="margin-bottom:10px;">These five events require a real session history, email/SMS system, webinar platform, or completed booking flow — none of which exist in this preview. Firing them here uses the exact same point values and dedup logic as the real event (Section 3.2); this is a QA convenience, not a shortcut around the rubric.</p>
     <div class="sim-btn-row" id="revSimControls"></div>
-    <p class="rev-note" style="margin:16px 0 0; padding-top:12px; border-top:1px solid #2A2822;">Fit Model v1.6 &middot; Engagement Model v1.3 (0–35 range label corrected v2.0, point values unchanged) &middot; Stress-Test Build v2.8 &mdash; store these alongside every GHL contact so future scoring changes can be audited and recalculated from raw answers.</p>
+    <p class="rev-note" style="margin:16px 0 0; padding-top:12px; border-top:1px solid #2A2822;">Fit Model v1.6 &middot; Engagement Model v1.3 (0–35 range label corrected v2.0, point values unchanged) &middot; Stress-Test Build v2.10 &mdash; store these alongside every GHL contact so future scoring changes can be audited and recalculated from raw answers.</p>
   </div>
 </div>
 
@@ -424,10 +424,15 @@ const PLANNING_TRACK_BY_PLAN = {
   has_current_plan:{ code:'second_opinion', label:'Second Opinion' }
 };
 function planningTrackFor(planStatus, intent){
-  // v2.5 lock: a current trusted plan always routes to Second Opinion.
-  if(planStatus === 'has_current_plan') return PLANNING_TRACK_BY_PLAN.has_current_plan;
-  // v2.5 lock: mainly researching routes to Education, independent of Fit Tier.
+  // v2.10 lock: stated intent takes precedence over plan-status defaults.
+  // "Mainly researching" is Education even when a current trusted plan exists.
   if(intent === 'mainly_researching') return { code:'education', label:'Education' };
+  // Second Opinion requires both a current trusted plan and explicit second-opinion intent.
+  if(planStatus === 'has_current_plan' && intent === 'second_opinion') {
+    return PLANNING_TRACK_BY_PLAN.has_current_plan;
+  }
+  // A current trusted plan without second-opinion intent does not imply a Second Opinion track.
+  if(planStatus === 'has_current_plan') return { code:'education', label:'Education' };
   return PLANNING_TRACK_BY_PLAN[planStatus] || { code:null, label:null };
 }
 const HORIZON_LABELS = {
