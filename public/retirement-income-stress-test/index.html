@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Retirement Income Stress-Test — LLFG Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#F8F4EC;
+    --white:#FFFFFF;
+    --emerald:#12463A;
+    --emerald-soft:#1C5C4C;
+    --gold:#B08C4F;
+    --gold-soft:#DCC593;
+    --charcoal:#262420;
+    --charcoal-muted:#6E675C;
+    --line:#E4DDCC;
+    --amber-warn:#8A5A12;
+    --amber-warn-bg:#FBF0DC;
+    --amber-warn-border:#D9A94A;
+    --radius:14px;
+    --shadow: 0 1px 2px rgba(38,36,32,0.06), 0 8px 24px rgba(38,36,32,0.06);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *,*::before,*::after{box-sizing:inherit;}
+  html{scroll-padding-top: env(safe-area-inset-top, 0px); height:100%;}
+  body{
+    height:100%;
+    margin:0;
+    background: var(--ivory);
+    color: var(--charcoal);
+    font-family:'Public Sans', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3,.serif{ font-family:'Fraunces', Georgia, serif; font-weight:500; letter-spacing:-0.01em; }
+
+  .app{
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 20px 20px 48px;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+  header.top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 6px 2px 22px;
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:15px;
+    color:var(--emerald);
+    letter-spacing:0.01em;
+  }
+  .brand span{ color:var(--gold); }
+  .reviewer-toggle{
+    font-size:12px;
+    color:var(--charcoal-muted);
+    background:none;
+    border:1px solid var(--line);
+    padding:5px 10px;
+    border-radius:100px;
+    cursor:pointer;
+  }
+  .reviewer-toggle:hover{ border-color:var(--gold); color:var(--emerald); }
+
+  .phase-wrap{ margin-bottom:28px; }
+  .phase-label{
+    font-size:12.5px;
+    color:var(--charcoal-muted);
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+  }
+  .phase-label .current{ color:var(--emerald); font-weight:600; }
+  .phase-bar{ display:flex; gap:6px; }
+  .phase-seg{ flex:1; height:4px; background: var(--line); border-radius:4px; overflow:hidden; }
+  .phase-seg > i{ display:block; height:100%; width:0%; background: var(--emerald); transition: width .45s ease; }
+
+  .screen{ display:none; flex:1; flex-direction:column; animation: rise .38s ease; }
+  .screen.active{ display:flex; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  .eyebrow{ font-size:13px; color:var(--gold); font-weight:600; margin-bottom:10px; }
+  h1.q{ font-size: 26px; line-height:1.28; margin: 0 0 8px; color:var(--charcoal); }
+  .sub{ font-size:15px; color:var(--charcoal-muted); line-height:1.55; margin:0 0 26px; max-width:44ch; }
+
+  .options{ display:flex; flex-direction:column; gap:10px; margin-bottom: 10px; }
+  .opt{
+    text-align:left; background: var(--white); border:1px solid var(--line); border-radius: var(--radius);
+    padding:16px 18px; font-size:15.5px; font-family:inherit; color:var(--charcoal); cursor:pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .08s ease;
+  }
+  .opt:hover{ border-color:var(--gold-soft); box-shadow: var(--shadow); }
+  .opt:active{ transform: scale(0.995); }
+  .opt.selected{ border-color:var(--emerald); background: #F4F8F6; box-shadow: 0 0 0 1px var(--emerald) inset; }
+  .opt .opt-check{
+    float:right; width:18px;height:18px; border-radius:50%; border:1.5px solid var(--line);
+    display:inline-flex; align-items:center;justify-content:center;
+  }
+  .opt.selected .opt-check{ border-color:var(--emerald); background:var(--emerald); }
+  .opt.selected .opt-check::after{ content:''; width:6px;height:6px;border-radius:50%; background:white; }
+
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:13px; color:var(--charcoal-muted); margin-bottom:6px; }
+  .field-error{ font-size:12.5px; color:#A03A3A; margin-top:5px; min-height:0; display:none; }
+  .field-error.show{ display:block; }
+  .field input.invalid{ border-color:#A03A3A; }
+  .field input{
+    width:100%; padding:14px 15px; border:1px solid var(--line); border-radius:10px;
+    font-size:16px; font-family:inherit; background:var(--white); color:var(--charcoal);
+  }
+  .field input:focus{ outline:2px solid var(--emerald-soft); outline-offset:1px; }
+
+  .btn{
+    appearance:none; border:none; cursor:pointer; font-family:inherit; font-size:15.5px; font-weight:600;
+    padding:15px 22px; border-radius:10px; transition: background .15s ease, opacity .15s ease;
+  }
+  .btn-primary{ background:var(--emerald); color:#fff; }
+  .btn-primary:hover{ background:var(--emerald-soft); }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn-ghost{ background:transparent; color:var(--emerald); border:1px solid var(--line); }
+  .btn-ghost:hover{ border-color:var(--gold-soft); }
+  .btn-row{ display:flex; gap:10px; margin-top:6px; }
+  .btn-block{ width:100%; }
+
+  .foot-nav{ margin-top:auto; padding-top:24px; display:flex; align-items:center; justify-content:space-between; }
+  .back-link{ font-size:14px; color:var(--charcoal-muted); background:none; border:none; cursor:pointer; padding:8px 0; }
+  .back-link:hover{ color:var(--emerald); }
+
+  .consent-box{
+    border:1px dashed var(--amber-warn-border); background: var(--amber-warn-bg); border-radius:10px;
+    padding:14px 15px; margin: 4px 0 20px;
+  }
+  .consent-flag{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.03em; color:var(--amber-warn);
+    background:#F4E1B8; border:1px solid var(--amber-warn-border); padding:3px 8px; border-radius:100px; margin-bottom:9px;
+  }
+  .consent-text{ font-size:12.5px; line-height:1.6; color:#5c4a20; margin:0 0 12px; }
+  .check-row{ display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
+  .check-row input{ margin-top:3px; width:17px;height:17px; accent-color:var(--emerald); }
+  .check-row span{ font-size:13.5px; color:var(--charcoal); line-height:1.5; }
+
+  .otp-demo-note{
+    font-size:12px; color:var(--charcoal-muted); background:var(--white); border:1px solid var(--line);
+    border-radius:10px; padding:12px 14px; margin-bottom:18px;
+  }
+  .otp-demo-note b{ color:var(--emerald); letter-spacing:.06em; }
+  .otp-inputs{ display:flex; gap:8px; margin-bottom:18px; }
+  .otp-inputs input{
+    width:100%; text-align:center; font-size:20px; padding:13px 0; border:1px solid var(--line);
+    border-radius:10px; background:var(--white); font-family:inherit; color:var(--charcoal);
+  }
+  .otp-inputs input:focus{ outline:2px solid var(--emerald-soft); }
+  .otp-error{ color:#A03A3A; font-size:13px; margin: -8px 0 14px; display:none; }
+  .resend{ font-size:13px; color:var(--emerald); background:none;border:none;cursor:pointer;text-decoration:underline; padding:0;}
+
+  .insight-card{ background: var(--emerald); color:#F3EFE3; border-radius: 18px; padding: 26px 24px; margin-bottom:22px; }
+  .insight-card p{ font-size:16px; line-height:1.6; margin:0; }
+  .insight-card .mark{ color: var(--gold-soft); }
+
+  .results-title{ text-align:center; margin-bottom:22px; }
+  .results-title h1{ font-size:24px; margin:0 0 4px; }
+  .results-title p{ font-size:13.5px; color:var(--charcoal-muted); margin:0;}
+
+  .diag-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:22px; }
+  .diag-card{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:14px 15px; }
+  .diag-card .lbl{ font-size:11px; color:var(--charcoal-muted); margin-bottom:5px; }
+  .diag-card .val{ font-family:'Fraunces',serif; font-size:15.5px; color:var(--emerald); line-height:1.3; }
+
+  .interp{
+    font-size:15px; line-height:1.65; color:var(--charcoal); background:var(--white); border:1px solid var(--line);
+    border-radius:14px; padding:18px 19px; margin-bottom:24px;
+  }
+
+  .next-step{ border-top:1px solid var(--line); padding-top:22px; }
+  .next-step .kicker{ font-size:12.5px; color:var(--gold); font-weight:600; margin-bottom:8px; }
+  .next-step h2{ font-size:20px; margin:0 0 10px; }
+  .next-step p{ font-size:14.5px; color:var(--charcoal-muted); line-height:1.6; margin:0 0 18px; }
+
+  .blaise-card{
+    display:flex; gap:13px; align-items:center; background: var(--white); border:1px solid var(--line);
+    border-radius:14px; padding:14px; margin-bottom:18px;
+  }
+  .blaise-avatar{
+    width:52px;height:52px;border-radius:50%; background: linear-gradient(135deg, var(--emerald), var(--emerald-soft));
+    color:#fff; display:flex;align-items:center;justify-content:center; font-family:'Fraunces',serif; font-size:19px; flex-shrink:0;
+  }
+  .blaise-msg{ font-size:13.5px; color:var(--charcoal); line-height:1.5; }
+  .blaise-msg b{ color:var(--emerald); }
+  .play-btn{
+    margin-top:8px; font-size:12.5px; color:var(--emerald); background:none;
+    border:1px solid var(--line); border-radius:100px; padding:5px 12px; cursor:pointer;
+  }
+  .play-btn.watched{ border-color:var(--emerald); background:#F4F8F6; }
+
+  .track-note{ font-size:12.5px; color:var(--charcoal-muted); background:#F4F1E7; border-radius:10px; padding:10px 13px; margin-top:16px; }
+
+  .edu-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:6px; }
+  .edu-item{
+    background:var(--white); border:1px solid var(--line); border-radius:10px; padding:12px 14px;
+    font-size:14px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .edu-item span.arrow{ color:var(--gold); }
+
+  .reviewer-panel{ display:none; margin-top:30px; border-top:2px dashed var(--line); padding-top:18px; }
+  .reviewer-panel.open{ display:block; }
+  .reviewer-panel h3{ font-family:'Public Sans',sans-serif; font-size:11.5px; color:var(--charcoal-muted); margin:0 0 10px; letter-spacing:.02em; }
+  .rev-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap:8px 14px; background:#1B1A17; color:#E6E1D3;
+    border-radius:12px; padding:16px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11.5px;
+  }
+  .rev-grid .k{ color:#8A8578; }
+  .rev-grid .v{ color:#E6E1D3; word-break:break-word; }
+  .rev-full{ grid-column: 1 / -1; }
+
+  /* ---------- global reviewer drawer ---------- */
+  .rev-overlay{
+    position:fixed; inset:0; background:rgba(20,18,14,0.45); z-index:50;
+    display:none; align-items:flex-end; justify-content:center;
+  }
+  .rev-overlay.open{ display:flex; }
+  .rev-drawer{
+    background:#141310; color:#E6E1D3; width:100%; max-width:620px;
+    max-height:82vh; overflow-y:auto; border-radius:18px 18px 0 0;
+    padding: 18px 18px calc(22px + env(safe-area-inset-bottom, 0px));
+    animation: slideup .25s ease;
+  }
+  @keyframes slideup{ from{ transform:translateY(24px); opacity:0;} to{ transform:translateY(0); opacity:1; } }
+  .rev-drawer-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+  .rev-drawer-head h3{ font-family:'Public Sans',sans-serif; font-size:13px; color:#E6E1D3; margin:0; letter-spacing:.02em; }
+  .rev-close{ background:none; border:1px solid #3A3730; color:#B7B1A2; border-radius:100px; width:28px;height:28px; cursor:pointer; font-size:15px; line-height:1; }
+  .rev-note{ font-size:11px; color:#8A8578; margin:0 0 14px; }
+  .sim-btn-row{ display:flex; flex-wrap:wrap; gap:7px; }
+  .sim-btn{
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10.5px;
+    color:#DCC593; background:#221F19; border:1px solid #3A3730; border-radius:100px;
+    padding:6px 11px; cursor:pointer;
+  }
+  .sim-btn:hover{ border-color:#DCC593; }
+  .sim-btn.fired{ color:#8A8578; border-color:#2A2822; cursor:default; }
+  .rev-section-label{ font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:#8A8578; margin:16px 0 6px; }
+  .rev-section-label:first-of-type{ margin-top:4px; }
+  .rev-grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:7px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11.5px; }
+  .rev-grid2 .k{ color:#8A8578; }
+  .rev-grid2 .v{ color:#E6E1D3; word-break:break-word; }
+  .rev-grid2 .full{ grid-column: 1 / -1; }
+  .rev-score-line{ display:flex; justify-content:space-between; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11.5px; padding:3px 0; border-bottom:1px solid #2A2822; }
+  .rev-score-line.total{ border-bottom:none; border-top:1px solid #3A3730; margin-top:4px; padding-top:7px; color:#DCC593; font-weight:600; }
+
+  @media (max-width:400px){ .diag-grid{ grid-template-columns:1fr; } h1.q{ font-size:23px; } }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="brand">Lifeline Legacy <span>&nbsp;·&nbsp;Retirement Income Stress-Test</span></div>
+    <button class="reviewer-toggle" id="reviewerToggle" type="button">Reviewer Mode</button>
+  </header>
+
+  <div class="phase-wrap" id="phaseWrap">
+    <div class="phase-label">
+      <span id="phaseCurrent" class="current">Your Retirement Picture</span>
+      <span id="phaseCount"></span>
+    </div>
+    <div class="phase-bar">
+      <div class="phase-seg"><i id="segA"></i></div>
+      <div class="phase-seg"><i id="segB"></i></div>
+      <div class="phase-seg"><i id="segC"></i></div>
+    </div>
+  </div>
+
+  <section class="screen active" data-screen="1">
+    <div class="eyebrow">A 2-minute retirement income assessment</div>
+    <h1 class="q">How prepared is your retirement income plan for the years ahead?</h1>
+    <p class="sub">Answer a few short questions about your situation and get a personalized look at where your retirement income plan stands today.</p>
+    <div style="margin-top:8px;">
+      <button class="btn btn-primary btn-block" onclick="goTo(2)">Start My Retirement Income Stress-Test</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="2">
+    <h1 class="q">When do you expect to retire, or begin relying substantially on your retirement savings?</h1>
+    <div class="options" id="opts-horizon"></div>
+    <div class="foot-nav"><button class="back-link" onclick="goTo(1)">← Back</button><span></span></div>
+  </section>
+
+  <section class="screen" data-screen="3">
+    <h1 class="q">About how much have you accumulated for retirement?</h1>
+    <p class="sub">401(k), IRA, savings and investment accounts — not home equity.</p>
+    <div class="options" id="opts-assets"></div>
+    <div class="foot-nav"><button class="back-link" onclick="goTo(2)">← Back</button><span></span></div>
+  </section>
+
+  <section class="screen" data-screen="4">
+    <h1 class="q">Which of these are part of your retirement picture?</h1>
+    <p class="sub">Select all that apply.</p>
+    <div class="options" id="opts-accounts"></div>
+    <button class="btn btn-primary btn-block" style="margin-top:6px;" onclick="goTo(5)">Continue</button>
+    <div class="foot-nav"><button class="back-link" onclick="goTo(3)">← Back</button><span></span></div>
+  </section>
+
+  <section class="screen" data-screen="5">
+    <h1 class="q">What concerns you most about retirement right now?</h1>
+    <div class="options" id="opts-concern"></div>
+    <div class="foot-nav"><button class="back-link" onclick="goTo(4)">← Back</button><span></span></div>
+  </section>
+
+  <section class="screen" data-screen="6">
+    <h1 class="q">Do you currently have a written retirement income plan?</h1>
+    <div class="options" id="opts-plan"></div>
+    <div class="foot-nav"><button class="back-link" onclick="goTo(5)">← Back</button><span></span></div>
+  </section>
+
+  <section class="screen" data-screen="7">
+    <h1 class="q">What are you hoping to accomplish?</h1>
+    <div class="options" id="opts-intent"></div>
+    <div class="foot-nav"><button class="back-link" onclick="goTo(6)">← Back</button><span></span></div>
+  </section>
+
+  <section class="screen" data-screen="8">
+    <div class="eyebrow">Based on your answers</div>
+    <h1 class="q" style="font-size:22px;">Here's an early look at what we're seeing.</h1>
+    <div class="insight-card"><p id="insightText"></p></div>
+    <p class="sub" style="margin-bottom:22px;">Enter your info on the next screen to get your complete results.</p>
+    <button class="btn btn-primary btn-block" onclick="goTo(9)">Get My Complete Results</button>
+    <div class="foot-nav"><button class="back-link" onclick="goTo(7)">← Back</button><span></span></div>
+  </section>
+
+  <section class="screen" data-screen="9">
+    <h1 class="q">Where should we send your complete results?</h1>
+    <div class="field"><label for="fld-name">First name</label><input id="fld-name" type="text" placeholder="Jane" autocomplete="given-name" required><div class="field-error" id="err-name"></div></div>
+    <div class="field"><label for="fld-lastname">Last name</label><input id="fld-lastname" type="text" placeholder="Doe" autocomplete="family-name" required><div class="field-error" id="err-lastname"></div></div>
+    <div class="field"><label for="fld-phone">Mobile number</label><input id="fld-phone" type="tel" placeholder="(214) 555-0123" autocomplete="tel" required><div class="field-error" id="err-phone"></div></div>
+    <div class="field"><label for="fld-email">Email</label><input id="fld-email" type="email" placeholder="jane@email.com" autocomplete="email" required><div class="field-error" id="err-email"></div></div>
+
+    <div class="consent-box">
+      <div class="consent-flag">⚠ COMPLIANCE REVIEW REQUIRED — placeholder language</div>
+      <p class="consent-text">By providing your number, you agree to receive text messages and calls from Lifeline Legacy Financial Group about your Retirement Income Stress-Test results, including by automated means. Message and data rates may apply. Consent is not a condition of any purchase. Reply STOP to opt out.</p>
+      <label class="check-row"><input type="checkbox" id="fld-consent"><span>I agree to receive texts and calls as described above.</span></label>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="consentContinue" disabled onclick="submitConsent()">Send Me My Results</button>
+    <div class="foot-nav"><button class="back-link" onclick="goTo(8)">← Back</button><span></span></div>
+  </section>
+
+  <section class="screen" data-screen="10">
+    <h1 class="q">Verify your mobile number</h1>
+    <p class="sub">We texted a 6-digit code to the number you entered.</p>
+    <div class="otp-demo-note">This is a working preview, not connected to live SMS. <b>Demo code: <span id="demoCode"></span></b> — enter it below to continue.</div>
+    <div class="otp-inputs">
+      <input maxlength="1" inputmode="numeric" class="otp-d">
+      <input maxlength="1" inputmode="numeric" class="otp-d">
+      <input maxlength="1" inputmode="numeric" class="otp-d">
+      <input maxlength="1" inputmode="numeric" class="otp-d">
+      <input maxlength="1" inputmode="numeric" class="otp-d">
+      <input maxlength="1" inputmode="numeric" class="otp-d">
+    </div>
+    <div class="otp-error" id="otpError">That code didn't match. Try again.</div>
+    <button class="btn btn-primary btn-block" onclick="verifyOtp()">Verify &amp; See My Results</button>
+    <div class="foot-nav">
+      <button class="back-link" onclick="goTo(9)">← Back</button>
+      <button class="resend" onclick="regenOtp()">Resend code</button>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="11">
+    <div class="results-title">
+      <h1>Your Retirement Income Results</h1>
+      <p id="resultsName"></p>
+    </div>
+
+    <div class="diag-grid">
+      <div class="diag-card"><div class="lbl">Retirement Stage</div><div class="val" id="diagStage"></div></div>
+      <div class="diag-card"><div class="lbl">Planning Status</div><div class="val" id="diagStatus"></div></div>
+      <div class="diag-card"><div class="lbl">Primary Concern</div><div class="val" id="diagConcern"></div></div>
+      <div class="diag-card"><div class="lbl">Planning Track</div><div class="val" id="diagTrack"></div></div>
+    </div>
+
+    <div class="interp" id="interpText"></div>
+    <div class="next-step" id="nextStepBlock"></div>
+  </section>
+
+</div>
+
+<div class="rev-overlay" id="revOverlay">
+  <div class="rev-drawer">
+    <div class="rev-drawer-head">
+      <h3>Reviewer / Architect Diagnostic — hidden system, never shown to visitors</h3>
+      <button class="rev-close" onclick="closeReviewer()" aria-label="Close">&times;</button>
+    </div>
+    <p class="rev-note">Preview only: fields are held in-browser, not written to GHL. In production, Fit Score and Tier must be computed server-side — this drawer is a preview convenience, not a security boundary.</p>
+    <div id="revBody"></div>
+    <div class="rev-section-label" style="margin-top:18px;">Simulate engagement events (no natural trigger in a static preview)</div>
+    <p class="rev-note" style="margin-bottom:10px;">These five events require a real session history, email/SMS system, webinar platform, or completed booking flow — none of which exist in this preview. Firing them here uses the exact same point values and dedup logic as the real event (Section 3.2); this is a QA convenience, not a shortcut around the rubric.</p>
+    <div class="sim-btn-row" id="revSimControls"></div>
+    <p class="rev-note" style="margin:16px 0 0; padding-top:12px; border-top:1px solid #2A2822;">Fit Model v1.6 &middot; Engagement Model v1.3 (0–35 range label corrected v2.0, point values unchanged) &middot; Stress-Test Build v2.8 &mdash; store these alongside every GHL contact so future scoring changes can be audited and recalculated from raw answers.</p>
+  </div>
+</div>
+
+<script>
+const FIT_POINTS = {
+  horizon: { already_retired:30, '0_to_2_years':30, '3_to_5_years':25, '6_to_10_years':20, gt_10_years:5, unsure_horizon:10 },
+  assets:  { under_100k:0, '100k_250k':10, '250k_500k':20, '500k_1m':30, '1m_plus':30, undisclosed:15 },
+  plan:    { no_plan:20, accounts_no_plan:18, projections_only:15, outdated_plan:15, has_current_plan:5 },
+  intent:  { build_plan:15, verify_income:15, second_opinion:15, near_term_decision:20, understand_options:10, mainly_researching:0 }
+};
+const PLANNING_TRACK_BY_PLAN = {
+  no_plan:{ code:'build_first_plan', label:'Build My First Written Plan' },
+  accounts_no_plan:{ code:'build_first_plan', label:'Build My First Written Plan' },
+  projections_only:{ code:'update_coordinate', label:'Update & Coordinate My Plan' },
+  outdated_plan:{ code:'update_coordinate', label:'Update & Coordinate My Plan' },
+  has_current_plan:{ code:'second_opinion', label:'Second Opinion' }
+};
+function planningTrackFor(planStatus, intent){
+  // v2.5 lock: a current trusted plan always routes to Second Opinion.
+  if(planStatus === 'has_current_plan') return PLANNING_TRACK_BY_PLAN.has_current_plan;
+  // v2.5 lock: mainly researching routes to Education, independent of Fit Tier.
+  if(intent === 'mainly_researching') return { code:'education', label:'Education' };
+  return PLANNING_TRACK_BY_PLAN[planStatus] || { code:null, label:null };
+}
+const HORIZON_LABELS = {
+  already_retired:'Already Retired', '0_to_2_years':'Within 0–2 Years', '3_to_5_years':'Within 3–5 Years',
+  '6_to_10_years':'Within 6–10 Years', gt_10_years:'10+ Years Out', unsure_horizon:'Timing Not Yet Set'
+};
+const ASSET_LABELS = {
+  under_100k:'Under $100K', '100k_250k':'$100K–$250K', '250k_500k':'$250K–$500K',
+  '500k_1m':'$500K–$1M', '1m_plus':'$1M+', undisclosed:'Not Disclosed'
+};
+const PLAN_LABELS = {
+  no_plan:'No plan', accounts_no_plan:'Accounts, but no coordinated plan',
+  projections_only:'Projections, but not a real income plan', outdated_plan:'My plan is outdated or I don\u2019t fully trust it',
+  has_current_plan:'I have a current, trusted plan'
+};
+const PLAN_STATUS_LABEL = {
+  no_plan:'Written Income Plan Gap Identified', accounts_no_plan:'Written Income Plan Gap Identified',
+  projections_only:'Written Income Plan Gap Identified', outdated_plan:'Plan Update Needed',
+  has_current_plan:'Trusted Plan on File'
+};
+const INTENT_LABELS = {
+  build_plan:'Build a written plan', verify_income:'Verify my income is on track', second_opinion:'Get a second opinion',
+  near_term_decision:'Make a near-term decision', understand_options:'Understand my options', mainly_researching:'Mainly researching'
+};
+const CONCERN_LABELS = {
+  income:'Creating Dependable Retirement Income', taxes:'Retirement Taxes', market_decline:'A Market Decline Near Retirement',
+  longevity:'Outliving My Savings', survivor_income:'Survivor Income for My Spouse',
+  healthcare_ltc:'Healthcare / Long-Term Care Costs', timing:'Timing My Retirement Decisions',
+  coordination:'Coordinating Everything I Have', legacy:'Legacy for My Family'
+};
+const CONCERN_SENTENCES = {
+  income:"Turning what you've accumulated into dependable, lasting income is one of the most common — and most fixable — planning gaps once you have a written plan.",
+  taxes:"Most people underestimate how much of their retirement income tax rules will claim — a written plan is where that gets addressed directly.",
+  market_decline:"A downturn in the years right around retirement can do outsized damage to your income — this is called sequence-of-returns risk, and it's rarely addressed by account statements alone.",
+  longevity:"Planning for a retirement that could last 25–30+ years is different from planning for a fixed number of years — a written plan accounts for that directly.",
+  survivor_income:"Making sure your spouse is fully provided for if something happens to you is exactly what a written retirement income plan is built to solve.",
+  healthcare_ltc:"Healthcare and long-term care costs are one of the biggest unplanned drains on retirement income — this is a standard part of a coordinated written plan.",
+  timing:"Knowing exactly when to retire, claim Social Security, or start drawing income is a timing question a written plan is built to answer.",
+  coordination:"Having several accounts and pieces is common — the question is whether they're working together, which is exactly what plan coordination solves.",
+  legacy:"Making sure what you've built lasts beyond you is a legacy question a written retirement income plan directly addresses."
+};
+/* Concern-matched education — canonical LLFG titles, not invented copy.
+   Keys MUST match Screen 5's actual stored field values (see CONCERN_LABELS) — a mismatch here
+   silently breaks routing for that concern rather than throwing an error, so this is worth
+   re-checking any time Screen 5's answer set changes. "Retirement Income Explained" is the parent
+   umbrella library; titles below are canonical routing names, not a claim every asset is published —
+   see the note in eduListFor. */
+const EDU_RECOMMENDATIONS = {
+  income:          { primary:'The 10-Year Retirement Countdown', secondary:'The Written Retirement Income Sequence\u2122' },
+  taxes:           { primary:'Retirement Taxes', secondary:'The Written Retirement Income Sequence\u2122' },
+  market_decline:  { primary:'Market & Sequence Risk', secondary:'The 10-Year Retirement Countdown' },
+  longevity:       { primary:'Inflation & Longevity', secondary:'Retirement Income Explained' },
+  survivor_income: { primary:'Estate & Survivor Planning', secondary:'Retirement Income Explained' },
+  healthcare_ltc:  { primary:'Medicare & Healthcare', secondary:'The 10-Year Retirement Countdown' },
+  timing:          { primary:'Social Security Explained', secondary:'The 10-Year Retirement Countdown' },
+  coordination:    { primary:'Retirement Income Explained', secondary:'The Written Retirement Income Sequence\u2122' },
+  /* v2.0: canonical row supplied. NOTE: primary title is identical to survivor_income's — a deliberate
+     editorial choice (estate planning spans both), not a naming error, but it means these two distinct
+     Primary Concerns now surface the same lead recommendation title. */
+  legacy:          { primary:'Estate & Survivor Planning', secondary:'The Written Retirement Income Sequence\u2122' }
+};
+/* Horizon-based override, separate from concern-based routing — fires regardless of Primary Concern
+   when someone is already retired. Kept distinct from EDU_RECOMMENDATIONS since it's keyed off a
+   different field (Screen 2, not Screen 5); not folded in silently. */
+const EDU_HORIZON_OVERRIDE = {
+  already_retired: { primary:'First Five Years of Retirement', secondary:'When Retirement Does Not Go as Planned' }
+};
+function eduListFor(concern, horizon, includeExtras){
+  const rec = EDU_HORIZON_OVERRIDE[horizon] || EDU_RECOMMENDATIONS[concern] || EDU_RECOMMENDATIONS.coordination;
+  const items = [rec.primary, rec.secondary];
+  items.push('Upcoming LLFG Workshops');
+  if(includeExtras) items.push('Retake Your Stress-Test Later');
+  return items.map(t=>`<div class="edu-item">${t} <span class="arrow">\u2192</span></div>`).join('');
+}
+function eduDebugInfo(concern, horizon){
+  if(EDU_HORIZON_OVERRIDE[horizon]){
+    const r = EDU_HORIZON_OVERRIDE[horizon];
+    return `${r.primary} / ${r.secondary} \u2014 source: horizon override (already retired), concern (${concern||'\u2014'}) not used for this routing`;
+  }
+  const rec = EDU_RECOMMENDATIONS[concern];
+  if(!rec) return '\u2014 (Primary Concern not yet answered)';
+  return `${rec.primary} / ${rec.secondary} \u2014 source: concern-matched (${concern})`;
+}
+const ACCOUNT_LABELS = {
+  '401k_403b':'401(k) / 403(b)', tsp:'TSP', ira_traditional:'Traditional IRA', ira_roth:'Roth IRA',
+  pension:'Pension', brokerage:'Brokerage / Investment Account', annuity:'Annuity',
+  social_security:'Social Security', business_ownership:'Business Ownership', real_estate:'Real Estate', none_yet:'None Yet'
+};
+/* Section 3.2, full locked rubric — v1.9 adds the five events this preview was missing
+   (returns_to_results, clicks_link, replies, attends_webinar, completes_booking).
+   Point values unchanged from the locked doc; watched_intro remains a single +5 proxy for
+   "watches 50%+ (+3) then 90%+ (+2 more)" since this preview has no partial-view tracking.
+   v2.0 LOCK: range is 0–35 (matches the true sum of all 9 events), not the old nominal "0–30" —
+   bands: Low 0–7, Medium 8–17, High 18–35. No point values changed to reach this; the range
+   statement was corrected to match arithmetic that was always true. */
+const ENGAGEMENT_EVENTS = {
+  test_completed: 3, viewed_full_results: 3, watched_intro: 5, opened_booking: 3,
+  returns_to_results: 2, clicks_link: 2, replies: 4, attends_webinar: 5, completes_booking: 8
+};
+const OWNER_MATRIX = {
+  'A-High':'Blaise + AI/Admin support', 'A-Medium':'Admin/AI \u2192 Blaise escalation', 'A-Low':'AI/Admin (high-value re-engagement, retains Tier A)',
+  'B-High':'Admin/AI, Blaise if intent strong', 'B-Medium':'AI + automation', 'B-Low':'Automation/AI',
+  'C-High':'Automation/AI', 'C-Medium':'Automation', 'C-Low':'Automation'
+};
+
+const ATTRIBUTION = (()=>{
+  const p = new URLSearchParams(location.search);
+  const get = (k)=> p.get(k) || 'n/a — preview (populated from UTM in production)';
+  const now = new Date();
+  const cohort = `${now.toLocaleString('en-US',{month:'long'})} ${now.getFullYear()} (preview stub — real cohort keys off lead-created date, tracked to eventual close per Section 6.7)`;
+  return {
+    traffic_source: get('utm_source'), campaign: get('utm_campaign'), ad_set: get('utm_adset'),
+    ad: get('utm_ad'), ad_angle: get('ad_angle'), creative: get('creative'),
+    acquisition_cohort: p.get('cohort') || cohort
+  };
+})();
+
+const state = {
+  answers: { account_inventory: [] },
+  fitScore: 0, fitTier: null, fitBreakdown: [],
+  engagementScore: 0, engagementLevel: null,
+  planningTrack: null,
+  verification: 'Pending',
+  currentScreen: 1,
+  demoOtp: null
+};
+
+const PHASES = {
+  1:{name:'Your Retirement Picture', seg:0}, 2:{name:'Your Retirement Picture', seg:0}, 3:{name:'Your Retirement Picture', seg:0}, 4:{name:'Your Retirement Picture', seg:0},
+  5:{name:'Priorities', seg:1}, 6:{name:'Priorities', seg:1}, 7:{name:'Priorities', seg:1},
+  8:{name:'Results', seg:2}, 9:{name:'Results', seg:2}, 10:{name:'Results', seg:2}, 11:{name:'Results', seg:2}
+};
+
+function buildOptions(containerId, entries, field, multi){
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  entries.forEach(([value,label])=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt'; btn.type='button';
+    btn.innerHTML = `<span class="opt-check"></span>${label}`;
+    btn.onclick = ()=> selectOption(field, value, multi, btn, containerId);
+    el.appendChild(btn);
+  });
+}
+
+function selectOption(field, value, multi, btn, containerId){
+  if(multi){
+    btn.classList.toggle('selected');
+    const set = new Set(state.answers.account_inventory);
+    if(set.has(value)) set.delete(value); else set.add(value);
+    state.answers.account_inventory = Array.from(set);
+    return;
+  }
+  document.querySelectorAll(`#${containerId} .opt`).forEach(o=>o.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.answers[field] = value;
+  setTimeout(()=> advanceAfterSelect(field), 320);
+}
+
+function advanceAfterSelect(field){
+  const map = { retirement_horizon:3, investable_assets:4, primary_concern:6, written_plan_status:7, stated_intent:8 };
+  if(field === 'stated_intent'){ computeFit(); markEngagement('test_completed'); buildInsight(); }
+  if(map[field]) goTo(map[field]);
+}
+
+function computeFit(){
+  const a = state.answers;
+  const h = FIT_POINTS.horizon[a.retirement_horizon]||0;
+  const as = FIT_POINTS.assets[a.investable_assets]||0;
+  const pl = FIT_POINTS.plan[a.written_plan_status]||0;
+  const it = FIT_POINTS.intent[a.stated_intent]||0;
+  state.fitBreakdown = [
+    [`Horizon: ${HORIZON_LABELS[a.retirement_horizon]||'—'}`, h],
+    [`Assets: ${ASSET_LABELS[a.investable_assets]||'—'}`, as],
+    [`Written plan: ${PLAN_LABELS[a.written_plan_status]||'—'}`, pl],
+    [`Intent: ${INTENT_LABELS[a.stated_intent]||'—'}`, it]
+  ];
+  state.fitScore = h + as + pl + it;
+  state.fitTier = state.fitScore >= 70 ? 'A' : (state.fitScore >= 40 ? 'B' : 'C');
+  const track = planningTrackFor(a.written_plan_status, a.stated_intent);
+  state.planningTrackCode = track.code;
+  state.planningTrack = track.label;
+}
+
+function markEngagement(key){
+  if(state.answers['_eng_'+key]) return;
+  state.answers['_eng_'+key] = true;
+  state.engagementScore += ENGAGEMENT_EVENTS[key] || 0;
+  state.engagementLevel = state.engagementScore >= 18 ? 'High' : (state.engagementScore >= 8 ? 'Medium' : 'Low');
+  renderReviewer();
+}
+
+function buildInsight(){
+  const c = state.answers.primary_concern;
+  document.getElementById('insightText').innerHTML =
+    `You've accumulated several retirement resources, but your responses suggest this deserves closer attention: <span class="mark">${CONCERN_SENTENCES[c] || ''}</span>`;
+}
+
+function goTo(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelector(`.screen[data-screen="${n}"]`).classList.add('active');
+  state.currentScreen = n;
+  updatePhase(n);
+  if(n===2 && !document.getElementById('opts-horizon').children.length){ buildOptions('opts-horizon', Object.entries(HORIZON_LABELS), 'retirement_horizon', false); }
+  if(n===3 && !document.getElementById('opts-assets').children.length){ buildOptions('opts-assets', Object.entries(ASSET_LABELS), 'investable_assets', false); }
+  if(n===4 && !document.getElementById('opts-accounts').children.length){ buildOptions('opts-accounts', Object.entries(ACCOUNT_LABELS), 'account_inventory', true); }
+  if(n===5 && !document.getElementById('opts-concern').children.length){ buildOptions('opts-concern', Object.entries(CONCERN_LABELS), 'primary_concern', false); }
+  if(n===6 && !document.getElementById('opts-plan').children.length){ buildOptions('opts-plan', Object.entries(PLAN_LABELS), 'written_plan_status', false); }
+  if(n===7 && !document.getElementById('opts-intent').children.length){ buildOptions('opts-intent', Object.entries(INTENT_LABELS), 'stated_intent', false); }
+  if(n===10){ regenOtp(); }
+  if(n===11){ markEngagement('viewed_full_results'); renderResults(); }
+  renderReviewer();
+  window.scrollTo({top:0});
+}
+
+function updatePhase(n){
+  const p = PHASES[n];
+  document.getElementById('phaseCurrent').textContent = p.name;
+  ['segA','segB','segC'].forEach((id,i)=>{
+    document.getElementById(id).style.width = i < p.seg ? '100%' : (i === p.seg ? '55%' : '0%');
+  });
+  document.getElementById('phaseWrap').style.display = (n===1) ? 'none' : 'block';
+}
+
+/* ---- Screen 9 validation & normalization (locked spec) ---- */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validateName(raw){
+  const v = raw.trim();
+  return { valid: v.length > 0, normalized: v };
+}
+function validateEmail(raw){
+  const v = raw.trim().toLowerCase();
+  return { valid: EMAIL_RE.test(v), normalized: v };
+}
+function validatePhone(raw){
+  const digits = raw.replace(/\D/g, '');
+  let national;
+  if(digits.length === 11 && digits[0] === '1') national = digits.slice(1);
+  else if(digits.length === 10) national = digits;
+  else return { valid: false, normalized: null };
+  // NANP structural check: area code and exchange code can't start with 0 or 1 — "obviously invalid" beyond digit count alone
+  if(/^[01]/.test(national) || /^[01]/.test(national.slice(3))) return { valid: false, normalized: null };
+  return { valid: true, normalized: '+1' + national };
+}
+
+const FIELD_VALIDATORS = {
+  'fld-name':      { fn: validateName,  msg: 'First name is required.' },
+  'fld-lastname':  { fn: validateName,  msg: 'Last name is required.' },
+  'fld-phone':     { fn: validatePhone, msg: 'Please enter a valid mobile number.' },
+  'fld-email':     { fn: validateEmail, msg: 'Please enter a valid email address.' }
+};
+const fieldValidity = { 'fld-name': false, 'fld-lastname': false, 'fld-phone': false, 'fld-email': false };
+
+function runFieldValidation(id, showErrorEvenIfEmpty){
+  const el = document.getElementById(id);
+  const errId = 'err-' + id.replace('fld-', '');
+  const errEl = document.getElementById(errId);
+  const { fn, msg } = FIELD_VALIDATORS[id];
+  const result = fn(el.value);
+  fieldValidity[id] = result.valid;
+  const isEmpty = el.value.trim().length === 0;
+  if(!result.valid && (showErrorEvenIfEmpty || !isEmpty)){
+    el.classList.add('invalid');
+    errEl.textContent = isEmpty ? (id === 'fld-phone' ? 'Mobile number is required.' : id === 'fld-email' ? 'Email is required.' : msg) : msg;
+    errEl.classList.add('show');
+  } else {
+    el.classList.remove('invalid');
+    errEl.classList.remove('show');
+  }
+  updateSubmitGate();
+}
+function updateSubmitGate(){
+  const allValid = Object.values(fieldValidity).every(v => v);
+  const consented = document.getElementById('fld-consent').checked;
+  document.getElementById('consentContinue').disabled = !(allValid && consented);
+}
+Object.keys(FIELD_VALIDATORS).forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener('blur', ()=> runFieldValidation(id, true));
+  el.addEventListener('input', ()=> runFieldValidation(id, false));
+});
+document.getElementById('fld-consent').addEventListener('change', updateSubmitGate);
+
+function submitConsent(){
+  // Defense in depth — the button should already be disabled if any of this fails.
+  for(const id of Object.keys(FIELD_VALIDATORS)) runFieldValidation(id, true);
+  if(!Object.values(fieldValidity).every(v=>v) || !document.getElementById('fld-consent').checked) return;
+
+  const emailResult = validateEmail(document.getElementById('fld-email').value);
+  const phoneResult = validatePhone(document.getElementById('fld-phone').value);
+
+  state.answers.first_name = validateName(document.getElementById('fld-name').value).normalized;
+  state.answers.last_name = validateName(document.getElementById('fld-lastname').value).normalized; // maps directly to native GHL Contact Last Name — never parsed from a combined name field
+  state.answers.email_raw = document.getElementById('fld-email').value.trim();
+  state.answers.email_normalized = emailResult.normalized;
+  state.answers.email = emailResult.normalized; // downstream fields use the normalized value
+  state.answers.mobile_raw = document.getElementById('fld-phone').value.trim();
+  state.answers.mobile_normalized = phoneResult.normalized;
+  state.answers.mobile_phone = phoneResult.normalized; // downstream fields use the normalized value
+  state.answers.sms_consent = true;
+  state.answers.consent_timestamp = new Date().toISOString();
+  goTo(10);
+}
+
+function regenOtp(){
+  state.demoOtp = String(Math.floor(100000 + Math.random()*900000));
+  document.getElementById('demoCode').textContent = state.demoOtp;
+  document.querySelectorAll('.otp-d').forEach(i=>i.value='');
+  document.getElementById('otpError').style.display='none';
+  wireOtpInputs();
+}
+function wireOtpInputs(){
+  const inputs = document.querySelectorAll('.otp-d');
+  inputs.forEach((inp,idx)=>{
+    inp.oninput = ()=>{ inp.value = inp.value.replace(/\D/g,'').slice(0,1); if(inp.value && inputs[idx+1]) inputs[idx+1].focus(); };
+    inp.onkeydown = (e)=>{ if(e.key==='Backspace' && !inp.value && inputs[idx-1]) inputs[idx-1].focus(); };
+  });
+}
+function verifyOtp(){
+  const entered = Array.from(document.querySelectorAll('.otp-d')).map(i=>i.value).join('');
+  if(entered === state.demoOtp){ state.verification = 'Verified'; goTo(11); }
+  else{ document.getElementById('otpError').style.display='block'; }
+}
+
+function renderResults(){
+  const a = state.answers;
+  document.getElementById('resultsName').textContent = a.first_name ? `Prepared for ${a.first_name}${a.last_name ? ' ' + a.last_name : ''}` : '';
+  document.getElementById('diagStage').textContent = HORIZON_LABELS[a.retirement_horizon] || '\u2014';
+  document.getElementById('diagStatus').textContent = PLAN_STATUS_LABEL[a.written_plan_status] || '\u2014';
+  document.getElementById('diagConcern').textContent = CONCERN_LABELS[a.primary_concern] || '\u2014';
+  document.getElementById('diagTrack').textContent = state.planningTrack || '\u2014';
+  document.getElementById('interpText').textContent =
+    "You've done important work accumulating retirement assets. Based on your responses, the next planning question may be how those resources work together to create dependable income once the paycheck stops.";
+  renderNextStep();
+  renderReviewer();
+}
+
+function renderNextStep(){
+  const el = document.getElementById('nextStepBlock');
+  const tier = state.fitTier;
+  const isSecondOpinion = state.planningTrack === 'Second Opinion';
+
+  if(isSecondOpinion){
+    el.innerHTML = `
+      <div class="kicker">Your next step</div>
+      <h2>A Second Opinion</h2>
+      <p>You already have a retirement plan. The question may be whether you'd benefit from a second set of eyes.</p>
+      ${tier==='A' ? blaiseCardHtml() : ''}
+      <button class="btn btn-primary btn-block" onclick="openBooking()">Request a Retirement Income Second Opinion</button>`;
+    return;
+  }
+  if(tier === 'A'){
+    el.innerHTML = `
+      <div class="kicker">Your next step</div>
+      <h2>Retirement Income Review</h2>
+      <p>Based on your responses, a Retirement Income Review may be the appropriate next step. This is where we can look at how your retirement pieces fit together and determine whether a written income plan would be helpful.</p>
+      ${blaiseCardHtml()}
+      <button class="btn btn-primary btn-block" onclick="openBooking()">Book My Retirement Income Review</button>
+      <div class="track-note">What we'll examine: income sources, retirement accounts, timing decisions, taxes, risks, and whether the pieces are working together.</div>`;
+  } else if(tier === 'B'){
+    el.innerHTML = `
+      <div class="kicker">Your next step</div>
+      <h2>You're at a good starting point</h2>
+      <p>A Retirement Income Review would give you real clarity here \u2014 many people in your situation find this is the missing piece.</p>
+      ${blaiseCardHtml()}
+      <div class="btn-row">
+        <button class="btn btn-primary" style="flex:1" onclick="openBooking()">See Available Times</button>
+        <button class="btn btn-ghost" style="flex:1" onclick="showEducation()">Continue My Education</button>
+      </div>
+      <div id="eduSlot"></div>`;
+  } else {
+    el.innerHTML = `
+      <div class="kicker">Your next step</div>
+      <h2>Education and preparation</h2>
+      <p>You're early in this process, and that's a great place to start. Here's where we'd point you first:</p>
+      <div class="edu-list">
+        ${eduListFor(state.answers.primary_concern, state.answers.retirement_horizon, true)}
+      </div>`;
+  }
+}
+
+function blaiseCardHtml(){
+  return `
+    <div class="blaise-card">
+      <div class="blaise-avatar">B</div>
+      <div class="blaise-msg">
+        <b>Blaise Tamo</b> \u2014 "Hi, I'm Blaise. Based on the kind of situation that brought you here, I wanted to introduce myself before we talk."<br>
+        <button class="play-btn" id="watchBtn" onclick="watchIntro(this)">\u25B6 Play message from Blaise</button>
+      </div>
+    </div>`;
+}
+function watchIntro(btn){ btn.textContent = '\u2713 Watched'; btn.classList.add('watched'); markEngagement('watched_intro'); }
+function openBooking(){ markEngagement('opened_booking'); alert('Preview only: this would open the live booking calendar in production.'); }
+function showEducation(){
+  document.getElementById('eduSlot').innerHTML = `
+    <div class="edu-list" style="margin-top:12px;">
+      ${eduListFor(state.answers.primary_concern, state.answers.retirement_horizon, false)}
+    </div>`;
+}
+
+document.getElementById('reviewerToggle').addEventListener('click', openReviewer);
+const SIM_EVENTS = [
+  ['returns_to_results', 'Returns to results/website (+2)'],
+  ['clicks_link', 'Clicks concern-matched email/SMS link (+2)'],
+  ['replies', 'Replies to SMS/email (+4)'],
+  ['attends_webinar', 'Attends webinar/seminar (+5)'],
+  ['completes_booking', 'Completes booking (+8)']
+];
+function renderSimControls(){
+  const el = document.getElementById('revSimControls');
+  el.innerHTML = SIM_EVENTS.map(([key,label])=>{
+    const fired = !!state.answers['_eng_'+key];
+    return `<button type="button" class="sim-btn${fired?' fired':''}" ${fired?'disabled':''} onclick="fireSimEvent('${key}')">${fired?'\u2713 ':''}${label}</button>`;
+  }).join('');
+}
+function fireSimEvent(key){
+  markEngagement(key);
+  renderReviewer();
+  renderSimControls();
+}
+function openReviewer(){
+  document.getElementById('revOverlay').classList.add('open');
+  renderReviewer();
+  renderSimControls();
+}
+function closeReviewer(){
+  document.getElementById('revOverlay').classList.remove('open');
+}
+document.getElementById('revOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'revOverlay') closeReviewer();
+});
+
+function tierDisplay(){
+  if(!state.fitTier) return '\u2014';
+  return state.verification === 'Verified' ? `Tier ${state.fitTier} \u2014 Verified` : `Tier ${state.fitTier} Candidate \u2014 Unverified`;
+}
+
+function nextActionFor(){
+  if(!state.fitTier) return `Not yet classified \u2014 Screens 2\u20137 incomplete (Screen ${state.currentScreen} of 11)`;
+  if(state.currentScreen < 11) return `Fit classified; routing pending verification (${tierDisplay()} \u2014 complete contact, consent and OTP to activate routing)`;
+  if(state.planningTrack === 'Second Opinion') return 'Route to Second-Opinion Track (Section 2, Screen 11)';
+  if(state.fitTier === 'A') return 'Tier A \u2014 Not Booked: strong Review CTA, speed-to-relevant-response (Section 3.8)';
+  if(state.fitTier === 'B') return 'Tier B \u2014 Not Booked: Review invitation + concern-matched nurture (Section 3.8)';
+  return 'Tier C \u2014 Nurture: education track, no booking push (Section 3.7 governs promotion)';
+}
+
+function renderReviewer(){
+  const overlay = document.getElementById('revOverlay');
+  if(!overlay.classList.contains('open')) return;
+  const a = state.answers;
+  const ownerKey = `${state.fitTier}-${state.engagementLevel || 'Low'}`;
+  const scored = state.currentScreen >= 8 && state.fitTier;
+
+  let html = '';
+
+  /* ---- FIT CLASSIFICATION — scored inputs only, nothing else mixed in ---- */
+  html += `<div class="rev-section-label">Fit Classification \u2014 scored inputs only</div>`;
+  html += `<div class="rev-score-line"><span>Fit Score</span><span>${scored ? state.fitScore + ' / 100' : '\u2014'}</span></div>`;
+  html += `<div class="rev-score-line" style="margin-bottom:8px;"><span>Fit Tier</span><span>${tierDisplay()}</span></div>`;
+  if(scored){
+    html += state.fitBreakdown.map(([label,pts])=>`<div class="rev-score-line"><span>${label}</span><span>${pts>=0?'+':''}${pts}</span></div>`).join('');
+    html += `<div class="rev-score-line total"><span>TOTAL</span><span>${state.fitScore}</span></div>`;
+  } else {
+    html += `<div class="rev-score-line"><span style="color:#8A8578;">Not yet computed \u2014 Screens 2\u20137 incomplete</span><span></span></div>`;
+  }
+  html += `<p class="rev-note" style="margin:10px 0 0;">Only these four inputs score. Primary Concern is deliberately excluded \u2014 see Routing & Personalization below.</p>`;
+
+  /* ---- ROUTING & PERSONALIZATION — everything non-scored ---- */
+  html += `<div class="rev-section-label">Routing & Personalization \u2014 not scored</div><div class="rev-grid2">`;
+  html += kv('Primary Concern', a.primary_concern ? CONCERN_LABELS[a.primary_concern] : '\u2014');
+  html += kv('Planning Track', scored ? state.planningTrack : '\u2014');
+  html += kv('Verification', state.verification);
+  html += kv('Engagement', `${state.engagementLevel || 'Low'} (${state.engagementScore} / 35)`);
+  html += kv('Consent Captured', a.sms_consent ? `true \u2014 ${a.consent_timestamp}` : 'false');
+  html += kv('Acquisition Cohort', ATTRIBUTION.acquisition_cohort.split(' (')[0]);
+  html += kv('Current Screen', `${state.currentScreen} / 11`);
+  html += kv('Assigned Follow-Up Owner', scored ? (OWNER_MATRIX[ownerKey] || '\u2014') : '\u2014');
+  html += `<div class="k full" style="margin-top:2px;">Next Action</div><div class="v full">${nextActionFor()}</div>`;
+  html += `<div class="k full" style="margin-top:2px;">Recommended Education</div><div class="v full">${eduDebugInfo(a.primary_concern, a.retirement_horizon)}</div>`;
+  html += `<div class="k full" style="margin-top:2px;">Account Inventory</div><div class="v full">${(a.account_inventory||[]).map(x=>ACCOUNT_LABELS[x]).join(', ') || '\u2014'}</div>`;
+  html += `</div>`;
+
+  /* ---- ATTRIBUTION — supporting detail, kept separate from the two boxes above ---- */
+  html += `<div class="rev-section-label">Attribution (preview stub \u2014 populated from UTM in production)</div><div class="rev-grid2">`;
+  html += kv('Traffic Source', ATTRIBUTION.traffic_source);
+  html += kv('Campaign', ATTRIBUTION.campaign);
+  html += kv('Ad Set', ATTRIBUTION.ad_set);
+  html += kv('Ad', ATTRIBUTION.ad);
+  html += kv('Ad Angle', ATTRIBUTION.ad_angle);
+  html += kv('Creative', ATTRIBUTION.creative);
+  html += `</div>`;
+
+  document.getElementById('revBody').innerHTML = html;
+}
+function kv(k,v){ return `<div class="k">${k}</div><div class="v">${v}</div>`; }
+
+updatePhase(1);
+</script>
+</body>
+</html>
