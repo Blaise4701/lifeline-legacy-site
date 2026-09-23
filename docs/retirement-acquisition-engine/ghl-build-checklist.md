@@ -244,7 +244,7 @@ Build all three sub-fields for each row before moving to the next field — don'
 
 | # | Field Name | Type | Value to hard-code for every contact created under this lock |
 |---|---|---|---|
-| 7.1 | Stress-Test Build Version | Text | `v2.8` |
+| 7.1 | Stress-Test Build Version | Text | `v2.11` |
 | 7.2 | Fit Model Version | Text | `v1.6` |
 | 7.3 | Engagement Model Version | Text | `v1.3` |
 
