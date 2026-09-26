@@ -73,6 +73,7 @@ async function supabaseRequest(
 
   if (!response.ok) {
     console.error("Lifeline Guide repository request failed", response.status);
+    throw new Error("Lifeline Guide repository write failed");
   }
 }
 
