@@ -37,7 +37,7 @@ type RecordGuideEventInput = {
 function getConfig() {
   const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
   const key =
-    process.env.SUPABASE_SECRET_KEY ??
+    process.env.SUPABASE_SECRET_KEY ||
     process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !key) return null;
@@ -68,16 +68,18 @@ async function supabaseRequest(
       ...(init.headers ?? {}),
     },
     cache: "no-store",
+    signal: AbortSignal.timeout(2500),
   });
 
   if (!response.ok) {
-    const body = await response.text();
-    console.error(
-      "Lifeline Guide repository request failed",
-      response.status,
-      body.slice(0, 300),
-    );
+    console.error("Lifeline Guide repository request failed", response.status);
   }
+}
+
+function safePath(path: string): string {
+  return path.startsWith("/") && !path.startsWith("//")
+    ? redactGuideText(path.split(/[?#]/, 1)[0].slice(0, 300)).text
+    : "/";
 }
 
 export function isGuideRepositoryConfigured() {
@@ -117,8 +119,8 @@ export async function recordGuideExchange({
     body: JSON.stringify({
       session_key: sessionId,
       last_seen_at: now,
-      landing_path: landingPath || "/",
-      current_path: currentPath || "/",
+      landing_path: safePath(landingPath),
+      current_path: safePath(currentPath),
       primary_intent: intent,
       last_intent: intent,
       last_pillar: pillar,
@@ -176,8 +178,8 @@ export async function recordGuideEvent({
     body: JSON.stringify({
       session_key: sessionId,
       event_type: eventType,
-      event_value: eventValue ?? null,
-      page_path: pagePath ?? "/",
+      event_value: eventValue ? redactGuideText(eventValue).text : null,
+      page_path: safePath(pagePath ?? "/"),
     }),
   });
 }

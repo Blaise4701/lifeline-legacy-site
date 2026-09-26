@@ -183,6 +183,8 @@ export function LifelineGuide() {
       ]);
       setSuggestedStep(payload.suggestedStep ?? null);
     } catch (requestError) {
+      setMessages((current) => current.slice(0, -1));
+      setDraft(content);
       setError(
         requestError instanceof Error
           ? requestError.message
@@ -225,6 +227,7 @@ export function LifelineGuide() {
                 type="button"
                 className="lifeline-guide-text-button"
                 onClick={resetGuide}
+                disabled={isSending}
               >
                 Start over
               </button>

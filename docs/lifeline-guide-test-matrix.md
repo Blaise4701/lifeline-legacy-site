@@ -146,3 +146,19 @@ Use these prompts in Preview before merging. The goal is not exact wording; veri
 ## Preview deployment
 
 The Preview deployment for this branch is the required gate for live assistant testing. Environment variables must remain scoped to Preview during V1 validation.
+
+## Release checks
+
+- Send only invented identifiers. Confirm the server sends `[SSN REDACTED]`,
+  `[EMAIL REDACTED]`, and similar placeholders to the model and Supabase;
+  neither the model reply nor application logs should repeat the originals.
+- Simulate a Supabase logging failure after a successful model response. The
+  visitor should still receive the answer. A model failure should restore the
+  question in the input for a clean retry.
+- On a production-equivalent deployment, missing limiter configuration or a
+  Supabase limiter outage must respond 503 before an OpenAI request. After
+  12 requests in one UTC minute or 100 in one UTC day from a caller IP,
+  the next request should respond 429.
+- Confirm Supabase row security and view grants deny anonymous reads, and the
+  scheduled cleanup job actually deletes expired records. See
+  `lifeline-guide-launch.md` for deployment prerequisites.

@@ -42,6 +42,72 @@ create table if not exists public.guide_events (
   created_at timestamptz not null default now()
 );
 
+-- Only the server-side secret/service role may access these records. Views
+-- below also need explicit grants because views may bypass table RLS.
+alter table public.guide_sessions enable row level security;
+alter table public.guide_messages enable row level security;
+alter table public.guide_events enable row level security;
+
+revoke all on table public.guide_sessions, public.guide_messages, public.guide_events
+  from public, anon, authenticated;
+grant select, insert, update, delete on table
+  public.guide_sessions, public.guide_messages, public.guide_events to service_role;
+grant usage, select on sequence public.guide_messages_id_seq,
+  public.guide_events_id_seq to service_role;
+
+-- Fixed one-minute and one-day buckets. Both increments are atomic under
+-- concurrent requests across Vercel instances. Keys are HMACs, never IPs.
+create table if not exists public.guide_request_limits (
+  bucket_key text primary key,
+  request_count integer not null default 0,
+  expires_at timestamptz not null
+);
+
+alter table public.guide_request_limits enable row level security;
+revoke all on table public.guide_request_limits from public, anon, authenticated;
+grant select, insert, update, delete on table public.guide_request_limits to service_role;
+
+create or replace function public.claim_guide_request(
+  p_minute_key text,
+  p_day_key text,
+  p_event boolean
+) returns boolean
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+declare
+  minute_count integer;
+  day_count integer;
+begin
+  if length(p_minute_key) > 100 or length(p_day_key) > 100 then
+    return false;
+  end if;
+
+  insert into public.guide_request_limits as limits (bucket_key, request_count, expires_at)
+  values (p_minute_key, 1, now() + interval '2 days')
+  on conflict (bucket_key) do update
+    set request_count = limits.request_count + 1
+  returning request_count into minute_count;
+
+  if minute_count > case when p_event then 60 else 12 end then
+    return false;
+  end if;
+
+  insert into public.guide_request_limits as limits (bucket_key, request_count, expires_at)
+  values (p_day_key, 1, now() + interval '2 days')
+  on conflict (bucket_key) do update
+    set request_count = limits.request_count + 1
+  returning request_count into day_count;
+
+  return day_count <= case when p_event then 500 else 100 end;
+end;
+$$;
+
+revoke execute on function public.claim_guide_request(text, text, boolean)
+  from public, anon, authenticated;
+grant execute on function public.claim_guide_request(text, text, boolean) to service_role;
+
 create index if not exists guide_messages_session_created_idx
   on public.guide_messages (session_key, created_at);
 
@@ -102,7 +168,28 @@ where created_at >= now() - interval '30 days'
 group by event_type, event_value
 order by events desc;
 
--- Recommended repository permissions:
--- Keep these tables private. Do not enable public browser access.
--- The website should write through the server-only SUPABASE_SERVICE_ROLE_KEY.
--- Review retention with your privacy/compliance counsel before enabling automated deletion.
+revoke all on table public.guide_intent_trends_daily,
+  public.guide_topic_trends_30d, public.guide_top_questions_30d,
+  public.guide_next_step_events_30d from public, anon, authenticated;
+grant select on table public.guide_intent_trends_daily,
+  public.guide_topic_trends_30d, public.guide_top_questions_30d,
+  public.guide_next_step_events_30d to service_role;
+
+-- Schedule this function once daily with Supabase Cron after approving the
+-- 30-day retention period; verify the job is active before launch.
+create or replace function public.purge_expired_guide_data() returns void
+language sql
+security invoker
+set search_path = ''
+as $$
+  delete from public.guide_events where created_at < now() - interval '30 days';
+  delete from public.guide_sessions where last_seen_at < now() - interval '30 days';
+  delete from public.guide_request_limits where expires_at < now();
+$$;
+
+revoke execute on function public.purge_expired_guide_data()
+  from public, anon, authenticated;
+grant execute on function public.purge_expired_guide_data() to service_role;
+
+-- The website should write through the server-only secret/service-role key.
+-- Do not use a browser/publishable key for this repository.

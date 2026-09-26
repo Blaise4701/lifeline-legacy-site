@@ -11,6 +11,8 @@ import {
   inferGuidePillar,
 } from "@/lib/lifeline-guide-analytics";
 import { recordGuideExchange } from "@/lib/lifeline-guide-repository";
+import { claimGuideRequest } from "@/lib/lifeline-guide-rate-limit";
+import { redactGuideText } from "@/lib/lifeline-guide-redaction";
 import {
   disclosure,
   licensedStates,
@@ -167,12 +169,13 @@ export async function POST(request: Request) {
 
   if (!apiKey) {
     return NextResponse.json(
-      {
-        error:
-          "The Lifeline Guide is not configured yet. Please use the Continuity Review for now.",
-      },
+      { error: "The Lifeline Guide is temporarily unavailable. Please try again later." },
       { status: 503 },
     );
+  }
+
+  if (Number(request.headers.get("content-length")) > 40_000) {
+    return NextResponse.json({ error: "The question is too long." }, { status: 413 });
   }
 
   let body: unknown;
@@ -199,6 +202,9 @@ export async function POST(request: Request) {
     typeof requestBody.sessionId === "string"
       ? requestBody.sessionId.slice(0, 100)
       : "";
+  if (sessionId && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(sessionId)) {
+    return NextResponse.json({ error: "Invalid session." }, { status: 400 });
+  }
   const landingPath =
     typeof requestBody.landingPath === "string"
       ? requestBody.landingPath.slice(0, 300)
@@ -212,7 +218,7 @@ export async function POST(request: Request) {
     .reverse()
     .find((message) => message.role === "user");
 
-  if (!latestUserMessage) {
+  if (!latestUserMessage || messages.at(-1)?.role !== "user") {
     return NextResponse.json(
       { error: "Please enter a question for the Lifeline Guide." },
       { status: 400 },
@@ -220,6 +226,26 @@ export async function POST(request: Request) {
   }
 
   const model = process.env.OPENAI_MODEL || "gpt-5.6-luna";
+
+  const limit = await claimGuideRequest(request);
+  if (limit === "limited") {
+    return NextResponse.json(
+      { error: "The Lifeline Guide has reached its request limit. Please try again later." },
+      { status: 429, headers: { "Retry-After": "60" } },
+    );
+  }
+  if (limit === "unavailable") {
+    return NextResponse.json(
+      { error: "The Lifeline Guide is temporarily unavailable. Please try again later." },
+      { status: 503 },
+    );
+  }
+
+  // Minimize identifiers sent to the model as well as those stored in Supabase.
+  const providerMessages = messages.map((message) => ({
+    role: message.role,
+    content: redactGuideText(message.content).text,
+  }));
 
   try {
     const startedAt = Date.now();
@@ -233,47 +259,26 @@ export async function POST(request: Request) {
         model,
         store: false,
         instructions: `${LIFELINE_GUIDE_INSTRUCTIONS}\n\nLIFELINE LEGACY APPROVED KNOWLEDGE\n${LIFELINE_GUIDE_KNOWLEDGE}\n\nCURRENT APPROVED BUSINESS CONTEXT\n${buildBusinessContext()}`,
-        input: messages,
+        input: providerMessages,
         max_output_tokens: 700,
         reasoning: { effort: "none" },
       }),
       cache: "no-store",
+      signal: AbortSignal.timeout(25_000),
     });
 
     const payload = (await openAIResponse.json()) as OpenAIResponsePayload;
 
     if (!openAIResponse.ok) {
-      const providerMessage =
-        typeof payload.error?.message === "string" ? payload.error.message : "";
-
       console.error(
         "Lifeline Guide model request failed",
         openAIResponse.status,
-        providerMessage.slice(0, 300),
       );
 
-      let error =
-        "The Lifeline Guide could not answer right now. Please try again.";
-
-      if (openAIResponse.status === 401 || openAIResponse.status === 403) {
-        error =
-          "The Lifeline Guide API key is not being accepted. Please verify the Preview API key and its project permissions.";
-      } else if (openAIResponse.status === 429) {
-        error =
-          "The Lifeline Guide has reached an API billing, credit, or usage limit. Please check the OpenAI API project's billing and limits.";
-      } else if (
-        /model|permission|access/i.test(providerMessage) &&
-        openAIResponse.status >= 400 &&
-        openAIResponse.status < 500
-      ) {
-        error =
-          "The Lifeline Guide model is not available to this API project. Please check the OpenAI project's model permissions.";
-      } else if (openAIResponse.status === 400) {
-        error =
-          "The Lifeline Guide request configuration needs an adjustment. The Preview build is working, but the OpenAI request was rejected.";
-      }
-
-      return NextResponse.json({ error }, { status: 502 });
+      return NextResponse.json(
+        { error: "The Lifeline Guide could not answer right now. Please try again later." },
+        { status: 502 },
+      );
     }
 
     const reply = extractOutputText(payload);
@@ -297,20 +302,27 @@ export async function POST(request: Request) {
     );
 
     if (sessionId) {
-      await recordGuideExchange({
-        sessionId,
-        landingPath,
-        currentPath,
-        messagesInConversation: messages.length,
-        userMessage: latestUserMessage.content,
-        assistantMessage: reply,
-        intent,
-        pillar,
-        topics,
-        suggestedStep,
-        model,
-        responseMs: Date.now() - startedAt,
-      });
+      try {
+        await recordGuideExchange({
+          sessionId,
+          landingPath,
+          currentPath,
+          messagesInConversation: messages.length,
+          userMessage: latestUserMessage.content,
+          assistantMessage: reply,
+          intent,
+          pillar,
+          topics,
+          suggestedStep,
+          model,
+          responseMs: Date.now() - startedAt,
+        });
+      } catch (error) {
+        console.error(
+          "Lifeline Guide conversation logging failed",
+          error instanceof Error ? error.name : "UnknownError",
+        );
+      }
     }
 
     return NextResponse.json({

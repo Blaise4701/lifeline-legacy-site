@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { recordGuideEvent } from "@/lib/lifeline-guide-repository";
+import { claimGuideRequest } from "@/lib/lifeline-guide-rate-limit";
 
 export const runtime = "nodejs";
 
@@ -35,26 +36,41 @@ export async function POST(request: Request) {
   const eventType =
     typeof value.eventType === "string" ? value.eventType : "";
 
-  if (!sessionId || !allowedEvents.has(eventType)) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(sessionId) || !allowedEvents.has(eventType)) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
-  await recordGuideEvent({
-    sessionId,
-    eventType: eventType as
-      | "guide_opened"
-      | "suggested_step_clicked"
-      | "checkup_started"
-      | "continuity_review_started",
-    eventValue:
-      typeof value.eventValue === "string"
-        ? value.eventValue.slice(0, 300)
-        : undefined,
-    pagePath:
-      typeof value.pagePath === "string"
-        ? value.pagePath.slice(0, 300)
-        : undefined,
-  });
+  const limit = await claimGuideRequest(request, "event");
+  if (limit !== "allowed") {
+    return NextResponse.json(
+      { ok: false },
+      { status: limit === "limited" ? 429 : 503 },
+    );
+  }
+
+  try {
+    await recordGuideEvent({
+      sessionId,
+      eventType: eventType as
+        | "guide_opened"
+        | "suggested_step_clicked"
+        | "checkup_started"
+        | "continuity_review_started",
+      eventValue:
+        typeof value.eventValue === "string"
+          ? value.eventValue.slice(0, 300)
+          : undefined,
+      pagePath:
+        typeof value.pagePath === "string"
+          ? value.pagePath.slice(0, 300)
+          : undefined,
+    });
+  } catch (error) {
+    console.error(
+      "Lifeline Guide event logging failed",
+      error instanceof Error ? error.name : "UnknownError",
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }
