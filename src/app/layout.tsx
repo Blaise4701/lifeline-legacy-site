@@ -5,8 +5,10 @@ import { AttributionCapture } from "@/components/attribution-capture";
 import { SeoStructuredData } from "@/components/seo-structured-data";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { LifelineGuide } from "@/components/lifeline-guide";
 import "./globals.css";
 import "./review.css";
+import "./lifeline-guide.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lifelinelegacyfinancial.com"),
@@ -47,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         {children}
         <SiteFooter />
+        <LifelineGuide />
       </body>
     </html>
   );

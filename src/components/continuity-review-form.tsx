@@ -136,20 +136,22 @@ export function ContinuityReviewForm() {
   const [contact, setContact] = useState<ContactData | null>(null);
   const [checkup, setCheckup] = useState<CheckupContext | null>(null);
   const [attribution, setAttribution] = useState<Attribution>({});
-  const [defaultPathway, setDefaultPathway] = useState<Pathway | "">("");
+  const defaultPathway = queryPathway(params.get("path")) ?? "";
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingUrl, setBookingUrl] = useState("");
 
   useEffect(() => {
-    const storedCheckup = readSession<CheckupContext>(CHECKUP_KEY);
-    const storedAttribution = readSession<Attribution>(ATTRIBUTION_KEY);
-    const fromQuery = queryPathway(params.get("path"));
+    const timer = window.setTimeout(() => {
+      const storedCheckup = readSession<CheckupContext>(CHECKUP_KEY);
+      const storedAttribution = readSession<Attribution>(ATTRIBUTION_KEY);
 
-    if (storedCheckup) setCheckup(storedCheckup);
-    if (storedAttribution) setAttribution(storedAttribution);
-    setDefaultPathway(fromQuery ?? "");
-  }, [params]);
+      if (storedCheckup) setCheckup(storedCheckup);
+      if (storedAttribution) setAttribution(storedAttribution);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const prep = useMemo(
     () => prepOptions[contact?.pathway ?? "Retirement"],
