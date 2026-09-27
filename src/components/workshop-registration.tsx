@@ -144,23 +144,21 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
           <h5 id={`registration-step-3-${workshop.id}`}>Tell us a little more.</h5>
         </div>
         <div className="registration-question-stack">
-          <label>
-            <span>Is the primary attendee age 50 or older?</span>
-            <select name="age50Plus" defaultValue="" required>
-              <option value="" disabled>Select an answer</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
-            </select>
-          </label>
-          <label>
-            <span>Are you a financial advisor, insurance agent, or broker?</span>
-            <select name="industryProfessional" defaultValue="" required>
-              <option value="" disabled>Select an answer</option>
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </label>
+          <fieldset className="registration-radio-group">
+            <legend>Is this seminar for someone age 50 or older?</legend>
+            <div className="registration-radio-options">
+              <label><input type="radio" name="age50Plus" value="yes" required /> <span>Yes</span></label>
+              <label><input type="radio" name="age50Plus" value="no" /> <span>No</span></label>
+              <label><input type="radio" name="age50Plus" value="prefer-not-to-say" /> <span>Prefer not to say</span></label>
+            </div>
+          </fieldset>
+          <fieldset className="registration-radio-group">
+            <legend>Are you a financial advisor, insurance agent, or broker?</legend>
+            <div className="registration-radio-options">
+              <label><input type="radio" name="industryProfessional" value="no" required /> <span>No</span></label>
+              <label><input type="radio" name="industryProfessional" value="yes" /> <span>Yes</span></label>
+            </div>
+          </fieldset>
         </div>
       </section>
 
