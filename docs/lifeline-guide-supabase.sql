@@ -183,6 +183,7 @@ security invoker
 set search_path = ''
 as $$
   delete from public.guide_events where created_at < now() - interval '30 days';
+  delete from public.guide_messages where created_at < now() - interval '30 days';
   delete from public.guide_sessions where last_seen_at < now() - interval '30 days';
   delete from public.guide_request_limits where expires_at < now();
 $$;
