@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
+import Script from "next/script";
 import {
   guideStarterQuestions,
   type GuideMessage,
@@ -25,6 +26,27 @@ type GuideApiResponse = {
   suggestedStep?: GuideSuggestedStep | null;
 };
 
+type SummaryResponse = { summary?: string; summaryToken?: string | null; error?: string };
+type Delivery = "none" | "client" | "llfg" | "both";
+
+type TurnstileWidget = {
+  render: (container: HTMLElement, options: {
+    sitekey: string;
+    action: string;
+    callback: (token: string) => void;
+    "expired-callback": () => void;
+    "error-callback": () => void;
+  }) => string;
+  remove: (widgetId: string) => void;
+  reset: (widgetId: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileWidget;
+  }
+}
+
 export function LifelineGuide() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<GuideMessage[]>([greeting]);
@@ -32,13 +54,25 @@ export function LifelineGuide() {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
   const [suggestedStep, setSuggestedStep] = useState<GuideSuggestedStep | null>(null);
+  const [summary, setSummary] = useState("");
+  const [summaryToken, setSummaryToken] = useState("");
+  const [isSummarizing, setIsSummarizing] = useState(false);
+  const [delivery, setDelivery] = useState<Delivery>("none");
+  const [email, setEmail] = useState("");
+  const [confirmationCode, setConfirmationCode] = useState("");
+  const [challengeToken, setChallengeToken] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileReady, setTurnstileReady] = useState(false);
+  const [shareConsent, setShareConsent] = useState(false);
+  const [isEmailBusy, setIsEmailBusy] = useState(false);
+  const [emailSuccess, setEmailSuccess] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const latestAssistantRef = useRef<HTMLDivElement>(null);
-  const sessionIdRef = useRef("");
-  const landingPathRef = useRef("");
-  const openedLoggedRef = useRef(false);
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetRef = useRef("");
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   const canSend = draft.trim().length > 0 && !isSending;
   const showStarters = messages.length === 1;
@@ -69,72 +103,34 @@ export function LifelineGuide() {
     }
   }, [messages]);
 
-  function getSessionContext() {
-    if (typeof window === "undefined") {
-      return { sessionId: "", landingPath: "/", currentPath: "/" };
-    }
+  useEffect(() => {
+    if (!summary || emailSuccess || delivery === "none" || !turnstileReady || !turnstileSiteKey || !turnstileContainerRef.current) return;
+    const widget = window.turnstile;
+    if (!widget) return;
 
-    if (!sessionIdRef.current) {
-      const storedSessionId = window.sessionStorage.getItem(
-        "lifeline-guide-session-id",
-      );
-      const sessionId = storedSessionId || window.crypto.randomUUID();
-      window.sessionStorage.setItem("lifeline-guide-session-id", sessionId);
-      sessionIdRef.current = sessionId;
-    }
-
-    if (!landingPathRef.current) {
-      const storedLandingPath = window.sessionStorage.getItem(
-        "lifeline-guide-landing-path",
-      );
-      const landingPath =
-        storedLandingPath || window.location.pathname || "/";
-      window.sessionStorage.setItem(
-        "lifeline-guide-landing-path",
-        landingPath,
-      );
-      landingPathRef.current = landingPath;
-    }
-
-    return {
-      sessionId: sessionIdRef.current,
-      landingPath: landingPathRef.current,
-      currentPath: window.location.pathname || "/",
+    const widgetId = widget.render(turnstileContainerRef.current, {
+      sitekey: turnstileSiteKey,
+      action: "guide-email",
+      callback: (token) => setTurnstileToken(token),
+      "expired-callback": () => setTurnstileToken(""),
+      "error-callback": () => setTurnstileToken(""),
+    });
+    turnstileWidgetRef.current = widgetId;
+    return () => {
+      widget.remove(widgetId);
+      turnstileWidgetRef.current = "";
     };
-  }
+  }, [summary, delivery, emailSuccess, turnstileReady, turnstileSiteKey]);
 
-  function recordEvent(
-    eventType:
-      | "guide_opened"
-      | "suggested_step_clicked"
-      | "checkup_started"
-      | "continuity_review_started",
-    eventValue?: string,
-  ) {
-    const context = getSessionContext();
-    if (!context.sessionId) return;
-
-    void fetch("/api/guide/event", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sessionId: context.sessionId,
-        eventType,
-        eventValue,
-        pagePath: context.currentPath,
-      }),
-      keepalive: true,
-    }).catch(() => undefined);
+  function refreshEmailCheck() {
+    setTurnstileToken("");
+    if (turnstileWidgetRef.current) {
+      window.turnstile?.reset(turnstileWidgetRef.current);
+    }
   }
 
   function openGuide() {
     setIsOpen(true);
-
-    if (!openedLoggedRef.current) {
-      openedLoggedRef.current = true;
-      recordEvent("guide_opened");
-    }
-
     window.setTimeout(() => textareaRef.current?.focus(), 80);
   }
 
@@ -148,6 +144,14 @@ export function LifelineGuide() {
     setDraft("");
     setError("");
     setSuggestedStep(null);
+    setSummary("");
+    setSummaryToken("");
+    setDelivery("none");
+    setEmail("");
+    setConfirmationCode("");
+    setChallengeToken("");
+    setEmailSuccess("");
+    setShareConsent(false);
     window.setTimeout(() => textareaRef.current?.focus(), 80);
   }
 
@@ -165,16 +169,10 @@ export function LifelineGuide() {
     setIsSending(true);
 
     try {
-      const context = getSessionContext();
       const response = await fetch("/api/guide", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: nextMessages,
-          sessionId: context.sessionId,
-          landingPath: context.landingPath,
-          currentPath: context.currentPath,
-        }),
+        body: JSON.stringify({ messages: nextMessages }),
       });
 
       const payload = (await response.json()) as GuideApiResponse;
@@ -214,6 +212,95 @@ export function LifelineGuide() {
     }
   }
 
+  async function finishChat() {
+    if (isSending || isSummarizing || !messages.some((message) => message.role === "user")) return;
+    setError("");
+    setIsSummarizing(true);
+    try {
+      const response = await fetch("/api/guide/summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: transcriptForApi }),
+      });
+      const payload = (await response.json()) as SummaryResponse;
+      if (!response.ok || !payload.summary) throw new Error(payload.error || "The summary could not be created.");
+      setSummary(payload.summary);
+      setSummaryToken(payload.summaryToken || "");
+      setDelivery("none");
+      setEmailSuccess("");
+    } catch (summaryError) {
+      setError(summaryError instanceof Error ? summaryError.message : "The summary could not be created.");
+    } finally {
+      setIsSummarizing(false);
+    }
+  }
+
+  async function sendCode() {
+    if (!summaryToken || !/^\S+@\S+\.\S+$/.test(email.trim()) || !turnstileToken) {
+      setError("Enter your email address and complete the security check.");
+      return;
+    }
+    setIsEmailBusy(true);
+    setError("");
+    try {
+      const response = await fetch("/api/guide/summary/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ summaryToken, email, turnstileToken }),
+      });
+      const payload = (await response.json()) as { challengeToken?: string; error?: string };
+      if (!response.ok || !payload.challengeToken) throw new Error(payload.error || "Could not send the code.");
+      setChallengeToken(payload.challengeToken);
+      setConfirmationCode("");
+    } catch (emailError) {
+      setError(emailError instanceof Error ? emailError.message : "Could not send the code.");
+    } finally {
+      setIsEmailBusy(false);
+      refreshEmailCheck();
+    }
+  }
+
+  async function emailSummary() {
+    if (!summaryToken || !delivery || delivery === "none") return;
+    if (delivery !== "client" && !shareConsent) {
+      setError("Please approve sharing the summary with Lifeline Legacy.");
+      return;
+    }
+    if (delivery === "llfg" && !turnstileToken) {
+      setError("Complete the email security check.");
+      return;
+    }
+    if (delivery !== "llfg" && (!challengeToken || !/^\d{8}$/.test(confirmationCode))) {
+      setError("Enter the 8-digit code emailed to you.");
+      return;
+    }
+
+    setIsEmailBusy(true);
+    setError("");
+    try {
+      const response = await fetch("/api/guide/summary/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          summaryToken, delivery, email, challengeToken,
+          code: confirmationCode, turnstileToken, shareConsent,
+        }),
+      });
+      const payload = (await response.json()) as { delivered?: string[]; error?: string };
+      if (!response.ok) throw new Error(payload.error || "Could not send the summary.");
+      setEmailSuccess(
+        delivery === "both" ? "A summary was emailed to you and Lifeline Legacy."
+          : delivery === "client" ? "A summary was emailed to you."
+            : "A summary was emailed to Lifeline Legacy.",
+      );
+    } catch (emailError) {
+      setError(emailError instanceof Error ? emailError.message : "Could not send the summary.");
+    } finally {
+      setIsEmailBusy(false);
+      refreshEmailCheck();
+    }
+  }
+
   return (
     <div className="lifeline-guide-shell">
       {isOpen ? (
@@ -239,10 +326,15 @@ export function LifelineGuide() {
                 type="button"
                 className="lifeline-guide-text-button"
                 onClick={resetGuide}
-                disabled={isSending}
+                disabled={isSending || isSummarizing || isEmailBusy}
               >
                 Start over
               </button>
+              {!summary && messages.some((message) => message.role === "user") ? (
+                <button type="button" className="lifeline-guide-text-button" onClick={() => void finishChat()} disabled={isSending || isSummarizing}>
+                  {isSummarizing ? "Summarizing…" : "Finish chat"}
+                </button>
+              ) : null}
               <button
                 type="button"
                 className="lifeline-guide-close"
@@ -255,6 +347,18 @@ export function LifelineGuide() {
           </header>
 
           <div className="lifeline-guide-messages" ref={messagesRef}>
+            {summary ? (
+              <div className="lifeline-guide-summary" aria-live="polite">
+                <h3>Your conversation summary</h3>
+                <p>{summary}</p>
+                <button type="button" onClick={() => {
+                  setSummary("");
+                  setSummaryToken("");
+                  setEmailSuccess("");
+                }}>Keep chatting</button>
+              </div>
+            ) : (
+              <>
             {messages.map((message, index) => {
               const isLatestAssistant =
                 message.role === "assistant" && index === messages.length - 1;
@@ -308,27 +412,72 @@ export function LifelineGuide() {
                 </div>
                 <a
                   href={suggestedStep.href}
-                  onClick={() => {
-                    const eventType =
-                      suggestedStep.href === "/continuity-review"
-                        ? "continuity_review_started"
-                        : suggestedStep.href.startsWith("/checkup")
-                          ? "checkup_started"
-                          : "suggested_step_clicked";
-
-                    recordEvent(
-                      eventType,
-                      `${suggestedStep.label} | ${suggestedStep.href}`,
-                    );
-                  }}
                 >
                   Explore →
                 </a>
               </div>
             ) : null}
+              </>
+            )}
           </div>
 
-          <form className="lifeline-guide-form" onSubmit={onSubmit}>
+          {summary ? (
+            <div className="lifeline-guide-summary-form">
+              <p>Choose what happens to your summary. The full chat is not emailed or saved by Lifeline Legacy.</p>
+              <label htmlFor="guide-summary-delivery">Summary delivery</label>
+              <select id="guide-summary-delivery" value={delivery} disabled={!summaryToken || Boolean(emailSuccess)} onChange={(event) => {
+                setDelivery(event.target.value as Delivery);
+                setChallengeToken("");
+                setConfirmationCode("");
+                setTurnstileToken("");
+                setEmailSuccess("");
+                setError("");
+              }}>
+                <option value="none">Only show it here</option>
+                <option value="client">Email me a copy</option>
+                <option value="llfg">Share anonymously with Lifeline Legacy</option>
+                <option value="both">Email me and share with Lifeline Legacy</option>
+              </select>
+              {!summaryToken ? <p>Email delivery is not configured for this preview.</p> : null}
+              {(delivery === "client" || delivery === "both") && summaryToken ? (
+                <>
+                  <label htmlFor="guide-summary-email">Your email address</label>
+                  <input id="guide-summary-email" type="email" autoComplete="email" value={email} disabled={Boolean(emailSuccess)} onChange={(event) => {
+                    setEmail(event.target.value.slice(0, 254));
+                    setChallengeToken("");
+                    setConfirmationCode("");
+                  }} />
+                  {!challengeToken && !emailSuccess ? <button type="button" disabled={isEmailBusy || !turnstileToken} onClick={() => void sendCode()}>Send confirmation code</button> : null}
+                  {challengeToken && !emailSuccess ? (
+                    <>
+                      <label htmlFor="guide-summary-code">8-digit code from your email</label>
+                      <input id="guide-summary-code" inputMode="numeric" autoComplete="one-time-code" maxLength={8} value={confirmationCode} onChange={(event) => setConfirmationCode(event.target.value.replace(/\D/g, "").slice(0, 8))} />
+                    </>
+                  ) : null}
+                </>
+              ) : null}
+              {(delivery === "llfg" || delivery === "both") && summaryToken ? (
+                <label className="lifeline-guide-consent">
+                  <input type="checkbox" checked={shareConsent} disabled={Boolean(emailSuccess)} onChange={(event) => setShareConsent(event.target.checked)} />
+                  {delivery === "both" ? "I agree to share this summary and my verified email address with Lifeline Legacy." : "I agree to share this summary anonymously with Lifeline Legacy."} No full transcript will be sent.
+                </label>
+              ) : null}
+              {summaryToken && delivery !== "none" && !emailSuccess ? (
+                <>
+                  {turnstileSiteKey ? <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" strategy="afterInteractive" onReady={() => setTurnstileReady(true)} /> : <p>Email security is not configured for this preview.</p>}
+                  <div ref={turnstileContainerRef} aria-label="Email security check" />
+                  {(delivery === "llfg" || Boolean(challengeToken)) ? (
+                    <button type="button" disabled={isEmailBusy || (delivery !== "client" && !shareConsent) || (delivery === "llfg" ? !turnstileToken : confirmationCode.length !== 8)} onClick={() => void emailSummary()}>
+                      {isEmailBusy ? "Sending…" : "Email summary"}
+                    </button>
+                  ) : null}
+                </>
+              ) : null}
+              {emailSuccess ? <p role="status">{emailSuccess}</p> : null}
+              {error ? <p className="lifeline-guide-summary-error" role="alert">{error}</p> : null}
+              <p>Any emailed summary will be kept by the recipient and email provider. <a href="/privacy">Privacy</a></p>
+            </div>
+          ) : <form className="lifeline-guide-form" onSubmit={onSubmit}>
             <label htmlFor="lifeline-guide-question">
               Ask a retirement, protection, business, or legacy question
             </label>
@@ -348,11 +497,11 @@ export function LifelineGuide() {
             </div>
             <p className="lifeline-guide-disclaimer">
               Educational information only—not legal, tax, investment, or individualized financial advice.
-              Conversations may be stored in redacted form and reviewed to improve the Guide. Please do not share
+              The chat stays in this open page; Lifeline Legacy does not save transcripts. Please do not share
               account numbers, Social Security numbers, passwords, or medical details.{" "}
               <a href="/privacy">Privacy</a>
             </p>
-          </form>
+          </form>}
         </section>
       ) : null}
 

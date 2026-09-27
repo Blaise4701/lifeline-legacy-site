@@ -150,15 +150,19 @@ The Preview deployment for this branch is the required gate for live assistant t
 ## Release checks
 
 - Send only invented identifiers. Confirm the server sends `[SSN REDACTED]`,
-  `[EMAIL REDACTED]`, and similar placeholders to the model and Supabase;
-  neither the model reply nor application logs should repeat the originals.
-- Simulate a Supabase logging failure after a successful model response. The
-  visitor should still receive the answer. A model failure should restore the
-  question in the input for a clean retry.
-- On a production-equivalent deployment, missing limiter configuration or a
-  Supabase limiter outage must respond 503 before an OpenAI request. After
-  12 requests in one UTC minute or 100 in one UTC day from a caller IP,
-  the next request should respond 429.
-- Confirm Supabase row security and view grants deny anonymous reads, and the
-  scheduled cleanup job actually deletes expired records. See
+  `[EMAIL REDACTED]`, and similar placeholders to the model; neither the model
+  reply, summary email, nor application logs should repeat the originals.
+- A model failure should restore the question in the input for a clean retry.
+  Refreshing the page should clear the browser-only chat. Guide traffic should
+  not call Supabase or send events or anonymous session IDs.
+- Check the Finish chat recap without email. Attempt to alter or reuse an
+  expired signed summary token; neither attempt should email anyone. Check
+  LLFG-only email requires explicit sharing consent and Turnstile. Check that
+  visitor-only and both-recipient delivery require the correct 8-digit code
+  delivered to the chosen address. Check wrong/expired codes and duplicate
+  sends. Check provider failure and partial delivery messages.
+- On a production-equivalent deployment, missing
+  `GUIDE_WAF_RATE_LIMIT_VERIFIED` must respond 503 before an OpenAI or email
+  request. A published firewall rule on `/api/guide` and nested paths must
+  return a real 429 after a burst of harmless invalid requests. See
   `lifeline-guide-launch.md` for deployment prerequisites.

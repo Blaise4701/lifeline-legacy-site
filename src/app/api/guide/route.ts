@@ -3,15 +3,14 @@ import {
   LIFELINE_GUIDE_INSTRUCTIONS,
   classifyGuideIntent,
   type GuideIntent,
-  type GuideMessage,
 } from "@/lib/lifeline-guide";
-import { LIFELINE_GUIDE_KNOWLEDGE } from "@/lib/lifeline-guide-knowledge";
 import {
-  classifyGuideTopics,
-  inferGuidePillar,
-} from "@/lib/lifeline-guide-analytics";
-import { recordGuideExchange } from "@/lib/lifeline-guide-repository";
-import { claimGuideRequest } from "@/lib/lifeline-guide-rate-limit";
+  cleanGuideMessages,
+  extractGuideOutput,
+  type OpenAIResponsePayload,
+} from "@/lib/lifeline-guide-api";
+import { LIFELINE_GUIDE_KNOWLEDGE } from "@/lib/lifeline-guide-knowledge";
+import { guideGatewayReady } from "@/lib/lifeline-guide-rate-limit";
 import { redactGuideText } from "@/lib/lifeline-guide-redaction";
 import {
   disclosure,
@@ -21,63 +20,6 @@ import {
 } from "@/lib/site-data";
 
 export const runtime = "nodejs";
-
-const MAX_MESSAGES = 12;
-const MAX_MESSAGE_LENGTH = 2400;
-
-type OpenAIResponsePayload = {
-  output_text?: string;
-  output?: Array<{
-    type?: string;
-    content?: Array<{
-      type?: string;
-      text?: string;
-    }>;
-  }>;
-  error?: {
-    message?: string;
-  };
-};
-
-function cleanMessages(value: unknown): GuideMessage[] {
-  if (!Array.isArray(value)) return [];
-
-  return value
-    .slice(-MAX_MESSAGES)
-    .filter(
-      (item): item is GuideMessage =>
-        Boolean(item) &&
-        typeof item === "object" &&
-        (item as GuideMessage).role !== undefined &&
-        ["user", "assistant"].includes((item as GuideMessage).role) &&
-        typeof (item as GuideMessage).content === "string",
-    )
-    .map((item) => ({
-      role: item.role,
-      content: item.content.trim().slice(0, MAX_MESSAGE_LENGTH),
-    }))
-    .filter((item) => item.content.length > 0);
-}
-
-function extractOutputText(payload: OpenAIResponsePayload): string {
-  if (typeof payload.output_text === "string" && payload.output_text.trim()) {
-    return payload.output_text.trim();
-  }
-
-  const parts: string[] = [];
-
-  for (const item of payload.output ?? []) {
-    if (item.type !== "message") continue;
-
-    for (const content of item.content ?? []) {
-      if (content.type === "output_text" && typeof content.text === "string") {
-        parts.push(content.text);
-      }
-    }
-  }
-
-  return parts.join("\n").trim();
-}
 
 function getSuggestedStep(intent: GuideIntent, message: string) {
   if (
@@ -190,29 +132,10 @@ export async function POST(request: Request) {
     typeof body === "object" && body !== null
       ? (body as {
           messages?: unknown;
-          sessionId?: unknown;
-          landingPath?: unknown;
-          currentPath?: unknown;
         })
       : {};
 
-  const messages = cleanMessages(requestBody.messages);
-
-  const sessionId =
-    typeof requestBody.sessionId === "string"
-      ? requestBody.sessionId.slice(0, 100)
-      : "";
-  if (sessionId && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(sessionId)) {
-    return NextResponse.json({ error: "Invalid session." }, { status: 400 });
-  }
-  const landingPath =
-    typeof requestBody.landingPath === "string"
-      ? requestBody.landingPath.slice(0, 300)
-      : "/";
-  const currentPath =
-    typeof requestBody.currentPath === "string"
-      ? requestBody.currentPath.slice(0, 300)
-      : "/";
+  const messages = cleanGuideMessages(requestBody.messages);
 
   const latestUserMessage = [...messages]
     .reverse()
@@ -227,28 +150,20 @@ export async function POST(request: Request) {
 
   const model = process.env.OPENAI_MODEL || "gpt-5.6-luna";
 
-  const limit = await claimGuideRequest(request);
-  if (limit === "limited") {
-    return NextResponse.json(
-      { error: "The Lifeline Guide has reached its request limit. Please try again later." },
-      { status: 429, headers: { "Retry-After": "60" } },
-    );
-  }
-  if (limit === "unavailable") {
+  if (!guideGatewayReady()) {
     return NextResponse.json(
       { error: "The Lifeline Guide is temporarily unavailable. Please try again later." },
       { status: 503 },
     );
   }
 
-  // Minimize identifiers sent to the model as well as those stored in Supabase.
+  // Minimize identifiers sent to the model. No conversation is written to our database.
   const providerMessages = messages.map((message) => ({
     role: message.role,
     content: redactGuideText(message.content).text,
   }));
 
   try {
-    const startedAt = Date.now();
     const openAIResponse = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -281,7 +196,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const reply = extractOutputText(payload);
+    const reply = extractGuideOutput(payload);
 
     if (!reply) {
       return NextResponse.json(
@@ -294,36 +209,10 @@ export async function POST(request: Request) {
     }
 
     const intent = classifyGuideIntent(latestUserMessage.content);
-    const topics = classifyGuideTopics(latestUserMessage.content);
-    const pillar = inferGuidePillar(intent, topics);
     const suggestedStep = getSuggestedStep(
       intent,
       latestUserMessage.content,
     );
-
-    if (sessionId) {
-      try {
-        await recordGuideExchange({
-          sessionId,
-          landingPath,
-          currentPath,
-          messagesInConversation: messages.length,
-          userMessage: latestUserMessage.content,
-          assistantMessage: reply,
-          intent,
-          pillar,
-          topics,
-          suggestedStep,
-          model,
-          responseMs: Date.now() - startedAt,
-        });
-      } catch (error) {
-        console.error(
-          "Lifeline Guide conversation logging failed",
-          error instanceof Error ? error.name : "UnknownError",
-        );
-      }
-    }
 
     return NextResponse.json({
       reply,

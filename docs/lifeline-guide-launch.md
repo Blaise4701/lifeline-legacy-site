@@ -1,76 +1,76 @@
-# Lifeline Guide production launch gate
+# Lifeline Guide: no-transcript production launch gate
 
-The branch is a draft until the items below are checked on the current clean
-revision. Do not check out or execute the historical ESLint loader revision.
-Merge only the reviewed feature PR after these checks pass.
+This draft branch keeps chat messages only in browser memory. The server sends
+redacted recent messages to the AI service with `store: false`, returns an
+answer, and writes no Guide transcript or interaction records to LLFG's
+database. When the visitor finishes, the server creates a short redacted recap
+for on-screen review. Email is optional, uses a time-limited signed recap,
+and requires an explicit visitor action. Email copies are stored in inboxes
+and by the email provider. The AI provider may keep abuse-monitoring logs.
 
-## Infrastructure
+Do not check out or execute the historical compromised ESLint loader revision.
+Do not merge or deploy this branch to the commercial production domain before
+the business hosting plan, protection, provider, and editorial gates below.
 
-1. In the intended Supabase project, run `docs/lifeline-guide-supabase.sql` in
-   the SQL editor. Verify RLS is enabled on the four `guide_*` tables, that
-   `anon` and `authenticated` cannot read the tables or analytics views, and
-   that `service_role` can call `claim_guide_request`.
-2. Approve a 30-day conversation retention period before scheduling deletion.
-   The cleanup function deletes messages and events by their own creation time,
-   removes sessions inactive for 30 days, and clears expired limiter buckets.
-   After approval, enable Supabase Cron under Integrations and create a daily
-   03:00 UTC SQL job named `lifeline-guide-retention` with this command:
+## Provider setup
 
-   ```sql
-   select public.purge_expired_guide_data();
-   ```
+1. Use a scoped `OPENAI_API_KEY`; keep it server-only. Confirm the project can
+   use `OPENAI_MODEL` and set its usage budget/alerts. `store: false` does not
+   override the provider's default safety log retention. Review data controls
+   separately if provider-side retention needs to be reduced.
+2. In Resend, verify a sending domain and create a sending API key. Configure
+   `RESEND_API_KEY`, `GUIDE_SUMMARY_FROM` (a verified sender), and, if the
+   business inbox differs from the published site email, `GUIDE_SUMMARY_RECIPIENT`.
+   A visitor's address must never determine the LLFG recipient. A visitor-copy
+   requires confirmation with an 8-digit emailed code; the code verification
+   token is signed and expires in 10 minutes. No full transcript is emailed.
+3. Create a Cloudflare Turnstile widget limited to the production hostname
+   and a separate preview widget if testing email on Preview. Set its public
+   `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and server-only `TURNSTILE_SECRET_KEY` for
+   each environment. Set `GUIDE_TURNSTILE_HOSTNAMES` to the exact permitted
+   hostnames, comma separated (no protocol or port). Verify the `guide-email`
+   action and allowed hostname from Turnstile's server response.
+4. Generate a unique server-only `GUIDE_SUMMARY_SIGNING_SECRET` of at least 32
+   random bytes (for example `openssl rand -hex 32`). Put it in Vercel's
+   environment settings, never in the repository. Changing it invalidates
+   outstanding 10-minute recap and email-code tokens.
 
-   Verify its run in Cron history. Review retention in backups and staff access
-   with privacy counsel.
-3. Scope `OPENAI_API_KEY` to this OpenAI project and set `OPENAI_MODEL` to a
-   model that the project can use. Set API spend alerts and a usage ceiling.
-   Keep the key server-only.
-4. In Vercel **Production** settings, set `SUPABASE_URL`,
-   `SUPABASE_SECRET_KEY` (or the legacy `SUPABASE_SERVICE_ROLE_KEY`), and a
-   random `GUIDE_RATE_LIMIT_SECRET` of at least 32 characters. Set them for
-   Preview too if you want to verify the database limiter there. Redeploy after
-   adding variables. Never use `NEXT_PUBLIC_` for these values.
-5. The production API fails closed when its limiter is not configured or the
-   Supabase RPC fails. It allows at most 12 requests per IP per UTC minute and
-   100 per UTC day for chat, and 60 per minute/500 per day for events. It stores
-   only keyed HMAC hashes for these counters; old counters are removed by the
-   cleanup job. Enable a Vercel Firewall rate limit on both Guide API routes as
-   an additional edge control, and protect public
-   Preview URLs while they use a paid API key without the database limiter.
-6. Review two Vercel Firewall fixed-window rate-limit rules before publishing:
-   - `POST` with path exactly `/api/guide`, keyed by source IP:
-     12 requests per 60 seconds, then return 429.
-   - `POST` with path exactly `/api/guide/event`, keyed by source IP:
-     60 requests per 60 seconds, then return 429.
-   The edge counters are regional; the SQL limiter remains the cross-region
-   control. Inspect legitimate traffic before applying these rules.
-7. Confirm a commercial Vercel plan for public launch. Hobby is restricted to
-   noncommercial use. If using the one-time 14-day Pro trial, check eligibility
-   for the existing team and plan for paid Pro before the trial ends.
+## Hosting and rate limit
 
-## Release verification
+1. Vercel's Hobby plan is for non-commercial projects. Buy Pro, secure the
+   existing-team trial if Support grants it, or use another suitable business
+   host before putting this LLFG feature into production. No paid upgrade or
+   production deployment has been started by this branch.
+2. In Vercel Firewall, publish a rate-limit rule for the exact Guide API path
+   and nested paths (`/api/guide` and `/api/guide/*`). For example, use IP,
+   a 10-minute fixed window, and a limit that supports a normal 12-message
+   conversation plus a recap, verification, and send. On a protected test
+   deployment, verify that a burst of harmless invalid requests returns a
+   real edge 429 before any AI or email call. The rule cannot enforce the
+   previous database's daily quota; keep OpenAI project usage protections.
+3. Set `GUIDE_WAF_RATE_LIMIT_VERIFIED=true` in **Production only after** the
+   rule is published and 429 verified. Until then, the production Guide API
+   returns 503 before spending model or email credits. Protect Preview URLs
+   when they use live provider credentials; the flag is not a rate limiter.
 
-1. Check the current branch's `eslint.config.mjs` blob is
-   `05e726d1b4201bc8c7716d2b058279676582e8c0` before any install, lint,
-   build, or live test. Do not run the old infected revision.
-2. Run the build, TypeScript, and lint checks against this clean branch. On a
-   fresh Preview deployment, work through `lifeline-guide-test-matrix.md` with
-   synthetic examples. Check mobile layout, keyboard focus, and retry after a
-   model failure. No real SSNs, credentials, or medical records are needed.
-3. Check a production-equivalent deployment: no Supabase config must return
-   503 without calling OpenAI; exceeding a limiter bucket must return 429;
-   a repository logging failure must still show the successful Guide answer.
-   Confirm redacted records, event logging, cleanup, and no anonymous database
-   read with the actual Supabase project.
-4. Have LLFG review financial and insurance scope, licensing states, the
-   founder story, workshop dates, disclosures, privacy text, AI-provider
-   processing, retention, and support contact. OpenAI `store: false` does not
-   disable its default abuse monitoring logs; account-level data controls
-   require separate approval.
-5. Review preview outputs, telemetry, model/API costs, and escalation path for
-   failures. Only then mark PR #9 ready and merge through the normal review.
+## Verification and privacy
 
-The conversational analytics repository is optional in Preview. Production
-request limits require the Supabase project and SQL function even if LLFG
-chooses not to review or retain message content long term; revisit storage
-scope before the public launch if that policy changes.
+1. Confirm `git hash-object eslint.config.mjs` returns
+   `05e726d1b4201bc8c7716d2b058279676582e8c0` before running tools.
+   Then run TypeScript, build, and ESLint checks on this clean branch.
+2. With invented data, exercise chat, finish and recap, LLFG-only email,
+   client-only email, both recipients, invalid and expired summary/code tokens,
+   duplicate sends, provider failures, 429, keyboard navigation, and mobile.
+   Confirm that any partial two-recipient delivery is reported accurately and
+   retries do not send duplicate copies.
+3. Ensure `/api/guide/event` is absent, no Guide request contains a session
+   identifier, and no Guide path writes to Supabase. Verify logs omit raw
+   visitor text, codes, and credentials. Update the privacy page and user
+   interface to distinguish no LLFG transcript from email and AI-provider
+   retention. LLFG must review all financial/insurance copy and contact flows.
+4. The earlier Supabase test project is not used for this release. Leave its
+   existing daily deletion job active until any earlier test data
+   has aged out under the approved 30-day rule. Review backups separately.
+
+Only mark PR #9 ready and merge through the normal review after the above
+items pass. Do not touch `main` or the live website while preparing the branch.

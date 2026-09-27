@@ -338,6 +338,89 @@
   line-height: 1.4;
 }
 
+.lifeline-guide-summary {
+  padding: 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--white);
+}
+
+.lifeline-guide-summary h3 {
+  margin: 0 0 0.65rem;
+  color: var(--emerald-950);
+  font-size: 1rem;
+}
+
+.lifeline-guide-summary p {
+  margin: 0 0 0.75rem;
+  color: var(--ink);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.lifeline-guide-summary button,
+.lifeline-guide-summary-form > button {
+  padding: 0.6rem 0.75rem;
+  border: 0;
+  border-radius: 0.6rem;
+  background: var(--emerald-900);
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 720;
+}
+
+.lifeline-guide-summary-form {
+  display: grid;
+  gap: 0.55rem;
+  max-height: min(22rem, 50dvh);
+  overflow-y: auto;
+  padding: 0.9rem 1rem;
+  border-top: 1px solid var(--line);
+  background: var(--white);
+}
+
+.lifeline-guide-summary-form > label {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.lifeline-guide-summary-form input:not([type="checkbox"]),
+.lifeline-guide-summary-form select {
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: var(--cream-50);
+  color: var(--ink);
+  font-size: 0.8rem;
+}
+
+.lifeline-guide-summary-form p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.71rem;
+  line-height: 1.4;
+}
+
+.lifeline-guide-summary-form .lifeline-guide-summary-error {
+  color: #8a3724;
+}
+
+.lifeline-guide-summary-form .lifeline-guide-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.lifeline-guide-summary-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 @media (max-width: 640px) {
   .lifeline-guide-shell {
     right: 0.7rem;
