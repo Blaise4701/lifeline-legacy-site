@@ -10,9 +10,18 @@ Merge only the reviewed feature PR after these checks pass.
    the SQL editor. Verify RLS is enabled on the four `guide_*` tables, that
    `anon` and `authenticated` cannot read the tables or analytics views, and
    that `service_role` can call `claim_guide_request`.
-2. Approve a 30-day conversation retention period. Enable Supabase Cron and
-   schedule `select public.purge_expired_guide_data()` daily; verify a job run.
-   Review retention in backups and access by staff with privacy counsel.
+2. Approve a 30-day conversation retention period before scheduling deletion.
+   The cleanup function deletes messages and events by their own creation time,
+   removes sessions inactive for 30 days, and clears expired limiter buckets.
+   After approval, enable Supabase Cron under Integrations and create a daily
+   03:00 UTC SQL job named `lifeline-guide-retention` with this command:
+
+   ```sql
+   select public.purge_expired_guide_data();
+   ```
+
+   Verify its run in Cron history. Review retention in backups and staff access
+   with privacy counsel.
 3. Scope `OPENAI_API_KEY` to this OpenAI project and set `OPENAI_MODEL` to a
    model that the project can use. Set API spend alerts and a usage ceiling.
    Keep the key server-only.
