@@ -155,6 +155,8 @@ The Preview deployment for this branch is the required gate for live assistant t
 - A model failure should restore the question in the input for a clean retry.
   Refreshing the page should clear the browser-only chat. Guide traffic should
   not call Supabase or send events or anonymous session IDs.
+- Oversized requests must return 413 even when sent without a Content-Length
+  header; malformed JSON must return 400 before a provider call.
 - Check the Finish chat recap without email. Attempt to alter or reuse an
   expired signed summary token; neither attempt should email anyone. Check
   LLFG-only email requires explicit sharing consent and Turnstile. Check that

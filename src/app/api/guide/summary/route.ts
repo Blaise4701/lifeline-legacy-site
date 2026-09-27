@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cleanGuideMessages, extractGuideOutput, type OpenAIResponsePayload } from "@/lib/lifeline-guide-api";
 import { guideGatewayReady } from "@/lib/lifeline-guide-rate-limit";
+import { GuideBodyTooLargeError, readGuideJson } from "@/lib/lifeline-guide-request";
 import { redactGuideText } from "@/lib/lifeline-guide-redaction";
 import { signGuideSummary } from "@/lib/lifeline-guide-summary-token";
 
@@ -10,10 +11,6 @@ export async function POST(request: Request) {
   if (!guideGatewayReady()) {
     return NextResponse.json({ error: "The Lifeline Guide is temporarily unavailable." }, { status: 503 });
   }
-  if (Number(request.headers.get("content-length")) > 40_000) {
-    return NextResponse.json({ error: "The conversation is too long." }, { status: 413 });
-  }
-
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "The summary is temporarily unavailable." }, { status: 503 });
@@ -21,9 +18,12 @@ export async function POST(request: Request) {
 
   let body: unknown;
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    body = await readGuideJson(request, 40_000);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof GuideBodyTooLargeError ? "The conversation is too long." : "Invalid request." },
+      { status: error instanceof GuideBodyTooLargeError ? 413 : 400 },
+    );
   }
 
   const messages = cleanGuideMessages(

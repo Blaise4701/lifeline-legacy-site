@@ -8,6 +8,7 @@ import {
   verifyGuideTurnstile,
 } from "@/lib/lifeline-guide-email";
 import { guideGatewayReady } from "@/lib/lifeline-guide-rate-limit";
+import { GuideBodyTooLargeError, readGuideJson } from "@/lib/lifeline-guide-request";
 import { verifyGuideSummary } from "@/lib/lifeline-guide-summary-token";
 
 export const runtime = "nodejs";
@@ -16,15 +17,14 @@ export async function POST(request: Request) {
   if (!guideGatewayReady() || !guideEmailConfigured()) {
     return NextResponse.json({ error: "Email delivery is not available yet." }, { status: 503 });
   }
-  if (Number(request.headers.get("content-length")) > 5_000) {
-    return NextResponse.json({ error: "Invalid request." }, { status: 413 });
-  }
-
   let body: unknown;
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    body = await readGuideJson(request, 5_000);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Invalid request." },
+      { status: error instanceof GuideBodyTooLargeError ? 413 : 400 },
+    );
   }
 
   const value = body && typeof body === "object"
