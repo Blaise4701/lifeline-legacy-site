@@ -115,10 +115,21 @@ type ReviewCompleteSubmission = ReviewCommon & {
 type EventSubmission = {
   type: "event-registration";
   firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
   state: string;
+  guestCount: "0" | "1" | "2" | "3";
+  guests: Array<{
+    firstName: string;
+    lastName: string;
+    relationship: string;
+  }>;
+  age50Plus: "yes" | "no" | "prefer-not-to-say";
+  industryProfessional: "yes" | "no";
   eventId: string;
   consent: boolean;
+  smsConsent: boolean;
   website: string;
 };
 
@@ -274,22 +285,60 @@ function parseSubmission(value: unknown): LeadSubmission | null {
 
   if (type === "event-registration") {
     const firstName = cleanText(value.firstName, 80);
+    const lastName = cleanText(value.lastName, 80);
     const email = cleanText(value.email, 254).toLowerCase();
+    const phone = cleanText(value.phone, 40);
     const state = cleanText(value.state, 40);
+    const guestCount = cleanText(value.guestCount, 1);
+    const rawGuests = Array.isArray(value.guests) ? value.guests : [];
+    const guests = rawGuests.slice(0, 3).map((guest) => {
+      if (!isRecord(guest)) return { firstName: "", lastName: "", relationship: "" };
+      return {
+        firstName: cleanText(guest.firstName, 80),
+        lastName: cleanText(guest.lastName, 80),
+        relationship: cleanText(guest.relationship, 40),
+      };
+    });
+    const age50Plus = cleanText(value.age50Plus, 24);
+    const industryProfessional = cleanText(value.industryProfessional, 3);
     const eventId = cleanText(value.eventId, 80);
     const website = cleanText(value.website, 200);
     const consent = value.consent === true;
+    const smsConsent = value.smsConsent === true;
 
     if (
+      !firstName ||
+      !lastName ||
       !isEmail(email) ||
+      !phone ||
       !includesValue(states, state) ||
+      !includesValue(["0", "1", "2", "3"] as const, guestCount) ||
+      guests.length !== Number(guestCount) ||
+      guests.some((guest) => !guest.firstName || !guest.lastName) ||
+      !includesValue(["yes", "no", "prefer-not-to-say"] as const, age50Plus) ||
+      !includesValue(["yes", "no"] as const, industryProfessional) ||
       !workshops.some((workshop) => workshop.id === eventId) ||
       !consent
     ) {
       return null;
     }
 
-    return { type, firstName, email, state, eventId, consent, website };
+    return {
+      type,
+      firstName,
+      lastName,
+      email,
+      phone,
+      state,
+      guestCount,
+      guests,
+      age50Plus,
+      industryProfessional,
+      eventId,
+      consent,
+      smsConsent,
+      website,
+    };
   }
 
   return null;
@@ -454,11 +503,20 @@ export async function POST(request: Request) {
 
   if (submission.type === "event-registration") {
     const workshop = workshops.find((item) => item.id === submission.eventId)!;
-    const eventInterest = `${workshop.title} — ${workshop.date} at ${workshop.time} — ${workshop.location}`;
+    const guestSummary = submission.guests.length
+      ? ` — Guests: ${submission.guests
+          .map((guest) =>
+            [`${guest.firstName} ${guest.lastName}`, guest.relationship]
+              .filter(Boolean)
+              .join(" (") + (guest.relationship ? ")" : ""),
+          )
+          .join(", ")}`
+      : "";
+    const eventInterest = `${workshop.title} — ${workshop.date} at ${workshop.time} — ${workshop.location}${guestSummary}`;
 
     customFields = [
       { key: "llfg_selected_pathway", fieldValue: "Retirement" },
-      { key: "llfg_learning_interest", fieldValue: eventInterest },
+      { key: "llfg_learning_interest", fieldValue: eventInterest.slice(0, 500) },
     ];
     source = "LLFG Website · Event Registration";
   } else {
@@ -485,7 +543,8 @@ export async function POST(request: Request) {
 
   const contactBody = {
     ...(submission.firstName ? { firstName: submission.firstName } : {}),
-    ...(submission.type !== "event-registration" && submission.phone ? { phone: submission.phone } : {}),
+    ...(submission.type === "event-registration" && submission.lastName ? { lastName: submission.lastName } : {}),
+    ...(submission.phone ? { phone: submission.phone } : {}),
     email: submission.email,
     locationId,
     state: submission.state,
@@ -515,10 +574,22 @@ export async function POST(request: Request) {
     }
 
     if (submission.type === "event-registration") {
+      const eventTags = [
+        "llf - website",
+        "llfg-event-registration",
+        `llfg-event-${slug(submission.eventId)}`,
+        `llfg-event-guests-${submission.guestCount}`,
+        `llfg-event-age-50-plus-${slug(submission.age50Plus)}`,
+        `llfg-event-industry-professional-${submission.industryProfessional}`,
+        "llfg-email-service-consent",
+      ];
+
+      if (submission.smsConsent) eventTags.push("llfg-sms-service-consent");
+
       const ok = await resetAndAddTags(
         contactId,
         token,
-        ["llf - website", "llfg-event-registration"],
+        eventTags,
         ["llfg-event-registration"],
       );
 

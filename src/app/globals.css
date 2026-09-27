@@ -5730,3 +5730,415 @@ ul:last-child {
       var(--emerald-950);
   }
 }
+
+
+/* Seminar series refresh */
+.seminar-series-list {
+  display: grid;
+  gap: clamp(3rem, 6vw, 5.5rem);
+}
+
+.seminar-series-group {
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  padding-top: 2rem;
+}
+
+.seminar-series-heading {
+  margin-bottom: 1.6rem;
+  max-width: 52rem;
+}
+
+.seminar-series-heading h3 {
+  color: var(--white);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.02;
+  margin-bottom: 0.65rem;
+}
+
+.seminar-series-heading > p:last-child {
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 48rem;
+}
+
+.learn-page-shell .workshop-card-grid {
+  align-items: stretch;
+}
+
+.learn-page-shell .workshop-card-detailed {
+  min-height: 0;
+}
+
+.workshop-subtitle {
+  color: var(--emerald-800);
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.9rem;
+}
+
+.workshop-description {
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.workshop-detail-block {
+  border-top: 1px solid var(--cream-200);
+  padding-top: 0.9rem;
+}
+
+.workshop-detail-label {
+  color: var(--gold-accessible);
+  font-size: 0.64rem;
+  font-weight: 780;
+  letter-spacing: 0.09em;
+  margin-bottom: 0.55rem;
+  text-transform: uppercase;
+}
+
+.workshop-highlight-list {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin: 0;
+  padding-left: 1.05rem;
+}
+
+.workshop-highlight-list li + li {
+  margin-top: 0.3rem;
+}
+
+.workshop-outcome {
+  background: var(--sage-50);
+  border-left: 2px solid var(--emerald-700);
+  margin-top: 1rem;
+  padding: 0.85rem 0.95rem;
+}
+
+.workshop-outcome > p:last-child {
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin-bottom: 0;
+}
+
+.workshop-parts {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.workshop-part {
+  background: var(--cream-100);
+  border: 1px solid var(--cream-200);
+  padding: 0.8rem 0.85rem;
+}
+
+.workshop-part > span {
+  color: var(--gold-accessible);
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 760;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
+}
+
+.workshop-part > strong {
+  color: var(--emerald-950);
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.workshop-part > p {
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  margin: 0.25rem 0 0;
+}
+
+@media (min-width: 1181px) {
+  .learn-page-shell .seminar-series-group .workshop-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .learn-page-shell .seminar-series-group:last-child .workshop-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .seminar-series-list {
+    gap: 3rem;
+  }
+
+  .seminar-series-heading {
+    margin-bottom: 1.25rem;
+  }
+
+  .seminar-series-heading h3 {
+    font-size: 2rem;
+  }
+}
+
+
+/* Premium seminar registration form */
+.premium-registration-form {
+  background: var(--emerald-950);
+  border: 1px solid rgba(217, 183, 93, 0.32);
+  color: var(--white);
+  margin-top: 1rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.premium-registration-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  margin-bottom: 1rem;
+  padding: 0.15rem 0 1rem;
+}
+
+.registration-kicker {
+  color: var(--gold-300);
+  font-size: 0.62rem;
+  font-weight: 780;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.premium-registration-header h4 {
+  color: var(--white);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.12;
+  margin-bottom: 0.35rem;
+}
+
+.premium-registration-header > p:not(.registration-kicker) {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  margin-bottom: 0.2rem;
+}
+
+.premium-registration-header > span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.68rem;
+}
+
+.registration-step {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 0.8rem;
+  padding: 1rem;
+}
+
+.registration-step-heading {
+  align-items: center;
+  display: flex;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.registration-step-heading > span {
+  align-items: center;
+  background: var(--cream-50);
+  border-radius: 50%;
+  color: var(--emerald-950);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 800;
+  height: 1.8rem;
+  justify-content: center;
+  width: 1.8rem;
+}
+
+.registration-step-heading h5 {
+  color: var(--white);
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.premium-registration-grid {
+  gap: 0.65rem 0.75rem;
+}
+
+.premium-registration-grid label,
+.premium-select-label,
+.registration-question-stack label {
+  color: rgba(255, 255, 255, 0.86);
+  display: grid;
+  font-size: 0.68rem;
+  font-weight: 650;
+  gap: 0.3rem;
+}
+
+.premium-registration-grid input,
+.premium-registration-grid select,
+.premium-select-label select,
+.registration-question-stack select {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--ink);
+  min-height: 2.7rem;
+  padding: 0.58rem 0.7rem;
+  width: 100%;
+}
+
+.registration-question-stack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.registration-consents {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.9rem;
+}
+
+.premium-consent {
+  align-items: flex-start;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
+.premium-consent input {
+  margin-top: 0.15rem;
+}
+
+.premium-registration-actions {
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.registration-submit-button {
+  background: var(--gold-400);
+  border-color: var(--gold-400);
+  color: var(--emerald-950);
+  min-width: min(100%, 15rem);
+}
+
+.registration-submit-button:hover {
+  background: var(--gold-300);
+  border-color: var(--gold-300);
+}
+
+.premium-registration-actions .text-button {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.registration-privacy-note {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.62rem;
+  line-height: 1.4;
+  margin-top: 0.85rem;
+}
+
+@media (max-width: 700px) {
+  .premium-registration-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-registration-grid .registration-field-full {
+    grid-column: auto;
+  }
+
+  .premium-registration-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .registration-submit-button {
+    width: 100%;
+  }
+}
+
+
+/* Seminar qualification radio controls */
+.registration-radio-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.registration-radio-group + .registration-radio-group {
+  margin-top: 0.9rem;
+}
+
+.registration-radio-group legend {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.68rem;
+  font-weight: 650;
+  margin-bottom: 0.5rem;
+}
+
+.registration-radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.registration-radio-options label {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.45rem;
+  min-height: 2.45rem;
+  padding: 0.5rem 0.7rem;
+}
+
+.registration-radio-options input {
+  accent-color: var(--gold-400);
+  margin: 0;
+}
+
+.registration-radio-options span {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+@media (max-width: 700px) {
+  .registration-radio-options {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .registration-radio-options label {
+    width: 100%;
+  }
+}
+
+
+/* Conditional seminar guest details */
+.guest-details-list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.85rem;
+}
+
+.guest-details-card {
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(217, 183, 93, 0.2);
+  margin: 0;
+  padding: 0.85rem;
+}
+
+.guest-details-card legend {
+  color: var(--gold-300);
+  font-size: 0.66rem;
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  padding: 0 0.3rem;
+  text-transform: uppercase;
+}
+
+.guest-details-card small {
+  color: rgba(255, 255, 255, 0.52);
+  font-weight: 450;
+}
