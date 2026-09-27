@@ -86,7 +86,6 @@ const seminarSeries = [
   },
 ] as const;
 
-
 export default function LearnPage() {
   return (
     <div className="learn-page-shell">
@@ -105,7 +104,31 @@ export default function LearnPage() {
             <div className="section-heading split-heading">
               <div>
                 <p className="eyebrow">Guides and tools</p>
-                <h2>Start with the question in f        <section className="section section-dark learn-workshops-section" id="workshops" aria-labelledby="workshops-title">
+                <h2>Start with the question in front of you.</h2>
+              </div>
+              <p>Resources marked “in development” are intentionally not linked yet. They will only be published when the content and compliance review are complete.</p>
+            </div>
+
+            <div className="resource-grid">
+              {resources.map((resource) => (
+                <article className="resource-card" key={resource.title}>
+                  <p className="card-kicker">{resource.type}</p>
+                  <h3>{resource.title}</h3>
+                  <p>{resource.text}</p>
+                  {resource.ready ? (
+                    <Link className="text-link" href={resource.href}>
+                      {resource.action} <span aria-hidden="true">→</span>
+                    </Link>
+                  ) : (
+                    <span className="status-label">{resource.action}</span>
+                  )}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section section-dark learn-workshops-section" id="workshops" aria-labelledby="workshops-title">
           <div className="container">
             <div className="section-heading centered-heading heading-light">
               <p className="eyebrow eyebrow-light">Fall 2026 retirement education series</p>
@@ -143,7 +166,9 @@ export default function LearnPage() {
                           <div className="workshop-detail-block">
                             <p className="workshop-detail-label">What you’ll work through</p>
                             <ul className="workshop-highlight-list">
-                              {workshop.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+                              {workshop.highlights.map((highlight) => (
+                                <li key={highlight}>{highlight}</li>
+                              ))}
                             </ul>
                           </div>
 
@@ -175,27 +200,6 @@ export default function LearnPage() {
                   </section>
                 );
               })}
-            </div>
-          </div>
-        </section>
-
-className="workshop-card" id={workshop.id} key={workshop.id}>
-                  <div className="workshop-meta">
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <div>
-                      <p className="workshop-format">{workshop.eventType}</p>
-                      <time dateTime={workshop.dateTime}>{workshop.date} · {workshop.time}</time>
-                    </div>
-                  </div>
-                  <h3>{workshop.title}</h3>
-                  <p>{workshop.description}</p>
-                  <div className="workshop-card-footer">
-                    <p className="workshop-location">{workshop.location}</p>
-                    <p className="workshop-address">{workshop.address}</p>
-                    <WorkshopRegistration workshop={workshop} />
-                  </div>
-                </article>
-              ))}
             </div>
           </div>
         </section>
