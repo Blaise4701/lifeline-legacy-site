@@ -11,6 +11,7 @@ import {
 } from "@/lib/lifeline-guide-api";
 import { LIFELINE_GUIDE_KNOWLEDGE } from "@/lib/lifeline-guide-knowledge";
 import { guideGatewayReady } from "@/lib/lifeline-guide-rate-limit";
+import { GuideBodyTooLargeError, readGuideJson } from "@/lib/lifeline-guide-request";
 import { redactGuideText } from "@/lib/lifeline-guide-redaction";
 import {
   disclosure,
@@ -116,16 +117,15 @@ export async function POST(request: Request) {
     );
   }
 
-  if (Number(request.headers.get("content-length")) > 40_000) {
-    return NextResponse.json({ error: "The question is too long." }, { status: 413 });
-  }
-
   let body: unknown;
 
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    body = await readGuideJson(request, 40_000);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof GuideBodyTooLargeError ? "The question is too long." : "Invalid request." },
+      { status: error instanceof GuideBodyTooLargeError ? 413 : 400 },
+    );
   }
 
   const requestBody =
