@@ -51,9 +51,22 @@ export default function Home() {
   return (
     <>
       <main id="main-content">
-        <section className="home-hero">
-          <div className="container home-hero-grid">
-            <div className="home-hero-copy">
+        <section className="home-hero home-hero-video">
+          <video
+            className="home-hero-video-media"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/brand/lifeline-home-hero-poster.jpg"
+            aria-hidden="true"
+          >
+            <source src="/brand/lifeline-home-hero.mp4" type="video/mp4" />
+          </video>
+          <div className="home-hero-video-overlay" aria-hidden="true" />
+          <div className="container home-hero-video-grid">
+            <div className="home-hero-copy home-hero-copy-video">
               <p className="eyebrow home-hero-eyebrow">Education-first planning · Dallas–Fort Worth</p>
               <h1>
                 <span>You’ve built the pieces.</span>
@@ -66,32 +79,20 @@ export default function Home() {
                 <Link className="button" href="#bridge">Explore the Continuity Bridge</Link>
                 <Link className="button button-outline" href="/checkup">Take the Continuity Checkup</Link>
               </div>
+              <div className="hero-video-question">
+                <p>The question behind every plan</p>
+                <strong>If life changes tomorrow, will the people who depend on you be okay?</strong>
+                <div className="hero-video-pillars" aria-label="Continuity, Certainty, Legacy">
+                  <span>Continuity</span>
+                  <span>Certainty</span>
+                  <span>Legacy</span>
+                </div>
+              </div>
               <p className="hero-note">
                 <span>Start with the questions</span>
                 <span>No account numbers</span>
                 <span>No upfront contact form</span>
               </p>
-            </div>
-            <div className="hero-bridge-visual" aria-label="The Continuity Bridge has three connected sections: Continuity, Certainty, and Legacy">
-              <div className="bridge-arch" aria-hidden="true">
-                <span className="arch-line arch-one" />
-                <span className="arch-line arch-two" />
-                <span className="arch-line arch-three" />
-                <span className="arch-line arch-four" />
-                <span className="arch-line arch-five" />
-                <span className="arch-line arch-six" />
-                <span className="arch-line arch-seven" />
-                <span className="bridge-deck" />
-              </div>
-              <p>The question behind every plan</p>
-              <blockquote>
-                <span>If life changes tomorrow,</span>
-                <strong className="hero-question">
-                  <span>will the people who depend on</span>
-                  <span>you be okay?</span>
-                </strong>
-              </blockquote>
-              <div className="hero-pillars"><span>Continuity</span><span>Certainty</span><span>Legacy</span></div>
             </div>
           </div>
         </section>
