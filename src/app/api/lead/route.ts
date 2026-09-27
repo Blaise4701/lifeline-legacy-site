@@ -120,6 +120,11 @@ type EventSubmission = {
   phone: string;
   state: string;
   guestCount: "0" | "1" | "2" | "3";
+  guests: Array<{
+    firstName: string;
+    lastName: string;
+    relationship: string;
+  }>;
   age50Plus: "yes" | "no" | "prefer-not-to-say";
   industryProfessional: "yes" | "no";
   eventId: string;
@@ -285,6 +290,15 @@ function parseSubmission(value: unknown): LeadSubmission | null {
     const phone = cleanText(value.phone, 40);
     const state = cleanText(value.state, 40);
     const guestCount = cleanText(value.guestCount, 1);
+    const rawGuests = Array.isArray(value.guests) ? value.guests : [];
+    const guests = rawGuests.slice(0, 3).map((guest) => {
+      if (!isRecord(guest)) return { firstName: "", lastName: "", relationship: "" };
+      return {
+        firstName: cleanText(guest.firstName, 80),
+        lastName: cleanText(guest.lastName, 80),
+        relationship: cleanText(guest.relationship, 40),
+      };
+    });
     const age50Plus = cleanText(value.age50Plus, 24);
     const industryProfessional = cleanText(value.industryProfessional, 3);
     const eventId = cleanText(value.eventId, 80);
@@ -299,6 +313,8 @@ function parseSubmission(value: unknown): LeadSubmission | null {
       !phone ||
       !includesValue(states, state) ||
       !includesValue(["0", "1", "2", "3"] as const, guestCount) ||
+      guests.length !== Number(guestCount) ||
+      guests.some((guest) => !guest.firstName || !guest.lastName) ||
       !includesValue(["yes", "no", "prefer-not-to-say"] as const, age50Plus) ||
       !includesValue(["yes", "no"] as const, industryProfessional) ||
       !workshops.some((workshop) => workshop.id === eventId) ||
@@ -315,6 +331,7 @@ function parseSubmission(value: unknown): LeadSubmission | null {
       phone,
       state,
       guestCount,
+      guests,
       age50Plus,
       industryProfessional,
       eventId,
@@ -486,11 +503,20 @@ export async function POST(request: Request) {
 
   if (submission.type === "event-registration") {
     const workshop = workshops.find((item) => item.id === submission.eventId)!;
-    const eventInterest = `${workshop.title} — ${workshop.date} at ${workshop.time} — ${workshop.location}`;
+    const guestSummary = submission.guests.length
+      ? ` — Guests: ${submission.guests
+          .map((guest) =>
+            [`${guest.firstName} ${guest.lastName}`, guest.relationship]
+              .filter(Boolean)
+              .join(" (") + (guest.relationship ? ")" : ""),
+          )
+          .join(", ")}`
+      : "";
+    const eventInterest = `${workshop.title} — ${workshop.date} at ${workshop.time} — ${workshop.location}${guestSummary}`;
 
     customFields = [
       { key: "llfg_selected_pathway", fieldValue: "Retirement" },
-      { key: "llfg_learning_interest", fieldValue: eventInterest },
+      { key: "llfg_learning_interest", fieldValue: eventInterest.slice(0, 500) },
     ];
     source = "LLFG Website · Event Registration";
   } else {
