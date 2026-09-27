@@ -217,7 +217,7 @@ export default function Home() {
             <div>
               <p className="eyebrow">Workshops, guides, and conversations</p>
               <h2>Learn it before you decide anything.</h2>
-              <p>Ten fall education sessions are scheduled at public libraries in Dallas and Wylie. Online registration will open shortly.</p>
+              <p>Fall retirement education sessions are scheduled across Dallas and Wylie, including seminars and hands-on written-plan workshops.</p>
               <Link className="button" href="/learn#workshops">View the full event schedule</Link>
             </div>
             <div className="resource-stack">
