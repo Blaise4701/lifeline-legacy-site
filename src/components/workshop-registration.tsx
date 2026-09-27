@@ -74,8 +74,8 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
   if (status === "submitted") {
     return (
       <div className="registration-confirmation" role="status">
-        <strong>Your seat is reserved.</strong>
-        <span>We’ll send the event details and confirmation to your email.</span>
+        <strong>Your registration was recorded.</strong>
+        <span>Save the event details above. If you need confirmation or have questions, contact Lifeline Legacy directly.</span>
       </div>
     );
   }
