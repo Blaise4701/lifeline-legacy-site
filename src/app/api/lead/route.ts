@@ -115,10 +115,16 @@ type ReviewCompleteSubmission = ReviewCommon & {
 type EventSubmission = {
   type: "event-registration";
   firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
   state: string;
+  guestCount: "0" | "1" | "2" | "3";
+  age50Plus: "yes" | "no" | "prefer-not-to-say";
+  industryProfessional: "yes" | "no";
   eventId: string;
   consent: boolean;
+  smsConsent: boolean;
   website: string;
 };
 
@@ -274,22 +280,48 @@ function parseSubmission(value: unknown): LeadSubmission | null {
 
   if (type === "event-registration") {
     const firstName = cleanText(value.firstName, 80);
+    const lastName = cleanText(value.lastName, 80);
     const email = cleanText(value.email, 254).toLowerCase();
+    const phone = cleanText(value.phone, 40);
     const state = cleanText(value.state, 40);
+    const guestCount = cleanText(value.guestCount, 1);
+    const age50Plus = cleanText(value.age50Plus, 24);
+    const industryProfessional = cleanText(value.industryProfessional, 3);
     const eventId = cleanText(value.eventId, 80);
     const website = cleanText(value.website, 200);
     const consent = value.consent === true;
+    const smsConsent = value.smsConsent === true;
 
     if (
+      !firstName ||
+      !lastName ||
       !isEmail(email) ||
+      !phone ||
       !includesValue(states, state) ||
+      !includesValue(["0", "1", "2", "3"] as const, guestCount) ||
+      !includesValue(["yes", "no", "prefer-not-to-say"] as const, age50Plus) ||
+      !includesValue(["yes", "no"] as const, industryProfessional) ||
       !workshops.some((workshop) => workshop.id === eventId) ||
       !consent
     ) {
       return null;
     }
 
-    return { type, firstName, email, state, eventId, consent, website };
+    return {
+      type,
+      firstName,
+      lastName,
+      email,
+      phone,
+      state,
+      guestCount,
+      age50Plus,
+      industryProfessional,
+      eventId,
+      consent,
+      smsConsent,
+      website,
+    };
   }
 
   return null;
@@ -485,7 +517,8 @@ export async function POST(request: Request) {
 
   const contactBody = {
     ...(submission.firstName ? { firstName: submission.firstName } : {}),
-    ...(submission.type !== "event-registration" && submission.phone ? { phone: submission.phone } : {}),
+    ...(submission.type === "event-registration" && submission.lastName ? { lastName: submission.lastName } : {}),
+    ...(submission.phone ? { phone: submission.phone } : {}),
     email: submission.email,
     locationId,
     state: submission.state,
@@ -515,10 +548,22 @@ export async function POST(request: Request) {
     }
 
     if (submission.type === "event-registration") {
+      const eventTags = [
+        "llf - website",
+        "llfg-event-registration",
+        `llfg-event-${slug(submission.eventId)}`,
+        `llfg-event-guests-${submission.guestCount}`,
+        `llfg-event-age-50-plus-${slug(submission.age50Plus)}`,
+        `llfg-event-industry-professional-${submission.industryProfessional}`,
+        "llfg-email-service-consent",
+      ];
+
+      if (submission.smsConsent) eventTags.push("llfg-sms-service-consent");
+
       const ok = await resetAndAddTags(
         contactId,
         token,
-        ["llf - website", "llfg-event-registration"],
+        eventTags,
         ["llfg-event-registration"],
       );
 
