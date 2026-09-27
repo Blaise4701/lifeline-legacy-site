@@ -90,7 +90,7 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
     return (
       <div className="registration-confirmation" role="status">
         <strong>{alreadyRegistered ? "Your seat is already reserved." : "Your seat is reserved."}</strong>
-        <span>{workshop.title} · {workshop.date} · {workshop.time} · {workshop.location}. Save these details for your visit.</span>
+        <span>{workshop.title} · {workshop.date} · {workshop.time} · {workshop.location}. {alreadyRegistered ? "To change your guest details, contact LLFG directly." : "Save these details for your visit."}</span>
       </div>
     );
   }

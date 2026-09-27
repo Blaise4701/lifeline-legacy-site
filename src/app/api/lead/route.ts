@@ -634,7 +634,6 @@ export async function POST(request: Request) {
 
       if (submission.age50Plus === "no") commonTags.push("llfg-under-50");
       if (submission.industryProfessional === "yes") commonTags.push("llfg-industry-professional");
-      if (submission.smsConsent) commonTags.push("llfg-sms-service-consent");
 
       // The tag API returns the entire tag set. Check it before recording a second
       // registration or firing another confirmation for this contact and event.
@@ -647,6 +646,30 @@ export async function POST(request: Request) {
       }
 
       if (currentTags.some((tag) => tag.toLowerCase() === eventTag)) {
+        const smsTag = `${eventPrefix}sms-consent`;
+        const previouslyConsented = currentTags.some((tag) => tag.toLowerCase() === smsTag);
+        if (previouslyConsented && !submission.smsConsent) {
+          const removal = await ghlRequest(`/contacts/${contactId}/tags`, token, { tags: [smsTag] }, "DELETE");
+          if (!removal.ok) {
+            console.error("GHL event SMS opt-out failed.", { status: removal.status });
+            return Response.json(
+              { ok: false, message: "Your SMS preference could not be updated. Please contact LLFG directly." },
+              { status: 502 },
+            );
+          }
+        }
+        if (!previouslyConsented && submission.smsConsent) {
+          const consentNote = await ghlRequest(`/contacts/${contactId}/notes`, token, {
+            title: `LLFG event SMS consent: ${workshop.id}`,
+            body: `Website registrant explicitly opted in to SMS reminders for event ${workshop.id} on a repeat registration.`,
+          });
+          if (!consentNote.ok || !await addEventTags(contactId, token, [smsTag])) {
+            return Response.json(
+              { ok: false, message: "Your SMS preference could not be updated. Please contact LLFG directly." },
+              { status: 502 },
+            );
+          }
+        }
         return Response.json({ ok: true, alreadyRegistered: true }, { status: 200 });
       }
 
