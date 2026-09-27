@@ -6055,3 +6055,61 @@ ul:last-child {
     width: 100%;
   }
 }
+
+
+/* Seminar qualification radio controls */
+.registration-radio-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.registration-radio-group + .registration-radio-group {
+  margin-top: 0.9rem;
+}
+
+.registration-radio-group legend {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.68rem;
+  font-weight: 650;
+  margin-bottom: 0.5rem;
+}
+
+.registration-radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.registration-radio-options label {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.45rem;
+  min-height: 2.45rem;
+  padding: 0.5rem 0.7rem;
+}
+
+.registration-radio-options input {
+  accent-color: var(--gold-400);
+  margin: 0;
+}
+
+.registration-radio-options span {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+@media (max-width: 700px) {
+  .registration-radio-options {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .registration-radio-options label {
+    width: 100%;
+  }
+}
