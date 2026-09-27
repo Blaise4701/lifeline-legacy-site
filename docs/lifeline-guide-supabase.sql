@@ -90,7 +90,7 @@ begin
     set request_count = limits.request_count + 1
   returning request_count into minute_count;
 
-  if minute_count > case when p_event then 60 else 12 end then
+  if minute_count > (case when p_event then 60 else 12 end) then
     return false;
   end if;
 
@@ -100,7 +100,7 @@ begin
     set request_count = limits.request_count + 1
   returning request_count into day_count;
 
-  return day_count <= case when p_event then 500 else 100 end;
+  return day_count <= (case when p_event then 500 else 100 end);
 end;
 $$;
 
@@ -135,14 +135,14 @@ order by 1 desc, 3 desc;
 
 create or replace view public.guide_topic_trends_30d as
 select
-  topic,
+  expanded.topic,
   count(*) as mentions,
   count(distinct gm.session_key) as sessions
 from public.guide_messages gm
-cross join lateral unnest(gm.topics) as topic
+cross join lateral unnest(gm.topics) as expanded(topic)
 where gm.role = 'user'
   and gm.created_at >= now() - interval '30 days'
-group by topic
+group by expanded.topic
 order by mentions desc;
 
 create or replace view public.guide_top_questions_30d as
