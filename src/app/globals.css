@@ -6113,3 +6113,32 @@ ul:last-child {
     width: 100%;
   }
 }
+
+
+/* Conditional seminar guest details */
+.guest-details-list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.85rem;
+}
+
+.guest-details-card {
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(217, 183, 93, 0.2);
+  margin: 0;
+  padding: 0.85rem;
+}
+
+.guest-details-card legend {
+  color: var(--gold-300);
+  font-size: 0.66rem;
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  padding: 0 0.3rem;
+  text-transform: uppercase;
+}
+
+.guest-details-card small {
+  color: rgba(255, 255, 255, 0.52);
+  font-weight: 450;
+}
