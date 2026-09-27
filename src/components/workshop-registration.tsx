@@ -17,6 +17,7 @@ type RegistrationState = "idle" | "form" | "submitting" | "submitted";
 export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
   const [status, setStatus] = useState<RegistrationState>("idle");
   const [error, setError] = useState("");
+  const [guestCount, setGuestCount] = useState(0);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -38,6 +39,11 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
           phone: String(data.get("phone") ?? ""),
           state: String(data.get("state") ?? ""),
           guestCount: String(data.get("guestCount") ?? "0"),
+          guests: Array.from({ length: Number(data.get("guestCount") ?? 0) }, (_, index) => ({
+            firstName: String(data.get(`guestFirstName${index + 1}`) ?? ""),
+            lastName: String(data.get(`guestLastName${index + 1}`) ?? ""),
+            relationship: String(data.get(`guestRelationship${index + 1}`) ?? ""),
+          })),
           age50Plus: String(data.get("age50Plus") ?? ""),
           industryProfessional: String(data.get("industryProfessional") ?? ""),
           eventId: workshop.id,
@@ -53,6 +59,7 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
       }
 
       form.reset();
+      setGuestCount(0);
       setStatus("submitted");
     } catch (submissionError) {
       setError(
@@ -129,13 +136,58 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
         </div>
         <label className="premium-select-label">
           <span>Number of guests</span>
-          <select name="guestCount" defaultValue="0" required>
+          <select
+            name="guestCount"
+            value={String(guestCount)}
+            onChange={(event) => setGuestCount(Number(event.target.value))}
+            required
+          >
             <option value="0">No guest</option>
             <option value="1">1 guest</option>
             <option value="2">2 guests</option>
             <option value="3">3 guests</option>
           </select>
         </label>
+
+        {guestCount > 0 && (
+          <div className="guest-details-list">
+            {Array.from({ length: guestCount }, (_, index) => (
+              <fieldset className="guest-details-card" key={index}>
+                <legend>Guest {index + 1}</legend>
+                <div className="registration-field-grid premium-registration-grid">
+                  <label>
+                    <span>First name</span>
+                    <input
+                      name={`guestFirstName${index + 1}`}
+                      autoComplete="off"
+                      maxLength={80}
+                      required
+                    />
+                  </label>
+                  <label>
+                    <span>Last name</span>
+                    <input
+                      name={`guestLastName${index + 1}`}
+                      autoComplete="off"
+                      maxLength={80}
+                      required
+                    />
+                  </label>
+                  <label className="registration-field-full">
+                    <span>Relationship <small>(optional)</small></span>
+                    <select name={`guestRelationship${index + 1}`} defaultValue="">
+                      <option value="">Select if you’d like</option>
+                      <option value="Spouse/Partner">Spouse/Partner</option>
+                      <option value="Family member">Family member</option>
+                      <option value="Friend">Friend</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </label>
+                </div>
+              </fieldset>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="registration-step" aria-labelledby={`registration-step-3-${workshop.id}`}>
