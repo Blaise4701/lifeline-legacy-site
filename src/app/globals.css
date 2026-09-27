@@ -6142,3 +6142,73 @@ ul:last-child {
   color: rgba(255, 255, 255, 0.52);
   font-weight: 450;
 }
+
+
+/* Mobile homepage hero overflow fix */
+@media (max-width: 700px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .home-hero.home-hero-video,
+  .home-hero-video-grid,
+  .home-hero-copy-video {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .home-hero-video-grid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .home-hero-copy-video {
+    overflow-wrap: anywhere;
+  }
+
+  .home-hero-copy-video .eyebrow {
+    font-size: 0.64rem;
+    letter-spacing: 0.11em;
+    max-width: 100%;
+  }
+
+  .home-hero-copy-video h1 {
+    font-size: clamp(2.35rem, 11.5vw, 3.25rem);
+    line-height: 1;
+    max-width: 100%;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .home-hero-copy-video h1 > span {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .home-hero-copy-video .hero-lede {
+    max-width: 100%;
+  }
+
+  .home-hero-copy-video .button-row,
+  .home-hero-copy-video .button-row .button {
+    max-width: 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .home-hero-copy-video .button {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    white-space: normal;
+  }
+
+  .hero-video-question {
+    max-width: 100%;
+  }
+
+  .hero-video-pillars {
+    gap: 0.5rem 0.8rem;
+  }
+}
