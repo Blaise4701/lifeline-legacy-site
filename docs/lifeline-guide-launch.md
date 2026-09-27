@@ -37,6 +37,16 @@ Merge only the reviewed feature PR after these checks pass.
    cleanup job. Enable a Vercel Firewall rate limit on both Guide API routes as
    an additional edge control, and protect public
    Preview URLs while they use a paid API key without the database limiter.
+6. Review two Vercel Firewall fixed-window rate-limit rules before publishing:
+   - `POST` with path exactly `/api/guide`, keyed by source IP:
+     12 requests per 60 seconds, then return 429.
+   - `POST` with path exactly `/api/guide/event`, keyed by source IP:
+     60 requests per 60 seconds, then return 429.
+   The edge counters are regional; the SQL limiter remains the cross-region
+   control. Inspect legitimate traffic before applying these rules.
+7. Confirm a commercial Vercel plan for public launch. Hobby is restricted to
+   noncommercial use. If using the one-time 14-day Pro trial, check eligibility
+   for the existing team and plan for paid Pro before the trial ends.
 
 ## Release verification
 
