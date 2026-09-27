@@ -172,6 +172,8 @@ type GhlUpsertResponse = {
   };
 };
 
+type GhlTagsResponse = { tags?: string[] };
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -183,6 +185,11 @@ function cleanText(value: unknown, maxLength: number) {
 
 function isEmail(value: string) {
   return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isPhone(value: string) {
+  const digits = value.replace(/\D/g, "");
+  return /^[+\d().\s-]+$/.test(value) && digits.length >= 10 && digits.length <= 15;
 }
 
 function includesValue<const T extends readonly string[]>(values: T, value: string): value is T[number] {
@@ -322,7 +329,7 @@ function parseSubmission(value: unknown): LeadSubmission | null {
     const state = cleanText(value.state, 40);
     const guestCount = cleanText(value.guestCount, 1);
     const rawGuests = Array.isArray(value.guests) ? value.guests : [];
-    const guests = rawGuests.slice(0, 3).map((guest) => {
+    const guests = rawGuests.map((guest) => {
       if (!isRecord(guest)) return { firstName: "", lastName: "", relationship: "" };
       return {
         firstName: cleanText(guest.firstName, 80),
@@ -341,11 +348,14 @@ function parseSubmission(value: unknown): LeadSubmission | null {
       !firstName ||
       !lastName ||
       !isEmail(email) ||
-      !phone ||
+      !isPhone(phone) ||
       !includesValue(states, state) ||
       !includesValue(["0", "1", "2", "3"] as const, guestCount) ||
       guests.length !== Number(guestCount) ||
-      guests.some((guest) => !guest.firstName || !guest.lastName) ||
+      guests.some((guest) =>
+        !guest.firstName || !guest.lastName ||
+        !includesValue(["", "Spouse/Partner", "Family member", "Friend", "Other"] as const, guest.relationship)
+      ) ||
       !includesValue(["yes", "no", "prefer-not-to-say"] as const, age50Plus) ||
       !includesValue(["yes", "no"] as const, industryProfessional) ||
       !workshops.some((workshop) => workshop.id === eventId) ||
@@ -482,6 +492,16 @@ async function resetAndAddTags(
   return tagResponse.ok;
 }
 
+async function addEventTags(contactId: string, token: string, tags: string[]) {
+  const response = await ghlRequest(`/contacts/${contactId}/tags`, token, { tags });
+  if (!response.ok) {
+    console.error("GHL event tagging failed.", { status: response.status });
+    return null;
+  }
+  const result = (await response.json()) as GhlTagsResponse;
+  return Array.isArray(result.tags) ? result.tags : null;
+}
+
 export async function POST(request: Request) {
   if (!sameOrigin(request)) {
     return Response.json({ ok: false, message: "Request origin was not accepted." }, { status: 403 });
@@ -503,6 +523,16 @@ export async function POST(request: Request) {
 
   if (submission.website) {
     return Response.json({ ok: true });
+  }
+
+  if (submission.type === "event-registration") {
+    const workshop = workshops.find((item) => item.id === submission.eventId)!;
+    if (Date.now() >= Date.parse(workshop.dateTime)) {
+      return Response.json(
+        { ok: false, message: "Registration for this event has closed. Please choose another session." },
+        { status: 422 },
+      );
+    }
   }
 
   if (
@@ -530,21 +560,8 @@ export async function POST(request: Request) {
   let source = "LLFG Website";
 
   if (submission.type === "event-registration") {
-    const workshop = workshops.find((item) => item.id === submission.eventId)!;
-    const guestSummary = submission.guests.length
-      ? ` — Guests: ${submission.guests
-          .map((guest) =>
-            [`${guest.firstName} ${guest.lastName}`, guest.relationship]
-              .filter(Boolean)
-              .join(" (") + (guest.relationship ? ")" : ""),
-          )
-          .join(", ")}`
-      : "";
-    const eventInterest = `${workshop.title} — ${workshop.date} at ${workshop.time} — ${workshop.location}${guestSummary}`;
-
     customFields = [
       { key: "llfg_selected_pathway", fieldValue: "Retirement" },
-      { key: "llfg_learning_interest", fieldValue: eventInterest.slice(0, 500) },
     ];
     source = "LLFG Website · Event Registration";
   } else {
@@ -579,6 +596,7 @@ export async function POST(request: Request) {
     country: "US",
     source,
     customFields,
+    createNewIfDuplicateAllowed: false,
   };
 
   try {
@@ -602,33 +620,85 @@ export async function POST(request: Request) {
     }
 
     if (submission.type === "event-registration") {
-      const eventTags = [
+      const workshop = workshops.find((item) => item.id === submission.eventId)!;
+      const eventTag = `llfg-event-${workshop.id}`;
+      const eventPrefix = `${eventTag}-`;
+      const commonTags = [
         "llf - website",
         "llfg-event-registration",
-        `llfg-event-${slug(submission.eventId)}`,
         `llfg-event-guests-${submission.guestCount}`,
         `llfg-event-age-50-plus-${slug(submission.age50Plus)}`,
         `llfg-event-industry-professional-${submission.industryProfessional}`,
         "llfg-email-service-consent",
       ];
 
-      if (submission.smsConsent) eventTags.push("llfg-sms-service-consent");
+      if (submission.age50Plus === "no") commonTags.push("llfg-under-50");
+      if (submission.industryProfessional === "yes") commonTags.push("llfg-industry-professional");
+      if (submission.smsConsent) commonTags.push("llfg-sms-service-consent");
 
-      const ok = await resetAndAddTags(
-        contactId,
-        token,
-        eventTags,
-        ["llfg-event-registration"],
-      );
-
-      if (!ok) {
+      // The tag API returns the entire tag set. Check it before recording a second
+      // registration or firing another confirmation for this contact and event.
+      const currentTags = await addEventTags(contactId, token, commonTags);
+      if (!currentTags) {
         return Response.json(
           { ok: false, message: "Your registration could not be completed. Please try again." },
           { status: 502 },
         );
       }
 
-      return Response.json({ ok: true, bookingUrl: null }, { status: 201 });
+      if (currentTags.some((tag) => tag.toLowerCase() === eventTag)) {
+        return Response.json({ ok: true, alreadyRegistered: true }, { status: 200 });
+      }
+
+      // A contact may register for several events. Store each immutable event and
+      // guest snapshot as a separate contact note, never as a mutable contact field.
+      const note = await ghlRequest(`/contacts/${contactId}/notes`, token, {
+        title: `LLFG event registration: ${workshop.id}`,
+        body: JSON.stringify({
+          source: "LLFG Website · Event Registration",
+          eventId: workshop.id,
+          title: workshop.title,
+          subtitle: workshop.subtitle,
+          date: workshop.date,
+          startTime: workshop.dateTime,
+          endTime: workshop.endDateTime,
+          displayTime: workshop.time,
+          location: workshop.location,
+          address: workshop.address,
+          eventType: workshop.eventType,
+          guestCount: Number(submission.guestCount),
+          guests: submission.guests,
+          age50Plus: submission.age50Plus,
+          industryProfessional: submission.industryProfessional,
+          emailRegistrationConsent: submission.consent,
+          smsEventConsent: submission.smsConsent,
+          status: "Registered",
+        }, null, 2),
+      });
+
+      if (!note.ok) {
+        console.error("GHL event registration note failed.", { status: note.status });
+        return Response.json(
+          { ok: false, message: "Your registration could not be completed. Please try again." },
+          { status: 502 },
+        );
+      }
+
+      const statusTags = [
+        `${eventPrefix}status-registered`,
+        `${eventPrefix}age-50-plus-${slug(submission.age50Plus)}`,
+        `${eventPrefix}industry-professional-${submission.industryProfessional}`,
+      ];
+      if (submission.smsConsent) statusTags.push(`${eventPrefix}sms-consent`);
+      if (!await addEventTags(contactId, token, statusTags) ||
+          !await addEventTags(contactId, token, [eventTag])) {
+        return Response.json(
+          { ok: false, message: "Your registration could not be completed. Please try again." },
+          { status: 502 },
+        );
+      }
+
+      return Response.json({ ok: true, alreadyRegistered: false }, { status: 201 });
     }
 
     if (submission.type === "continuity-review-start") {

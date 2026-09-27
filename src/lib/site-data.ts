@@ -184,6 +184,19 @@ export const licensedStates = [
 
 export const licensedStateCodes = ["TX", "AZ", "FL", "KS", "ME", "MI", "NC", "OH"] as const;
 
+export const standardEventPreparation = "No preparation is required. Bring your questions.";
+export const writtenPlanPreparation =
+  "Please bring any retirement information you are comfortable using during the workshop, such as Social Security estimates, pension information, retirement account statements, or a simple list of your retirement accounts. Do not share sensitive account credentials or passwords.";
+
+// These settings are copied into each event's GHL workflow. They do not schedule messages in the website.
+export const standardEventReminders = {
+  dayBeforeEmail: true,
+  dayBeforeSms: true,
+  twoHoursBeforeEmail: true,
+  twoHoursBeforeSms: true,
+  oneHourBeforeSms: false,
+} as const;
+
 export const workshops = [
   {
     id: "retirement-countdown",
@@ -207,6 +220,10 @@ export const workshops = [
     ],
     location: "Renner Frankford Branch Library",
     address: "Dallas, Texas",
+    endDateTime: null,
+    preparation: standardEventPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
   {
     id: "assumptions-meet-reality",
@@ -230,6 +247,10 @@ export const workshops = [
     ],
     location: "Renner Frankford Branch Library",
     address: "Dallas, Texas",
+    endDateTime: null,
+    preparation: standardEventPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
   {
     id: "written-retirement-income-plan",
@@ -253,6 +274,10 @@ export const workshops = [
     ],
     location: "Renner Frankford Branch Library",
     address: "Dallas, Texas",
+    endDateTime: "2026-10-03T13:00:00-05:00",
+    preparation: writtenPlanPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
   {
     id: "wylie-october-06",
@@ -276,6 +301,10 @@ export const workshops = [
     ],
     location: "Rita & Truett Smith Public Library",
     address: "300 Country Club Road, Building 300 · Wylie, Texas",
+    endDateTime: null,
+    preparation: standardEventPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
   {
     id: "wylie-october-12",
@@ -299,6 +328,10 @@ export const workshops = [
     ],
     location: "Rita & Truett Smith Public Library",
     address: "300 Country Club Road, Building 300 · Wylie, Texas",
+    endDateTime: null,
+    preparation: standardEventPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
   {
     id: "wylie-october-29",
@@ -322,6 +355,10 @@ export const workshops = [
     ],
     location: "Rita & Truett Smith Public Library",
     address: "300 Country Club Road, Building 300 · Wylie, Texas",
+    endDateTime: null,
+    preparation: writtenPlanPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
   {
     id: "november-10-first-five-years",
@@ -345,6 +382,10 @@ export const workshops = [
     ],
     location: "Location to be announced",
     address: "Dallas–Fort Worth area",
+    endDateTime: null,
+    preparation: standardEventPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
   {
     id: "fretz-november-12-workshop",
@@ -385,6 +426,10 @@ export const workshops = [
     ],
     location: "Fretz Park Branch Library",
     address: "Dallas, Texas",
+    endDateTime: "2026-11-12T19:30:00-06:00",
+    preparation: writtenPlanPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
   {
     id: "renner-november-14-workshop",
@@ -408,6 +453,10 @@ export const workshops = [
     ],
     location: "Renner Frankford Branch Library",
     address: "Dallas, Texas",
+    endDateTime: null,
+    preparation: writtenPlanPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
   },
 ] as const;
 
