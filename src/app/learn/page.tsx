@@ -62,6 +62,31 @@ const resources = [
   },
 ] as const;
 
+const seminarSeries = [
+  {
+    key: "renner-fall",
+    eyebrow: "Renner Frankford · September–October",
+    title: "Prepare. Stress-Test. Build.",
+    description:
+      "Three connected sessions for people approaching retirement: understand the countdown, test the assumptions, then put the first version of the income plan on paper.",
+  },
+  {
+    key: "wylie-fall",
+    eyebrow: "Wylie · October",
+    title: "Reduce Risk. Build the Roadmap. Create the Plan.",
+    description:
+      "A three-event progression from retirement-income risk, to the planning roadmap, to a hands-on written retirement-paycheck workshop.",
+  },
+  {
+    key: "november-fall",
+    eyebrow: "Dallas–Fort Worth · November",
+    title: "Early Decisions. Income Coordination. Written Plan.",
+    description:
+      "November goes deeper into the first years of retirement and includes an extended two-part workshop at Fretz Park.",
+  },
+] as const;
+
+
 export default function LearnPage() {
   return (
     <div className="learn-page-shell">
@@ -80,37 +105,81 @@ export default function LearnPage() {
             <div className="section-heading split-heading">
               <div>
                 <p className="eyebrow">Guides and tools</p>
-                <h2>Start with the question in front of you.</h2>
-              </div>
-              <p>Resources marked “in development” are intentionally not linked yet. They will only be published when the content and compliance review are complete.</p>
-            </div>
-            <div className="resource-grid">
-              {resources.map((resource) => (
-                <article className="resource-card" key={resource.title}>
-                  <p className="card-kicker">{resource.type}</p>
-                  <h3>{resource.title}</h3>
-                  <p>{resource.text}</p>
-                  {resource.ready ? (
-                    <Link className="text-link" href={resource.href}>{resource.action} <span aria-hidden="true">→</span></Link>
-                  ) : (
-                    <span className="status-label">{resource.action}</span>
-                  )}
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section section-dark learn-workshops-section" id="workshops" aria-labelledby="workshops-title">
+                <h2>Start with the question in f        <section className="section section-dark learn-workshops-section" id="workshops" aria-labelledby="workshops-title">
           <div className="container">
             <div className="section-heading centered-heading heading-light">
               <p className="eyebrow eyebrow-light">Fall 2026 retirement education series</p>
               <h2 id="workshops-title">Retirement Should Feel Like Freedom.</h2>
-              <p>Ten education-first seminars and hands-on workshops are scheduled at public libraries in Dallas and Wylie. Reserve a seat for the conversation that fits your calendar.</p>
+              <p>Choose the conversation that matches the decision in front of you. Each seminar stands on its own, while the series builds from awareness to a written retirement-income plan.</p>
             </div>
-            <div className="workshop-card-grid">
-              {workshops.map((workshop, index) => (
-                <article className="workshop-card" id={workshop.id} key={workshop.id}>
+
+            <div className="seminar-series-list">
+              {seminarSeries.map((series) => {
+                const seriesWorkshops = workshops.filter((workshop) => workshop.series === series.key);
+
+                return (
+                  <section className="seminar-series-group" key={series.key} aria-labelledby={`series-${series.key}`}>
+                    <div className="seminar-series-heading">
+                      <p className="eyebrow eyebrow-light">{series.eyebrow}</p>
+                      <h3 id={`series-${series.key}`}>{series.title}</h3>
+                      <p>{series.description}</p>
+                    </div>
+
+                    <div className="workshop-card-grid">
+                      {seriesWorkshops.map((workshop, index) => (
+                        <article className="workshop-card workshop-card-detailed" id={workshop.id} key={workshop.id}>
+                          <div className="workshop-meta">
+                            <span>{String(index + 1).padStart(2, "0")}</span>
+                            <div>
+                              <p className="workshop-format">{workshop.eventType}</p>
+                              <time dateTime={workshop.dateTime}>{workshop.date} · {workshop.time}</time>
+                            </div>
+                          </div>
+
+                          <h3>{workshop.title}</h3>
+                          <p className="workshop-subtitle">{workshop.subtitle}</p>
+                          <p className="workshop-description">{workshop.description}</p>
+
+                          <div className="workshop-detail-block">
+                            <p className="workshop-detail-label">What you’ll work through</p>
+                            <ul className="workshop-highlight-list">
+                              {workshop.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+                            </ul>
+                          </div>
+
+                          {"parts" in workshop && (
+                            <div className="workshop-parts">
+                              {workshop.parts.map((part) => (
+                                <div className="workshop-part" key={part.title}>
+                                  <span>{part.time}</span>
+                                  <strong>{part.title}</strong>
+                                  <p>{part.outcome}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="workshop-outcome">
+                            <p className="workshop-detail-label">What you’ll leave with</p>
+                            <p>{workshop.outcome}</p>
+                          </div>
+
+                          <div className="workshop-card-footer">
+                            <p className="workshop-location">{workshop.location}</p>
+                            <p className="workshop-address">{workshop.address}</p>
+                            <WorkshopRegistration workshop={workshop} />
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+className="workshop-card" id={workshop.id} key={workshop.id}>
                   <div className="workshop-meta">
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <div>
