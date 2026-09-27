@@ -5881,3 +5881,177 @@ ul:last-child {
     font-size: 2rem;
   }
 }
+
+
+/* Premium seminar registration form */
+.premium-registration-form {
+  background: var(--emerald-950);
+  border: 1px solid rgba(217, 183, 93, 0.32);
+  color: var(--white);
+  margin-top: 1rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.premium-registration-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  margin-bottom: 1rem;
+  padding: 0.15rem 0 1rem;
+}
+
+.registration-kicker {
+  color: var(--gold-300);
+  font-size: 0.62rem;
+  font-weight: 780;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.premium-registration-header h4 {
+  color: var(--white);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.12;
+  margin-bottom: 0.35rem;
+}
+
+.premium-registration-header > p:not(.registration-kicker) {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  margin-bottom: 0.2rem;
+}
+
+.premium-registration-header > span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.68rem;
+}
+
+.registration-step {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 0.8rem;
+  padding: 1rem;
+}
+
+.registration-step-heading {
+  align-items: center;
+  display: flex;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.registration-step-heading > span {
+  align-items: center;
+  background: var(--cream-50);
+  border-radius: 50%;
+  color: var(--emerald-950);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 800;
+  height: 1.8rem;
+  justify-content: center;
+  width: 1.8rem;
+}
+
+.registration-step-heading h5 {
+  color: var(--white);
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.premium-registration-grid {
+  gap: 0.65rem 0.75rem;
+}
+
+.premium-registration-grid label,
+.premium-select-label,
+.registration-question-stack label {
+  color: rgba(255, 255, 255, 0.86);
+  display: grid;
+  font-size: 0.68rem;
+  font-weight: 650;
+  gap: 0.3rem;
+}
+
+.premium-registration-grid input,
+.premium-registration-grid select,
+.premium-select-label select,
+.registration-question-stack select {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--ink);
+  min-height: 2.7rem;
+  padding: 0.58rem 0.7rem;
+  width: 100%;
+}
+
+.registration-question-stack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.registration-consents {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.9rem;
+}
+
+.premium-consent {
+  align-items: flex-start;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
+.premium-consent input {
+  margin-top: 0.15rem;
+}
+
+.premium-registration-actions {
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.registration-submit-button {
+  background: var(--gold-400);
+  border-color: var(--gold-400);
+  color: var(--emerald-950);
+  min-width: min(100%, 15rem);
+}
+
+.registration-submit-button:hover {
+  background: var(--gold-300);
+  border-color: var(--gold-300);
+}
+
+.premium-registration-actions .text-button {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.registration-privacy-note {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.62rem;
+  line-height: 1.4;
+  margin-top: 0.85rem;
+}
+
+@media (max-width: 700px) {
+  .premium-registration-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-registration-grid .registration-field-full {
+    grid-column: auto;
+  }
+
+  .premium-registration-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .registration-submit-button {
+    width: 100%;
+  }
+}
