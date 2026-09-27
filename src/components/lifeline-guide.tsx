@@ -33,6 +33,7 @@ export function LifelineGuide() {
   const [error, setError] = useState("");
   const [suggestedStep, setSuggestedStep] = useState<GuideSuggestedStep | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const latestAssistantRef = useRef<HTMLDivElement>(null);
   const sessionIdRef = useRef("");
@@ -137,6 +138,11 @@ export function LifelineGuide() {
     window.setTimeout(() => textareaRef.current?.focus(), 80);
   }
 
+  function closeGuide() {
+    setIsOpen(false);
+    launcherRef.current?.focus();
+  }
+
   function resetGuide() {
     setMessages([greeting]);
     setDraft("");
@@ -215,6 +221,12 @@ export function LifelineGuide() {
           className="lifeline-guide-panel"
           aria-label="Lifeline Guide"
           aria-live="polite"
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              event.preventDefault();
+              closeGuide();
+            }
+          }}
         >
           <header className="lifeline-guide-header">
             <div>
@@ -234,7 +246,7 @@ export function LifelineGuide() {
               <button
                 type="button"
                 className="lifeline-guide-close"
-                onClick={() => setIsOpen(false)}
+                onClick={closeGuide}
                 aria-label="Close Lifeline Guide"
               >
                 ×
@@ -347,6 +359,7 @@ export function LifelineGuide() {
       <button
         type="button"
         className="lifeline-guide-launcher"
+        ref={launcherRef}
         onClick={openGuide}
         aria-expanded={isOpen}
         aria-label={isOpen ? "Lifeline Guide is open" : "Ask the Lifeline Guide"}
