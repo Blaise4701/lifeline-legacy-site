@@ -2,6 +2,7 @@ import { pageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/page-hero";
 import { PillarQuestionSection } from "@/components/pillar-question-section";
 import { ReviewInvite } from "@/components/review-invite";
+import { FamilyContinuityMapForm } from "@/components/family-continuity-map-form";
 
 export const metadata = pageMetadata({
   title: "Family Protection & Continuity Planning in DFW",
@@ -85,6 +86,23 @@ export default function FamilyContinuityPage() {
             <p className="eyebrow">Seven connected questions</p>
             <h2>Start with how the family would keep functioning.</h2>
             <p>The goal is not to predict every event. It is to reduce avoidable confusion by connecting protection, resources, documents, people, and responsibilities before the family has to act.</p>
+          </div>
+        </section>
+
+        <section className="section map-inline-section" id="family-continuity-map">
+          <div className="container map-inline-grid">
+            <div>
+              <p className="eyebrow">A practical place to begin</p>
+              <h2>Could Your Family Find the Plan If They Needed It?</h2>
+              <p>The Family Continuity Map™ helps you organize the people, responsibilities, documents, and decisions your family may need if life changes unexpectedly.</p>
+              <ul className="map-inline-list">
+                <li>Identify who would step in</li>
+                <li>See where responsibilities depend on one person</li>
+                <li>Clarify where key documents and contacts can be found</li>
+                <li>Find the gaps that may deserve attention</li>
+              </ul>
+            </div>
+            <FamilyContinuityMapForm buttonLabel="Send Me the Map" ready={process.env.GHL_CMAP_DELIVERY_READY === "true"} />
           </div>
         </section>
 

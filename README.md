@@ -49,9 +49,17 @@ Copy `.env.example` to `.env.local` for local CRM testing. The private integrati
 
 | Environment variable | Purpose |
 | --- | --- |
-| `GHL_PRIVATE_INTEGRATION_TOKEN` | Dedicated LLFG website token with only `contacts.write` permission |
+| `GHL_PRIVATE_INTEGRATION_TOKEN` | Dedicated LLFG website token; Map email-permission checks also require `contacts.read` in addition to `contacts.write` |
 | `GHL_LOCATION_ID` | LLFG sub-account identifier |
 | `GHL_CONTINUITY_CALENDAR_URL` | Optional public scheduling URL returned after an eligible review request |
+| `GHL_CMAP_DELIVERY_READY` | `false` until the Map PDF, contact fields, tag trigger, GHL workflows, email checks, and live delivery test are complete; then set `true` and redeploy |
+| `GHL_FAMILY_CONTINUITY_REVIEW_URL` | Tested HTTPS booking URL for the dedicated Your Family Continuity Review calendar; redeploy when set |
+
+## Family Continuity Map
+
+The `/family-continuity` page now includes a Map request form, and `/family-continuity-map` is the standalone landing page. The Map is delivered only through GHL email. Neither the blank PDF link nor completed household answers belong on the website. The form captures contact details, request attribution, and separate email/SMS permission; GHL emails later collect only the self-reported score band.
+
+The website upserts a GHL contact, checks email DND status with `contacts.read`, and adds the `cmap:delivery-requested` trigger tag only after a successful check. If Map delivery is not configured, it keeps the form unavailable and returns HTTP 503. For all GHL assets, workflow copy, manual checks, and launch tests, follow [the Map GHL setup guide](docs/family-continuity-map-ghl-setup.md).
 
 ## Pre-launch items
 

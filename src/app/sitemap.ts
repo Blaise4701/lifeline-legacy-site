@@ -7,6 +7,7 @@ const routes = [
   "/checkup",
   "/retirement-income",
   "/family-continuity",
+  "/family-continuity-map",
   "/business-continuity",
   "/learn",
   "/about",
