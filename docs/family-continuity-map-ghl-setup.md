@@ -1,12 +1,12 @@
 # Family Continuity Map: GHL setup and launch runbook
 
-This repository implements the Map pages and the `/api/lead` opt-in. The current private integration only manages contacts and their tags. No GHL fields, workflows, trigger links, pipeline, calendar, PDF hosting, sender setup, or SMS registration have been created by this code change.
+This repository implements the Map pages and the `/api/lead` opt-in. The current private integration only manages contacts and their tags. The GHL assets below are configured separately in the Lifeline Legacy Insurance Group sub-account; this repository does not create them.
 
 **Keep `GHL_CMAP_DELIVERY_READY=false` until every launch check at the end passes.** The form stays unavailable and the endpoint returns HTTP 503 while this is false. Do not place the blank PDF under `public/`, in a website page, or in an API response. An unlisted PDF URL can still be opened by anyone who receives the link; it is not access control. Completed worksheets stay with the household.
 
 ## 1. Prepare the sub-account
 
-1. In LLFG's GHL sub-account, upload the supplied **six-page blank** `Family_Continuity_Map.pdf` to Media Library. Open the resulting URL in a signed-out browser to confirm what recipients can access, and check whether it is indexed. Put that URL in the GHL delivery email only, replacing `[MAP LINK]`. Do not add it to Vercel environment variables or this repository. Confirm page 2 includes Decision-makers and page 6 includes the full score.
+1. In LLFG's GHL sub-account, upload the supplied **six-page blank** `Family_Continuity_Map.pdf` to Media Library. Attach that file directly to A1, or insert its Media Library link only inside delivery emails in place of `[MAP LINK]`. If using a link, open it in a signed-out browser to confirm what recipients can access, and check whether it is indexed. Do not add the URL to Vercel environment variables or this repository. Confirm page 2 includes Decision-makers and page 6 includes the full score. If a later email offers the Map again, attach the same file or insert the verified link there as well.
 2. Verify SPF, DKIM, and DMARC for `lifelinelegacyfinancial.com` in the sending setup and DNS. Verify sender `Blaise Dzudie Tamo <blaise.tamo@lifelinelegacyfinancial.com>`, the unsubscribe link, and postal footer. Send a real test to an external mailbox. Record results before enabling the form.
 3. Confirm GHL phone/A2P registration is active before enabling any SMS actions. Every Map SMS branch must check both the Map-specific consent tag and a mobile number, plus channel DND. The email workflow must respect email unsubscribe and DND, and notify an operator if it cannot deliver. Never clear DND automatically from this opt-in.
 4. Give the website private integration token `contacts.read` **and** `contacts.write` access. The endpoint upserts a contact, reads it back to confirm email DND is not active, and only then applies the delivery trigger tag. If that check fails or permission is unknown, the visitor gets an error instead of a thank-you page. Confirm the GHL account's duplicate-contact matching prioritizes email for this form, including when another contact has the optional phone number.
@@ -96,7 +96,7 @@ Build a GHL dashboard for opt-ins by source/medium/campaign; A1 opens and clicks
 
 ## Launch status
 
-As of this code change: PDF hosted **unverified**; custom fields/tags/pipeline **not created here**; trigger links/workflows/calendar **not created here**; email authentication and A2P **unverified**; live end-to-end delivery **untested**. The website remains gated until the operator completes the checklist above.
+As of 2026-09-28, the uploaded six-page PDF was verified in this sub-account's Media Storage and attached to A1 in the **unpublished** `CMap A: Delivery + Score` workflow. Its `cmap:delivery-requested` trigger, email DND branch, and A1 action are saved. The three score trigger links exist. The `Continuity Map Leads` pipeline has the six specified stages. All campaign tags exist. Eleven of thirteen contact fields exist in the `Family Continuity Map` folder; `cmap_email_consent_at` and `cmap_sms_consent_at` are outstanding because the account's Date picker preview only shows a calendar date, while the website supplies precise ISO 8601 timestamps. Do not replace those timestamps with date-only values. The A2–A4 and B–E workflows, score click processing, booking automation, dedicated calendar, email authentication and A2P checks, and live end-to-end test remain outstanding. `GHL_CMAP_DELIVERY_READY` stays false; the website remains gated.
 
 ## Appendix: approved workflow copy and timing
 
