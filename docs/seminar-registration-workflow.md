@@ -12,19 +12,19 @@ The CRM token needs `contacts.write` for upsert, additive tags, and contact note
 
 ## Event map
 
-Copy dates and copy from `src/lib/site-data.ts` whenever editing workflows. All start timestamps carry their Dallas local UTC offset. Where `endDateTime` is null, verify the actual end time with the venue before listing it in reminders. The November 10 venue is still TBD; confirm the actual address before activating reminders. Renner and Fretz currently list only Dallas, Texas; confirm the full street address before sending directions.
+Copy dates and copy from `src/lib/site-data.ts` whenever editing workflows. All start timestamps carry their Dallas local UTC offset. Where `endDateTime` is null, verify the actual end time with the venue before listing it in reminders. September 29 is historical and November 10 is cancelled; neither needs a new attendee workflow. The seven remaining events require event-specific setup and tests.
 
-| Stable ID and GHL trigger | Date, start | Title, venue | Type / known end |
+| Stable ID and GHL trigger | Date, start | Title, venue and address | Type / known end; status |
 | --- | --- | --- | --- |
-| `retirement-countdown` | Sep 29, 6:00 PM CDT | The 10-Year Retirement Countdown; Renner Frankford Branch Library | Seminar / unknown |
-| `assumptions-meet-reality` | Oct 1, 6:00 PM CDT | When Assumptions Meet Reality; Renner Frankford Branch Library | Seminar / unknown |
-| `written-retirement-income-plan` | Oct 3, 11:00 AM CDT | Build Your Written Retirement Income Plan; Renner Frankford Branch Library | Workshop / 1:00 PM |
-| `wylie-october-06` | Oct 6, 6:00 PM CDT | Reduce Retirement Risk. Build More Reliable Income.; Rita & Truett Smith Public Library, 300 Country Club Road, Building 300, Wylie, Texas | Seminar / unknown |
-| `wylie-october-12` | Oct 12, 6:00 PM CDT | Retirement Mindset & Roadmap; Rita & Truett Smith Public Library, 300 Country Club Road, Building 300, Wylie, Texas | Seminar / unknown |
-| `wylie-october-29` | Oct 29, 6:00 PM CDT | Build Your Written Retirement Income Plan; Rita & Truett Smith Public Library, 300 Country Club Road, Building 300, Wylie, Texas | Workshop / unknown |
-| `november-10-first-five-years` | Nov 10, 6:00 PM CST | The First Five Years of Retirement; location to be announced | Seminar / unknown |
-| `fretz-november-12-workshop` | Nov 12, 2:00 PM CST | Build Your Written Retirement Income Plan; Fretz Park Branch Library | Two-Part Workshop / 7:30 PM |
-| `renner-november-14-workshop` | Nov 14, 10:00 AM CST | Build Your Written Retirement Income Plan; Renner Frankford Branch Library | Workshop / unknown |
+| `retirement-countdown` | Sep 29, 6:00 PM CDT | The 10-Year Retirement Countdown; Renner Frankford Branch Library, 6400 Frankford Road, Dallas, TX 75252 | Seminar / unknown; past, registration closed |
+| `assumptions-meet-reality` | Oct 1, 6:00 PM CDT | When Assumptions Meet Reality; Renner Frankford Branch Library, 6400 Frankford Road, Dallas, TX 75252 | Seminar / unknown; upcoming |
+| `written-retirement-income-plan` | Oct 3, 11:00 AM CDT | Build Your Written Retirement Income Plan; Renner Frankford Branch Library, 6400 Frankford Road, Dallas, TX 75252 | Workshop / 1:00 PM; upcoming |
+| `wylie-october-06` | Oct 6, 6:00 PM CDT | Reduce Retirement Risk. Build More Reliable Income.; Rita & Truett Smith Public Library, 300 Country Club Road, Building 300, Wylie, TX 75098 | Seminar / unknown; upcoming |
+| `wylie-october-12` | Oct 12, 6:00 PM CDT | Retirement Mindset & Roadmap; Rita & Truett Smith Public Library, 300 Country Club Road, Building 300, Wylie, TX 75098 | Seminar / unknown; upcoming |
+| `wylie-october-29` | Oct 29, 6:00 PM CDT | Build Your Written Retirement Income Plan; Rita & Truett Smith Public Library, 300 Country Club Road, Building 300, Wylie, TX 75098 | Workshop / unknown; upcoming |
+| `november-10-first-five-years` | Nov 10, 6:00 PM CST | The First Five Years of Retirement; no confirmed venue | Seminar / unknown; cancelled, no registration or workflow |
+| `fretz-november-12-workshop` | Nov 12, 2:00 PM CST | Build Your Written Retirement Income Plan; Fretz Park Branch Library, 6990 Belt Line Road, Dallas, TX 75254 | Two-Part Workshop / 7:30 PM; upcoming |
+| `renner-november-14-workshop` | Nov 14, 10:00 AM CST | Build Your Written Retirement Income Plan; Renner Frankford Branch Library, 6400 Frankford Road, Dallas, TX 75252 | Workshop / unknown; upcoming |
 
 Each workflow must use its own `llfg-event-{id}` trigger and its own **literal** title, subtitle, date, time, location, address and preparation instructions. `{{event.title}}`, `{{event.date}}` etc. below are **editor placeholders**, not verified GHL merge fields. Replace with static values for that workflow before saving. The only contact merge field needed in attendee templates is `{{contact.first_name}}`. Never insert `{{contact.llfg_learning_interest}}` into an event email/SMS. If a venue or schedule changes, update the website config and every affected draft/active template, inspect queued waits, and notify already registered people manually.
 
@@ -43,9 +43,9 @@ Allowed per-event statuses: `registered`, `confirmed`, `attended`, `no-show`, `c
 
 Contact notes preserve the initial snapshot even when staff changes status. For later status changes, append a new dated note with the same event ID and the staff/source rather than overwriting the registration note. Maintain an event-specific consent audit trail. If a guest independently contacts LLFG later, collect their own contact information and consent separately before any messaging.
 
-## Build nine GHL workflows by hand
+## Build seven upcoming GHL workflows by hand
 
-The published GHL workflow API exposes retrieval, not a supported create/edit endpoint for these workflows. The current website integration has contact write access, not workflow editing. Configure in GHL's `LLFG Website` workflow folder. For each row in the event map:
+The published GHL workflow API exposes retrieval, not a supported create/edit endpoint for these workflows. The current website integration has contact write access, not workflow editing. Configure in GHL's `LLFG Website` workflow folder. Use the seven rows marked upcoming in the event map:
 
 1. Make a workflow named `LLFG | {id} | registration and reminders`. Set location/workflow timezone to `America/Chicago`; verify the UI displays the expected CDT/CST start. Permit at most one active enrollment per contact for this event; do not configure re-entry on an existing tag. Trigger **Contact Tag Added** filtered to the exact `llfg-event-{id}` tag. Do not trigger on `llfg-event-registration` or a tag name that is only a prefix.
 2. If `status-cancelled` or `status-waitlist` is present, end; otherwise confirm that `status-registered` or `status-confirmed` is present. Send the immediate registration email below once. If `llfg-event-{id}-sms-consent` is present, send the immediate SMS; otherwise skip SMS.
@@ -168,7 +168,7 @@ Lifeline Legacy Financial Group
 
 1. Confirm the GHL location's duplicate-contact settings, the website token's `contacts.write` scope and contact note API access, timezone, sender email, SMS sending/opt-in and compliance requirements. The current GHL account has a shared sending domain; verify deliverability to a test mailbox before sending externally.
 2. Run an **internal test registration** through Preview (not a public prospect). Verify one contact, exact event note, additive general/event tags, no guest contact, and `alreadyRegistered` on repeat. Inspect `llfg-event-{id}-sms-consent` absence for email-only registrants. Test a second event on the same contact and verify the first note/tag remains unchanged.
-3. The generic mutable-field email was removed from the existing **draft** workflow on September 27; keep its `llfg-event-registration` trigger unpublished. Build and test the nine exact-tag workflows above. Validate `America/Chicago` and daylight saving on September/October versus November events. Hold the November 10 reminders until venue/address are final.
+3. The generic mutable-field email was removed from the existing **draft** workflow on September 27; keep its `llfg-event-registration` trigger unpublished. Build and test the seven upcoming exact-tag workflows above. Validate `America/Chicago` and daylight saving on October versus November events. Do not build a new September 29 workflow or November 10 reminders.
 4. Set up the per-event status changes and attended/no-show/cancellation workflows. Train staff to mark attendance manually from an actual roll or check-in; audit tags after each update.
 5. Send a **test email/SMS only to an approved test contact** with SMS consent. Check message content, event/title, link, one-day/two-hour schedules, suppression of SMS without consent, and cancellation before publishing. Verify actual delivery in GHL message logs.
 6. After branch review, merge by normal PR approval, confirm the Vercel deployment/environment, and test the production endpoint once. Publish each GHL workflow only after corresponding production code, sender setup and test results are confirmed. Monitor the first live registrations and check for duplicate tags, notes, messages or 502 responses. Reconcile partial failures manually if necessary.

@@ -11,6 +11,8 @@ type WorkshopRegistrationProps = {
     time: string;
     location: string;
     address: string;
+    cancelled?: boolean;
+    registrationClosed?: boolean;
   };
 };
 
@@ -22,6 +24,13 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
   const [guestCount, setGuestCount] = useState(0);
   const submitting = useRef(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+
+  if (workshop.cancelled) {
+    return <span className="status-label">Event cancelled</span>;
+  }
+  if (workshop.registrationClosed) {
+    return <span className="status-label">Registration closed</span>;
+  }
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
