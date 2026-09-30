@@ -11,7 +11,7 @@ Production-oriented Next.js website for Lifeline Legacy Financial Group. The exp
 - Learning center with the complete ten-session fall 2026 seminar and workshop schedule
 - Server-side GoHighLevel capture for licensed-state Continuity Review requests and workshop registrations
 - Complete first-person founder story and the lived experience behind the Continuity Bridge™ Framework
-- Draft privacy, terms, and disclosure pages
+- September 29, 2026 Privacy Policy and draft terms and disclosure pages
 - Metadata, favicon, sitemap, robots file, custom 404, print styles, focus states, reduced-motion support, and mobile navigation
 
 ## Routes
@@ -26,7 +26,7 @@ Production-oriented Next.js website for Lifeline Legacy Financial Group. The exp
 | `/business-continuity` | Business owner pathway |
 | `/learn` | Guides and the fall 2026 seminar and workshop schedule |
 | `/about` | Blaise Tamo and LLFG story |
-| `/privacy` | Pre-launch privacy draft |
+| `/privacy` | September 29, 2026 Privacy Policy |
 | `/terms` | Pre-launch terms draft |
 | `/disclosures` | Pre-launch disclosure draft |
 
@@ -56,7 +56,7 @@ Copy `.env.example` to `.env.local` for local CRM testing. The private integrati
 ## Pre-launch items
 
 1. Reconfirm the licensing disclosure whenever the approved state list changes.
-2. Obtain final compliance approval for privacy, terms, disclosures, titles, and all educational copy.
+2. Obtain final compliance approval for terms, disclosures, titles, and all educational copy; keep the published Privacy Policy current as site practices change.
 3. Approve and connect the dedicated Continuity Review calendar URL.
 4. Review and publish the new GHL tag-triggered notification workflows after a test submission passes.
 5. Finish or remove resources currently labeled “in development.”
