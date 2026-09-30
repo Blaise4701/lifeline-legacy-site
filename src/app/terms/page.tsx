@@ -14,6 +14,7 @@ export default function TermsPage() {
       eyebrow="Website terms"
       title="Terms of Use"
       intro="These terms describe the educational purpose of this website and the limits of the information provided."
+      draft={false}
     >
       <p className="effective-date">Effective date: September 20, 2026</p>
 
