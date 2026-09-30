@@ -527,6 +527,12 @@ export async function POST(request: Request) {
 
   if (submission.type === "event-registration") {
     const workshop = workshops.find((item) => item.id === submission.eventId)!;
+    if ("cancelled" in workshop && workshop.cancelled) {
+      return Response.json(
+        { ok: false, message: "This event has been cancelled. Please choose another session." },
+        { status: 422 },
+      );
+    }
     if (Date.now() >= Date.parse(workshop.dateTime)) {
       return Response.json(
         { ok: false, message: "Registration for this event has closed. Please choose another session." },
