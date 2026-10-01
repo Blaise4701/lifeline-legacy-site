@@ -6,7 +6,7 @@ import { site } from "@/lib/site-data";
 
 export const metadata = pageMetadata({
   title: "About Blaise Tamo",
-  description: "Meet Blaise Tamo, Founder of Lifeline Legacy Financial Group and creator of the Continuity Bridge™ framework serving families and business owners in Dallas–Fort Worth.",
+  description: "Meet Blaise Tamo, Founder of Lifeline Legacy Financial Group and creator of the Continuity Bridge™ framework serving families and business owners in Dallas-Fort Worth.",
   path: "/about",
 });
 
@@ -32,7 +32,7 @@ export default function AboutPage() {
               <h1>Blaise Tamo</h1>
               <p className="about-title">{site.title}</p>
               <p className="about-opening">“I didn’t set out to build a company. I set out to build a life.”</p>
-              <p className="hero-lede">The story behind LLFG begins with family, loss, responsibility, and a conviction that people need more than financial pieces—they need a structure built to keep life moving.</p>
+              <p className="hero-lede">The story behind LLFG begins with family, loss, responsibility, and a conviction that people need more than financial pieces. They need a structure built to keep life moving.</p>
               <div className="button-row">
                 <Link className="button" href="/continuity-bridge">Explore the methodology</Link>
                 <Link className="button button-outline" href="/checkup">Take the Checkup</Link>
@@ -80,7 +80,7 @@ export default function AboutPage() {
         <section className="section section-sage about-values-section">
           <div className="container values-grid">
             <article><span>01</span><h3>Educate first</h3><p>Begin with the questions, language, and structure people need to make an informed decision.</p></article>
-            <article><span>02</span><h3>Invite second</h3><p>Offer a conversation after the visitor has context—not as the price of receiving it.</p></article>
+            <article><span>02</span><h3>Invite second</h3><p>Offer a conversation after the visitor has context, not as the price of receiving it.</p></article>
             <article><span>03</span><h3>Coordinate carefully</h3><p>Keep life and annuity work inside its proper role while helping the larger plan stay connected.</p></article>
           </div>
         </section>

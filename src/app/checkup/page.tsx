@@ -3,7 +3,7 @@ import { ContinuityCheckup } from "@/components/continuity-checkup";
 
 export const metadata = pageMetadata({
   title: "Financial Continuity Checkup",
-  description: "Answer five plain-language questions and receive an educational summary organized around Continuity, Certainty, and Legacy—without entering account balances or numbers.",
+  description: "Answer five plain-language questions and receive an educational summary organized around Continuity, Certainty, and Legacy without entering account balances or numbers.",
   path: "/checkup",
 });
 

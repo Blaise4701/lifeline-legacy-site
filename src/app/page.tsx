@@ -7,7 +7,7 @@ import { pathways, site, workshops } from "@/lib/site-data";
 
 export const metadata = pageMetadata({
   title: "Retirement Income & Continuity Planning in DFW",
-  description: "Education-first retirement income, family protection, business continuity, and legacy planning for Dallas–Fort Worth families and business owners.",
+  description: "Education-first retirement income, family protection, business continuity, and legacy planning for Dallas-Fort Worth families and business owners.",
   path: "/",
 });
 
@@ -67,13 +67,13 @@ export default function Home() {
           <div className="home-hero-video-overlay" aria-hidden="true" />
           <div className="container home-hero-video-grid">
             <div className="home-hero-copy home-hero-copy-video">
-              <p className="eyebrow home-hero-eyebrow">Education-first planning · Dallas–Fort Worth</p>
+              <p className="eyebrow home-hero-eyebrow">Education-first planning · Dallas-Fort Worth</p>
               <h1>
                 <span>You’ve built the pieces.</span>
                 <span>Do they work as <em>one plan?</em></span>
               </h1>
               <p className="hero-lede">
-                Most people already have pieces—retirement accounts, insurance, savings, benefits, documents, or a business. The real question is whether those pieces are coordinated to keep life moving when circumstances change.
+                Most people already have pieces: retirement accounts, insurance, savings, benefits, documents, or a business. The real question is whether those pieces are coordinated to keep life moving when circumstances change.
               </p>
               <div className="button-row">
                 <Link className="button" href="#bridge">Explore the Continuity Bridge</Link>
@@ -244,7 +244,7 @@ export default function Home() {
                 className="founder-photo"
                 sizes="(max-width: 800px) 100vw, 45vw"
               />
-              <div className="founder-photo-caption">Dallas–Fort Worth</div>
+              <div className="founder-photo-caption">Dallas-Fort Worth</div>
             </div>
             <div>
               <p className="eyebrow">Meet Blaise Tamo</p>
