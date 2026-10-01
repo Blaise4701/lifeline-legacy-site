@@ -1835,7 +1835,7 @@ ul:last-child {
 
 .aside-check-list li::before {
   color: var(--gold-300);
-  content: "—";
+  content: "•";
   left: 0;
   position: absolute;
 }
@@ -2496,7 +2496,7 @@ ul:last-child {
 }
 
 
-/* Premium home-page refinement — isolated visual pass */
+/* Premium home-page refinement : isolated visual pass */
 .site-header {
   background: rgba(253, 251, 246, 0.985);
   border-bottom-color: rgba(6, 45, 36, 0.1);
@@ -2786,7 +2786,7 @@ ul:last-child {
   }
 
   .hero-note span + span::before {
-    content: "—";
+    content: "•";
     display: inline-block;
     margin-right: 0.45rem;
   }
@@ -3068,7 +3068,7 @@ ul:last-child {
 
 .pathway-editorial li::before {
   color: #a77d2f;
-  content: "—";
+  content: "•";
   left: 0;
   position: absolute;
 }
@@ -3652,7 +3652,7 @@ ul:last-child {
 }
 
 
-/* Retirement page — compact premium system */
+/* Retirement page : compact premium system */
 .retirement-page-shell .retirement-intro {
   padding-bottom: 2rem;
   padding-top: 3.1rem;
@@ -3868,7 +3868,7 @@ ul:last-child {
 }
 
 
-/* About page — compact premium editorial system */
+/* About page : compact premium editorial system */
 @media (min-width: 981px) {
   .about-page-shell .about-hero {
     padding-bottom: 3.2rem;
@@ -4144,7 +4144,7 @@ ul:last-child {
 }
 
 
-/* Learning Center — compact premium editorial system */
+/* Learning Center : compact premium editorial system */
 @media (min-width: 981px) {
   .learn-page-shell .learn-hero {
     padding-bottom: 3.5rem;
@@ -4410,7 +4410,7 @@ ul:last-child {
 }
 
 
-/* Business Continuity page — compact premium editorial system */
+/* Business Continuity page : compact premium editorial system */
 @media (min-width: 981px) {
   .business-page-shell .business-hero {
     padding-bottom: 3.4rem;
@@ -4680,7 +4680,7 @@ ul:last-child {
 }
 
 
-/* Family Continuity page — compact premium editorial system */
+/* Family Continuity page : compact premium editorial system */
 @media (min-width: 981px) {
   .family-page-shell .family-hero {
     padding-bottom: 3.4rem;
@@ -4951,7 +4951,7 @@ ul:last-child {
 }
 
 
-/* Global header — compact premium treatment */
+/* Global header : compact premium treatment */
 .utility-inner {
   min-height: 1.45rem;
 }
@@ -5025,7 +5025,7 @@ ul:last-child {
 }
 
 
-/* Continuity Bridge methodology page — compact premium editorial system */
+/* Continuity Bridge methodology page : compact premium editorial system */
 @media (min-width: 981px) {
   .continuity-page-shell .continuity-method-hero {
     padding-bottom: 3.35rem;
@@ -5377,7 +5377,7 @@ ul:last-child {
 }
 
 
-/* Home hero — fit the opening viewport and remove excess top air */
+/* Home hero : fit the opening viewport and remove excess top air */
 @media (min-width: 981px) {
   .home-hero-grid {
     align-items: start;
@@ -5476,7 +5476,7 @@ ul:last-child {
 }
 
 
-/* Homepage hero — preserve e4a5adf composition with slightly more vertical rhythm */
+/* Homepage hero : preserve e4a5adf composition with slightly more vertical rhythm */
 @media (min-width: 981px) {
   .home-hero-copy .eyebrow {
     margin-bottom: 1.15rem;
@@ -5500,7 +5500,7 @@ ul:last-child {
 }
 
 
-/* Home hero — match the green panel height to the left content block */
+/* Home hero : match the green panel height to the left content block */
 @media (min-width: 981px) {
   .home-hero-grid {
     align-items: stretch;
@@ -5518,7 +5518,7 @@ ul:last-child {
 }
 
 
-/* Home hero question — exact two-line treatment */
+/* Home hero question : exact two-line treatment */
 @media (min-width: 981px) {
   .hero-bridge-visual blockquote > strong.hero-question {
     font-size: clamp(1.65rem, 1.85vw, 1.9rem);
