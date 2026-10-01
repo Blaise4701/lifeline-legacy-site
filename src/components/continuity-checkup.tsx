@@ -57,7 +57,7 @@ const personaQuestions: Record<Persona, Question[]> = {
         "Some coordination, some separate pieces",
         "They were set up separately over time",
       ],
-      why: "Certainty comes from a written sequence for how the pieces work together—not from any single account.",
+      why: "Certainty comes from a written sequence for how the pieces work together, not from any single account.",
     },
     {
       tag: "Legacy",
