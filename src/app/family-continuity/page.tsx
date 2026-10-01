@@ -12,7 +12,7 @@ export const metadata = pageMetadata({
 const continuity = [
   {
     question: "If income paused for six months, what would keep the household moving?",
-    explanation: "Map essential obligations, available reserves, workplace benefits, and protection so the family understands what would happen first—not merely what exists.",
+    explanation: "Map essential obligations, available reserves, workplace benefits, and protection so the family understands what would happen first, not merely what exists.",
     also: "Certainty",
   },
   {
@@ -102,7 +102,7 @@ export default function FamilyContinuityPage() {
             </div>
             <div className="boundary-card">
               <h3>Professional boundaries matter.</h3>
-              <p>Insurance planning should be coordinated with—not substituted for—legal documents, tax guidance, healthcare directives, or investment advice from the appropriate professionals.</p>
+              <p>Insurance planning should be coordinated with legal documents, tax guidance, healthcare directives, and investment advice from the appropriate professionals, not substituted for them.</p>
             </div>
           </div>
         </section>
