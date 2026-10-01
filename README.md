@@ -49,7 +49,7 @@ Copy `.env.example` to `.env.local` for local CRM testing. The private integrati
 
 | Environment variable | Purpose |
 | --- | --- |
-| `GHL_PRIVATE_INTEGRATION_TOKEN` | Dedicated LLFG website token with only `contacts.write` permission |
+| `GHL_PRIVATE_INTEGRATION_TOKEN` | Dedicated LLFG website token with `contacts.write` permission (including contact notes and tags) |
 | `GHL_LOCATION_ID` | LLFG sub-account identifier |
 | `GHL_CONTINUITY_CALENDAR_URL` | Optional public scheduling URL returned after an eligible review request |
 
@@ -75,7 +75,7 @@ The server route at `/api/lead` sends only the information the visitor explicitl
 - Three descriptive summary labels: Continuity, Certainty, Legacy
 - Selected learning interest
 
-Review requests from outside the licensed-state list are not transmitted. Workshop registrations send the same basic contact fields, set the selected pathway to Retirement, and store the chosen event as the learning interest.
+Review requests from outside the licensed-state list are not transmitted. Workshop registrations send the contact fields, set the selected pathway to Retirement, and store each event/guest/consent snapshot as its own GHL contact note. Event-specific tags, rather than the mutable learning-interest contact field, drive the planned GHL workflows.
 
 The dedicated GHL fields are:
 
@@ -85,7 +85,7 @@ The dedicated GHL fields are:
 - `llfg_legacy_summary`
 - `llfg_learning_interest`
 
-Submissions add the existing `llf - website` tag plus either `llfg-continuity-review-request` or `llfg-event-registration`. Tagging uses the additive contact-tag endpoint so existing contact tags are not overwritten. The submission tag is reset immediately before it is added, allowing a re-entry-enabled workflow to run again if the same contact submits later.
+Submissions add the existing `llf - website` tag plus either `llfg-continuity-review-request` or `llfg-event-registration`. Tagging uses the additive contact-tag endpoint so existing contact tags are not overwritten. Review submission tags are reset for re-entry. Event registrations instead read back the tag set and add the stable `llfg-event-{id}` trigger only once per contact and event, after recording the event note and event-specific consent/status tags. The general event tag does not send messages until GHL workflows are tested and published. See [the seminar registration workflow guide](docs/seminar-registration-workflow.md) for the nine event mappings, templates, reminder waits, attendance, cancellation, and remaining manual steps.
 
 Do not send balances, account numbers, free-form financial details, or raw Checkup answers to advertising platforms. Confirm state availability before offering a scheduling slot.
 

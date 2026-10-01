@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { states } from "@/lib/site-data";
 
 type WorkshopRegistrationProps = {
@@ -9,6 +9,10 @@ type WorkshopRegistrationProps = {
     title: string;
     date: string;
     time: string;
+    location: string;
+    address: string;
+    cancelled?: boolean;
+    registrationClosed?: boolean;
   };
 };
 
@@ -18,14 +22,31 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
   const [status, setStatus] = useState<RegistrationState>("idle");
   const [error, setError] = useState("");
   const [guestCount, setGuestCount] = useState(0);
+  const submitting = useRef(false);
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+
+  if (workshop.cancelled) {
+    return <span className="status-label">Event cancelled</span>;
+  }
+  if (workshop.registrationClosed) {
+    return <span className="status-label">Registration closed</span>;
+  }
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError("");
-    setStatus("submitting");
-
+    if (submitting.current) return;
     const form = event.currentTarget;
     const data = new FormData(form);
+    const phone = String(data.get("phone") ?? "");
+    const digitCount = phone.replace(/\D/g, "").length;
+    if (digitCount < 10 || digitCount > 15) {
+      setError("Enter a mobile number with 10 to 15 digits.");
+      (form.elements.namedItem("phone") as HTMLInputElement | null)?.focus();
+      return;
+    }
+    submitting.current = true;
+    setError("");
+    setStatus("submitting");
 
     try {
       const response = await fetch("/api/lead", {
@@ -36,7 +57,7 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
           firstName: String(data.get("firstName") ?? ""),
           lastName: String(data.get("lastName") ?? ""),
           email: String(data.get("email") ?? ""),
-          phone: String(data.get("phone") ?? ""),
+          phone,
           state: String(data.get("state") ?? ""),
           guestCount: String(data.get("guestCount") ?? "0"),
           guests: Array.from({ length: Number(data.get("guestCount") ?? 0) }, (_, index) => ({
@@ -52,7 +73,7 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
           website: String(data.get("website") ?? ""),
         }),
       });
-      const result = (await response.json()) as { ok?: boolean; message?: string };
+      const result = (await response.json()) as { ok?: boolean; message?: string; alreadyRegistered?: boolean };
 
       if (!response.ok || !result.ok) {
         throw new Error(result.message || "Registration could not be saved.");
@@ -60,6 +81,7 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
 
       form.reset();
       setGuestCount(0);
+      setAlreadyRegistered(result.alreadyRegistered === true);
       setStatus("submitted");
     } catch (submissionError) {
       setError(
@@ -68,14 +90,16 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
           : "Registration could not be saved. Please try again.",
       );
       setStatus("form");
+    } finally {
+      submitting.current = false;
     }
   };
 
   if (status === "submitted") {
     return (
       <div className="registration-confirmation" role="status">
-        <strong>Your seat is reserved.</strong>
-        <span>We’ll send the event details and confirmation to your email.</span>
+        <strong>{alreadyRegistered ? "Your seat is already reserved." : "Your seat is reserved."}</strong>
+        <span>{workshop.title} · {workshop.date} · {workshop.time} · {workshop.location}. {alreadyRegistered ? "To change your guest details, contact LLFG directly." : "Save these details for your visit."}</span>
       </div>
     );
   }
@@ -83,17 +107,18 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
   if (status === "idle") {
     return (
       <button className="button button-small workshop-register-button" type="button" onClick={() => setStatus("form")}>
-        Reserve my seat
+        Reserve My Seat
       </button>
     );
   }
 
   return (
-    <form className="workshop-registration-form premium-registration-form" onSubmit={submit}>
+    <form className="workshop-registration-form premium-registration-form" onSubmit={submit} aria-busy={status === "submitting"}>
       <header className="premium-registration-header">
         <p className="registration-kicker">Reserve your seat</p>
         <h4>{workshop.title}</h4>
         <p>{workshop.date} · {workshop.time}</p>
+        <p>{workshop.location} · {workshop.address}</p>
         <span>Registration takes about a minute.</span>
       </header>
 
@@ -117,7 +142,7 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
           </label>
           <label>
             <span>Mobile phone</span>
-            <input name="phone" type="tel" autoComplete="tel" maxLength={40} required />
+            <input name="phone" type="tel" autoComplete="tel" inputMode="tel" minLength={10} maxLength={40} pattern="[+0-9(). -]{10,40}" title="Enter a valid phone number with at least 10 digits." required />
           </label>
           <label className="registration-field-full">
             <span>Your state</span>
@@ -234,9 +259,9 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
 
       <div className="registration-actions premium-registration-actions">
         <button className="button registration-submit-button" type="submit" disabled={status === "submitting"}>
-          {status === "submitting" ? "Reserving…" : "Reserve my seat"}
+          {status === "submitting" ? "Reserving…" : "Reserve My Seat"}
         </button>
-        <button className="text-button" type="button" onClick={() => { setError(""); setStatus("idle"); }}>
+        <button className="text-button" type="button" disabled={status === "submitting"} onClick={() => { setError(""); setStatus("idle"); }}>
           Cancel
         </button>
       </div>
