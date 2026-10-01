@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | Lifeline Legacy Financial Group",
   },
   description:
-    "Education-first retirement income, family protection, business continuity, and legacy planning for families and business owners in Dallas–Fort Worth.",
+    "Education-first retirement income, family protection, business continuity, and legacy planning for families and business owners in Dallas-Fort Worth.",
   applicationName: "Lifeline Legacy Financial Group",
   creator: "Lifeline Legacy Financial Group",
   publisher: "Lifeline Legacy Financial Group",
