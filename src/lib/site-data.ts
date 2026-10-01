@@ -7,7 +7,7 @@ export const site = {
   cellHref: "tel:+14693549924",
   email: "info@lifelinelegacyfinancial.com",
   emailHref: "mailto:info@lifelinelegacyfinancial.com",
-  location: "Dallas–Fort Worth, Texas",
+  location: "Dallas-Fort Worth, Texas",
   title:
     "Founder & CEO · Retirement Income & Legacy Protection Specialist",
 };
@@ -48,7 +48,7 @@ export const pillars = [
     definition:
       "Turning separate financial pieces into one organized strategy with clearer decisions.",
     questions: [
-      "Which resource is used first—and why?",
+      "Which resource is used first, and why?",
       "How do benefits, taxes, and timing interact?",
       "Where is the written sequence?",
     ],
@@ -260,7 +260,7 @@ export const workshops = [
     dateTime: "2026-10-03T11:00:00-05:00",
     date: "October 3, 2026",
     shortDate: "Oct 03",
-    time: "11:00 AM–1:00 PM",
+    time: "11:00 AM-1:00 PM",
     title: "Build Your Written Retirement Income Plan",
     subtitle: "Leave With a First Draft of Your Retirement Paycheck Plan",
     description:
@@ -382,7 +382,7 @@ export const workshops = [
       "Building flexibility into the plan",
     ],
     location: "Location to be announced",
-    address: "Dallas–Fort Worth area",
+    address: "Dallas-Fort Worth area",
     cancelled: true,
     endDateTime: null,
     preparation: standardEventPreparation,
@@ -396,7 +396,7 @@ export const workshops = [
     dateTime: "2026-11-12T14:00:00-06:00",
     date: "November 12, 2026",
     shortDate: "Nov 12",
-    time: "2:00–7:30 PM",
+    time: "2:00-7:30 PM",
     title: "Build Your Written Retirement Income Plan",
     subtitle: "A Two-Part Hands-On Retirement Planning Workshop",
     description:
@@ -411,17 +411,17 @@ export const workshops = [
     ],
     parts: [
       {
-        time: "2:00–4:15 PM",
-        title: "Part 1 — Build Your Retirement Paycheck",
+        time: "2:00-4:15 PM",
+        title: "Part 1: Build Your Retirement Paycheck",
         outcome: "Create a first-draft retirement income map.",
       },
       {
-        time: "4:45–7:00 PM",
-        title: "Part 2 — Stress-Test & Complete Your Retirement Paycheck Plan",
+        time: "4:45-7:00 PM",
+        title: "Part 2: Stress-Test & Complete Your Retirement Paycheck Plan",
         outcome: "Strengthen the draft and identify gaps and next actions.",
       },
       {
-        time: "7:00–7:30 PM",
+        time: "7:00-7:30 PM",
         title: "Q&A and Planning Conversations",
         outcome: "Ask questions and clarify next steps.",
       },
