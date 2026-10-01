@@ -7,7 +7,7 @@ import { workshops } from "@/lib/site-data";
 
 export const metadata = pageMetadata({
   title: "Retirement Planning Workshops & Financial Education",
-  description: "Explore retirement planning workshops, guides, and financial education in Dallas–Fort Worth covering retirement income, continuity, protection, and legacy planning.",
+  description: "Explore retirement planning workshops, guides, and financial education in Dallas-Fort Worth covering retirement income, continuity, protection, and legacy planning.",
   path: "/learn",
 });
 
@@ -65,7 +65,7 @@ const resources = [
 const seminarSeries = [
   {
     key: "renner-fall",
-    eyebrow: "Renner Frankford · September–October",
+    eyebrow: "Renner Frankford · September-October",
     title: "Prepare. Stress-Test. Build.",
     description:
       "Three connected sessions for people approaching retirement: understand the countdown, test the assumptions, then put the first version of the income plan on paper.",
@@ -79,7 +79,7 @@ const seminarSeries = [
   },
   {
     key: "november-fall",
-    eyebrow: "Dallas–Fort Worth · November",
+    eyebrow: "Dallas-Fort Worth · November",
     title: "Early Decisions. Income Coordination. Written Plan.",
     description:
       "November goes deeper into the first years of retirement and includes an extended two-part workshop at Fretz Park.",

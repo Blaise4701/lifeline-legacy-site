@@ -5,14 +5,14 @@ import { PillarQuestionSection } from "@/components/pillar-question-section";
 import { ReviewInvite } from "@/components/review-invite";
 
 export const metadata = pageMetadata({
-  title: "Retirement Income Planning in Dallas–Fort Worth",
+  title: "Retirement Income Planning in Dallas-Fort Worth",
   description: "Learn the eight questions a written retirement income plan should answer, including Social Security, withdrawal order, taxes, healthcare, market risk, and survivor income.",
   path: "/retirement-income",
 });
 
 const continuity = [
   {
-    question: "How much monthly income will retirement require—and how might it change over time?",
+    question: "How much monthly income will retirement require, and how might it change over time?",
     explanation: "Start with the life you intend to fund, not merely the accounts you hold. Include changing needs, inflation, and the possibility of a longer retirement.",
     also: "Certainty",
   },
@@ -111,7 +111,7 @@ export default function RetirementIncomePage() {
             pillar="Legacy"
             description="Making sure the retirement strategy and what transfers to others tell the same story."
             questions={legacy}
-            note="Several questions above also reach Legacy—especially survivor income and care planning. This section closes the loop rather than repeating them."
+            note="Several questions above also reach Legacy, especially survivor income and care planning. This section closes the loop rather than repeating them."
           />
         </div>
 

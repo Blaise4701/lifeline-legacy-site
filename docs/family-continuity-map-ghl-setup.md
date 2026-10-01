@@ -311,7 +311,7 @@ Subject:
 Still here when you’re ready
 
 Preview:
-Thirty minutes, your Map, and a clear next step.
+One hour, your Map, and a clear next step.
 
 Body:
 
@@ -319,7 +319,7 @@ Hi {{contact.first_name}},
 
 No pressure here. I know this isn’t the most fun thing on your list.
 
-When you’re ready, Your Family Continuity Review is about 30 minutes.
+When you’re ready, Your Family Continuity Review is 60 minutes (one hour).
 
 You bring the Map.
 
@@ -697,7 +697,7 @@ Standard sign-off:
 Blaise Dzudie Tamo
 The Continuity Architect™
 Lifeline Legacy Financial Group
-Direct: 214-907-5087
+Business: 972-764-8516
 www.lifelinelegacyfinancial.com
 
 Every email must include:

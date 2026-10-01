@@ -53,7 +53,7 @@ export default function FamilyContinuityMapLandingPage() {
           <div>
             <p className="eyebrow">Your continuity check</p>
             <h2>Find Your Family’s Continuity Gap Score</h2>
-            <p>Complete the Map privately. Count the blanks and “N” answers across Parts 1 through 4. Then, if you choose, tell us only your score range: 0–3, 4–10, or 11 or more.</p>
+            <p>Complete the Map privately. Count the blanks and “N” answers across Parts 1 through 4. Then, if you choose, tell us only your score range: 0-3, 4-10, or 11 or more.</p>
           </div>
           <div className="map-score-note">
             <strong>Only your range, if you choose to share it.</strong>
