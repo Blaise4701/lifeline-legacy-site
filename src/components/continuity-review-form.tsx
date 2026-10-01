@@ -55,7 +55,7 @@ const prepOptions: Record<Pathway, {
     stageLabel: "Where are you in your retirement journey?",
     stageOptions: [
       "More than 10 years from retirement",
-      "6–10 years from retirement",
+      "6-10 years from retirement",
       "Within 5 years of retirement",
       "Retiring now",
       "Already retired",
