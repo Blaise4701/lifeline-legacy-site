@@ -1,4 +1,5 @@
 import { licensedStates, states, workshops } from "@/lib/site-data";
+import { MAP_CONSENT_VERSION, MAP_EMAIL_CONSENT_TEXT, MAP_SMS_CONSENT_TEXT } from "@/lib/family-continuity-map";
 
 const GHL_API_ORIGIN = "https://services.leadconnectorhq.com";
 const GHL_API_VERSION = "2021-07-28";
@@ -103,6 +104,7 @@ type LearningInterest = (typeof learningInterests)[number];
 type Attribution = {
   source: string;
   campaign: string;
+  medium: string;
   eventId: string;
   landingPath: string;
   referrer: string;
@@ -164,7 +166,18 @@ type EventSubmission = {
   website: string;
 };
 
-type LeadSubmission = ReviewStartSubmission | ReviewCompleteSubmission | EventSubmission;
+type MapOptInSubmission = {
+  type: "family-continuity-map-optin";
+  firstName: string;
+  email: string;
+  phone: string;
+  emailConsent: true;
+  smsConsent: boolean;
+  website: string;
+  attribution: Attribution;
+};
+
+type LeadSubmission = ReviewStartSubmission | ReviewCompleteSubmission | EventSubmission | MapOptInSubmission;
 
 type GhlUpsertResponse = {
   contact?: {
@@ -198,16 +211,28 @@ function includesValue<const T extends readonly string[]>(values: T, value: stri
 
 function parseAttribution(value: unknown): Attribution {
   if (!isRecord(value)) {
-    return { source: "website", campaign: "", eventId: "", landingPath: "", referrer: "" };
+    return { source: "website", campaign: "", medium: "", eventId: "", landingPath: "", referrer: "" };
   }
 
   return {
     source: cleanText(value.source, 60),
     campaign: cleanText(value.campaign, 100),
+    medium: cleanText(value.medium, 80),
     eventId: cleanText(value.eventId, 80),
     landingPath: cleanText(value.landingPath, 160),
     referrer: cleanText(value.referrer, 240),
   };
+}
+
+function referrerWithoutQuery(value: string) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:"
+      ? `${url.origin}${url.pathname}`.slice(0, 240)
+      : "";
+  } catch {
+    return "";
+  }
 }
 
 function parseReviewCommon(value: Record<string, unknown>): ReviewCommon | null {
@@ -283,6 +308,32 @@ function parseSubmission(value: unknown): LeadSubmission | null {
   if (!isRecord(value)) return null;
 
   const type = cleanText(value.type, 40);
+
+  if (type === "family-continuity-map-optin") {
+    const firstName = cleanText(value.firstName, 80);
+    const email = cleanText(value.email, 254).toLowerCase();
+    const phone = cleanText(value.phone, 40);
+    const smsConsent = value.smsConsent === true;
+    if (
+      !firstName ||
+      !isEmail(email) ||
+      value.emailConsent !== true ||
+      (phone !== "" && !/^\+?[\d\s().-]{10,40}$/.test(phone)) ||
+      (phone !== "" && !/^\d{10,15}$/.test(phone.replace(/\D/g, ""))) ||
+      (smsConsent && !phone)
+    ) return null;
+
+    return {
+      type,
+      firstName,
+      email,
+      phone,
+      emailConsent: true,
+      smsConsent,
+      website: cleanText(value.website, 200),
+      attribution: parseAttribution(value.attribution),
+    };
+  }
 
   if (type === "continuity-review-start") {
     const common = parseReviewCommon(value);
@@ -408,7 +459,7 @@ async function ghlRequest(
   path: string,
   token: string,
   body: unknown,
-  method: "POST" | "DELETE" = "POST",
+  method: "POST" | "DELETE" | "GET" = "POST",
 ) {
   return fetch(`${GHL_API_ORIGIN}${path}`, {
     method,
@@ -418,10 +469,28 @@ async function ghlRequest(
       "Content-Type": "application/json",
       Version: GHL_API_VERSION,
     },
-    body: JSON.stringify(body),
+    ...(method === "GET" ? {} : { body: JSON.stringify(body) }),
     cache: "no-store",
     signal: AbortSignal.timeout(10_000),
   });
+}
+
+function emailPermission(contact: unknown): "allowed" | "blocked" | "unknown" {
+  if (!isRecord(contact)) return "unknown";
+  if (contact.dnd === true) return "blocked";
+
+  const settings = contact.dndSettings;
+  if (isRecord(settings)) {
+    const channels = Object.entries(settings);
+    for (const [channel, value] of channels) {
+      if ((channel.toLowerCase() === "email" || channel.toLowerCase() === "all") &&
+        isRecord(value) && value.status === "active") return "blocked";
+    }
+    if (contact.dnd === false) return "allowed";
+    if (channels.some(([channel, value]) => channel.toLowerCase() === "email" &&
+      isRecord(value) && value.status === "inactive")) return "allowed";
+  }
+  return contact.dnd === false ? "allowed" : "unknown";
 }
 
 function slug(value: string) {
@@ -543,6 +612,7 @@ export async function POST(request: Request) {
 
   if (
     submission.type !== "event-registration" &&
+    submission.type !== "family-continuity-map-optin" &&
     !(licensedStates as readonly string[]).includes(submission.state)
   ) {
     return Response.json(
@@ -553,6 +623,14 @@ export async function POST(request: Request) {
 
   const token = process.env.GHL_PRIVATE_INTEGRATION_TOKEN;
   const locationId = process.env.GHL_LOCATION_ID;
+
+  // GHL must have the PDF, trigger, suppression checks, and fields configured first.
+  if (submission.type === "family-continuity-map-optin" && process.env.GHL_CMAP_DELIVERY_READY !== "true") {
+    return Response.json(
+      { ok: false, message: "Map email delivery is being prepared. Please check back shortly." },
+      { status: 503 },
+    );
+  }
 
   if (!token || !locationId) {
     console.error("GHL lead capture is missing required server configuration.");
@@ -565,7 +643,28 @@ export async function POST(request: Request) {
   let customFields: Array<{ key: string; fieldValue: string }> = [];
   let source = "LLFG Website";
 
-  if (submission.type === "event-registration") {
+  if (submission.type === "family-continuity-map-optin") {
+    const submittedAt = new Date();
+    customFields = [
+      { key: "cmap_download_date", fieldValue: submittedAt.toISOString().slice(0, 10) },
+      { key: "cmap_source", fieldValue: submission.attribution.source || "website" },
+      { key: "cmap_utm_campaign", fieldValue: submission.attribution.campaign },
+      { key: "cmap_utm_medium", fieldValue: submission.attribution.medium },
+      { key: "cmap_landing_path", fieldValue: submission.attribution.landingPath },
+      { key: "cmap_referrer", fieldValue: referrerWithoutQuery(submission.attribution.referrer) },
+      { key: "cmap_email_consent_at", fieldValue: submittedAt.toISOString() },
+      { key: "cmap_email_consent_version", fieldValue: MAP_CONSENT_VERSION },
+      { key: "cmap_email_consent_text", fieldValue: MAP_EMAIL_CONSENT_TEXT },
+    ];
+    if (submission.smsConsent) {
+      customFields.push(
+        { key: "cmap_sms_consent_at", fieldValue: submittedAt.toISOString() },
+        { key: "cmap_sms_consent_version", fieldValue: MAP_CONSENT_VERSION },
+        { key: "cmap_sms_consent_text", fieldValue: MAP_SMS_CONSENT_TEXT },
+      );
+    }
+    source = "LLFG Website · Family Continuity Map";
+  } else if (submission.type === "event-registration") {
     customFields = [
       { key: "llfg_selected_pathway", fieldValue: "Retirement" },
     ];
@@ -598,8 +697,7 @@ export async function POST(request: Request) {
     ...(submission.phone ? { phone: submission.phone } : {}),
     email: submission.email,
     locationId,
-    state: submission.state,
-    country: "US",
+    ...(submission.type !== "family-continuity-map-optin" ? { state: submission.state, country: "US" } : {}),
     source,
     customFields,
     createNewIfDuplicateAllowed: false,
@@ -623,6 +721,38 @@ export async function POST(request: Request) {
         { ok: false, message: "Your request could not be saved. Please try again or contact LLFG directly." },
         { status: 502 },
       );
+    }
+
+    if (submission.type === "family-continuity-map-optin") {
+      const contactResponse = await ghlRequest(`/contacts/${contactId}`, token, undefined, "GET");
+      if (!contactResponse.ok) {
+        console.error("GHL Map email permission lookup failed.", { status: contactResponse.status });
+        return Response.json({ ok: false, message: "We could not confirm email delivery. Please contact LLFG for help." }, { status: 502 });
+      }
+      const contactResult = await contactResponse.json() as { contact?: unknown };
+      const permission = emailPermission(contactResult.contact);
+      if (permission !== "allowed") {
+        console.error("GHL Map email permission unavailable.", { permission });
+        return Response.json({ ok: false, message: "We cannot email the Map to this address right now. Please contact LLFG for help." }, { status: 422 });
+      }
+
+      // A separate Map SMS tag prevents an older unrelated consent tag from enrolling this request.
+      // Resetting the request trigger also allows an existing contact to request another copy.
+      const tagsToRemove = ["cmap:delivery-requested", ...(submission.smsConsent ? [] : ["cmap:sms-consent"])];
+      const resetResponse = await ghlRequest(`/contacts/${contactId}/tags`, token, { tags: tagsToRemove }, "DELETE");
+      if (!resetResponse.ok && resetResponse.status !== 404) {
+        console.error("GHL Map tag reset failed.", { status: resetResponse.status });
+        return Response.json({ ok: false, message: "Your Map request could not be completed. Please try again." }, { status: 502 });
+      }
+
+      const mapTags = ["lead-magnet:continuity-map", "cmap:downloaded", "cmap:delivery-requested"];
+      if (submission.smsConsent) mapTags.push("cmap:sms-consent");
+      const tagResponse = await ghlRequest(`/contacts/${contactId}/tags`, token, { tags: mapTags });
+      if (!tagResponse.ok) {
+        console.error("GHL Map delivery trigger failed.", { status: tagResponse.status });
+        return Response.json({ ok: false, message: "Your Map request could not be completed. Please try again." }, { status: 502 });
+      }
+      return Response.json({ ok: true }, { status: 201 });
     }
 
     if (submission.type === "event-registration") {
