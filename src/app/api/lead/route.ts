@@ -1,5 +1,6 @@
 import { licensedStates, states, workshops } from "@/lib/site-data";
 import { MAP_CONSENT_VERSION, MAP_EMAIL_CONSENT_TEXT, MAP_SMS_CONSENT_TEXT } from "@/lib/family-continuity-map";
+import { emailPermission } from "@/lib/ghl-email-permission";
 
 const GHL_API_ORIGIN = "https://services.leadconnectorhq.com";
 const GHL_API_VERSION = "2021-07-28";
@@ -473,24 +474,6 @@ async function ghlRequest(
     cache: "no-store",
     signal: AbortSignal.timeout(10_000),
   });
-}
-
-function emailPermission(contact: unknown): "allowed" | "blocked" | "unknown" {
-  if (!isRecord(contact)) return "unknown";
-  if (contact.dnd === true) return "blocked";
-
-  const settings = contact.dndSettings;
-  if (isRecord(settings)) {
-    const channels = Object.entries(settings);
-    for (const [channel, value] of channels) {
-      if ((channel.toLowerCase() === "email" || channel.toLowerCase() === "all") &&
-        isRecord(value) && value.status === "active") return "blocked";
-    }
-    if (contact.dnd === false) return "allowed";
-    if (channels.some(([channel, value]) => channel.toLowerCase() === "email" &&
-      isRecord(value) && value.status === "inactive")) return "allowed";
-  }
-  return contact.dnd === false ? "allowed" : "unknown";
 }
 
 function slug(value: string) {
