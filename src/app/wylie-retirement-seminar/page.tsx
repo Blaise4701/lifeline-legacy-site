@@ -31,14 +31,16 @@ export default function WylieRetirementSeminarPage() {
     <main id="main-content" className={`${styles.page} wylie-landing-page`}>
       <section className={styles.topBar}>
         <div className={styles.topBarInner}>
-          <Image
-            src="/brand/llfg-logo.png"
-            alt="Lifeline Legacy Financial Group"
-            width={260}
-            height={87}
-            priority
-            className={styles.logo}
-          />
+          <Link href="/" aria-label="Lifeline Legacy Financial Group home">
+            <Image
+              src="/brand/llfg-logo.png"
+              alt="Lifeline Legacy Financial Group"
+              width={260}
+              height={87}
+              priority
+              className={styles.logo}
+            />
+          </Link>
           <a className={styles.phone} href="tel:+19727648516">Questions? 972-764-8516</a>
         </div>
       </section>
@@ -134,7 +136,9 @@ export default function WylieRetirementSeminarPage() {
           </p>
           <div className={styles.frameworkLabel}>The Continuity Bridge™ Framework</div>
           <div className={styles.frameworkPillars}>
-            <span>Continuity</span><span>Certainty</span><span>Legacy</span>
+            <Link href="/continuity-bridge">Continuity</Link>
+            <Link href="/continuity-bridge">Certainty</Link>
+            <Link href="/continuity-bridge">Legacy</Link>
           </div>
         </div>
       </section>
