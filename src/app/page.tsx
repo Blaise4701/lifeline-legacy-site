@@ -236,10 +236,10 @@ export default function Home() {
           <div className="container founder-grid">
             <div className="founder-photo-wrap">
               <Image
-                src="/brand/blaise-tamo.png"
+                src="/brand/blaise-tamo-home.jpg"
                 alt="Blaise Tamo, Founder and CEO of Lifeline Legacy Financial Group"
-                width={836}
-                height={941}
+                width={960}
+                height={1080}
                 loading="eager"
                 className="founder-photo"
                 sizes="(max-width: 800px) 100vw, 45vw"

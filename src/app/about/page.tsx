@@ -18,10 +18,10 @@ export default function AboutPage() {
           <div className="container about-hero-grid">
             <div className="about-photo">
               <Image
-                src="/brand/blaise-tamo.png"
-                alt="Blaise Tamo walking outdoors in professional attire"
-                width={1254}
-                height={941}
+                src="/brand/blaise-tamo-about.jpg"
+                alt="Blaise Tamo, Founder and CEO of Lifeline Legacy Financial Group"
+                width={1000}
+                height={1250}
                 priority
                 className="about-photo-image"
                 sizes="(max-width: 900px) 100vw, 50vw"
