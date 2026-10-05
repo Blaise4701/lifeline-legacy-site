@@ -47,9 +47,9 @@ export default function WylieRetirementSeminarPage() {
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Free Educational Retirement Seminar · Wylie, Texas</p>
-            <h1>Are You Within 10 Years of Retirement?</h1>
+            <h1>Are You Within 10 Years of Retirement - or Recently Retired?</h1>
             <p className={styles.heroLead}>
-              Build a clearer retirement roadmap before the paycheck stops.
+              Build a clearer retirement roadmap before and after the paycheck stops.
             </p>
             <p className={styles.heroSupport}>
               Learn how retirement income, Social Security, taxes, withdrawals, healthcare,
@@ -77,7 +77,7 @@ export default function WylieRetirementSeminarPage() {
             </div>
 
             <a className={styles.primaryCta} href="#register">Reserve My Free Seat</a>
-            <p className={styles.microcopy}>No charge to attend · Designed for adults age 50+ · Seating is limited</p>
+            <p className={styles.microcopy}>No charge to attend · Designed for adults age 50+ who are approaching retirement or recently retired · Seating is limited</p>
           </div>
 
           <aside className={styles.heroCard} aria-label="Seminar details">
