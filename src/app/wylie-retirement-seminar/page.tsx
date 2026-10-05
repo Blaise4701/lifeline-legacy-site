@@ -223,8 +223,7 @@ export default function WylieRetirementSeminarPage() {
             This presentation is not intended to provide individualized legal, tax, or investment advice.
           </p>
           <p>
-            This event is not sponsored by, affiliated with, or endorsed by the Rita &amp; Truett Smith
-            Public Library or the City of Wylie.
+            This event is not sponsored by the Smith Public Library. The library does not endorse the viewpoint of the meeting room users.
           </p>
           <p>
             <Link href="/privacy">Privacy Policy</Link> · <Link href="/terms">Terms</Link> · <Link href="/disclosures">Disclosures</Link>
