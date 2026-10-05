@@ -70,7 +70,8 @@ export default function WylieRetirementSeminarPage() {
                 </div>
                 <div>
                   <span>LOCATION</span>
-                  <strong>Wylie, TX</strong>
+                  <strong>Rita &amp; Truett Smith Public Library</strong>
+                  <small>300 Country Club Road, Building 300<br />Wylie, TX 75098</small>
                 </div>
               </div>
             </div>
@@ -155,7 +156,7 @@ export default function WylieRetirementSeminarPage() {
             </p>
             <div className={styles.presenter}>
               <Image
-                src="/brand/blaise-tamo.png"
+                src="/brand/blaise-natural-wylie.jpg"
                 alt="Blaise Tamo"
                 width={110}
                 height={110}
