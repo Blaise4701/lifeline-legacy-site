@@ -28,7 +28,7 @@ const topics = [
 
 export default function WylieRetirementSeminarPage() {
   return (
-    <main id="main-content" className={styles.page}>
+    <main id="main-content" className={`${styles.page} wylie-landing-page`}>
       <section className={styles.topBar}>
         <div className={styles.topBarInner}>
           <Image
