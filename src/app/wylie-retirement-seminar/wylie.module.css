@@ -1063,3 +1063,20 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.eventMeta small {
+  display: block;
+  margin-top: 7px;
+  color: #6b7280;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.presenterImage {
+  width: 112px;
+  height: 112px;
+  border-radius: 16px;
+  object-fit: cover;
+  object-position: center 32%;
+}
