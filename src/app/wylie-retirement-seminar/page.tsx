@@ -57,18 +57,21 @@ export default function WylieRetirementSeminarPage() {
               before retirement.
             </p>
 
-            <div className={styles.eventStrip}>
-              <div>
-                <span>MON</span>
-                <strong>OCT 12</strong>
+            <div className={styles.eventHighlight}>
+              <div className={styles.dateBlock}>
+                <span className={styles.dateMonth}>OCTOBER</span>
+                <strong className={styles.dateDay}>12</strong>
+                <span className={styles.dateWeekday}>MONDAY</span>
               </div>
-              <div>
-                <span>TIME</span>
-                <strong>6:00 PM</strong>
-              </div>
-              <div>
-                <span>LOCATION</span>
-                <strong>Wylie, TX</strong>
+              <div className={styles.eventMeta}>
+                <div>
+                  <span>TIME</span>
+                  <strong>6:00 PM</strong>
+                </div>
+                <div>
+                  <span>LOCATION</span>
+                  <strong>Wylie, TX</strong>
+                </div>
               </div>
             </div>
 
