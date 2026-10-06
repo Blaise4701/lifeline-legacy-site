@@ -1080,3 +1080,167 @@
   object-fit: cover;
   object-position: center 32%;
 }
+
+
+/* Paid-traffic conversion refresh: put registration beside the hero promise. */
+.heroInner {
+  grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
+  gap: 42px;
+  align-items: start;
+  padding: 52px 0 54px;
+}
+
+.heroSupport {
+  margin-bottom: 20px;
+}
+
+.heroBenefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: grid;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.heroBenefits li {
+  position: relative;
+  padding-left: 31px;
+  color: #26334c;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+.heroBenefits li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.heroEventLine {
+  display: grid;
+  grid-template-columns: 1fr 0.55fr 1.45fr;
+  gap: 10px;
+  max-width: 780px;
+}
+
+.heroEventLine > div {
+  min-width: 0;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid #e7dbc9;
+  border-radius: 10px;
+  padding: 13px 14px;
+  box-shadow: 0 8px 22px rgba(6,32,77,0.05);
+}
+
+.heroEventLine span,
+.heroEventLine strong {
+  display: block;
+}
+
+.heroEventLine span {
+  margin-bottom: 4px;
+  color: #7b6a55;
+  font-size: 0.66rem;
+  letter-spacing: 0.09em;
+  font-weight: 900;
+}
+
+.heroEventLine strong {
+  color: var(--navy);
+  font-size: 0.93rem;
+  line-height: 1.3;
+}
+
+.heroTrustLine {
+  margin: 13px 0 0;
+  color: #6e665d;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.heroForm {
+  scroll-margin-top: 18px;
+}
+
+.heroForm .formCard,
+.heroForm .successCard {
+  box-shadow: 0 24px 60px rgba(6,32,77,0.18);
+  border: 1px solid #e7dbc9;
+}
+
+.heroForm .formCard {
+  padding: 26px;
+}
+
+.heroForm .formHeading h2 {
+  font-size: 1.85rem;
+}
+
+.heroForm .formHeading > p:last-child {
+  margin-bottom: 17px;
+}
+
+.heroForm .fieldGrid {
+  gap: 11px;
+}
+
+.heroForm .selectLabel {
+  margin-top: 11px;
+}
+
+.heroForm .checkRow {
+  margin-top: 11px;
+}
+
+.heroForm .consentBox {
+  margin-top: 14px;
+}
+
+.heroForm .submitButton {
+  margin-top: 16px;
+}
+
+@media (max-width: 1000px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+  }
+
+  .heroForm {
+    width: min(100%, 680px);
+  }
+}
+
+@media (max-width: 680px) {
+  .heroInner {
+    padding-top: 34px;
+    gap: 28px;
+  }
+
+  .heroLead {
+    margin-top: 18px;
+  }
+
+  .heroEventLine {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .heroEventLine > div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .heroForm .formCard,
+  .heroForm .successCard {
+    padding: 20px;
+  }
+}
