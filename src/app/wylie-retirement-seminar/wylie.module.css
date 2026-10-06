@@ -1244,3 +1244,38 @@
     padding: 20px;
   }
 }
+
+
+.industryBlock {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #f8f6f2;
+  border: 1px solid #ece5dc;
+}
+
+.industryLabel {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--navy);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.industryBlock .checkRow {
+  margin-top: 7px;
+}
+
+.formReassurance {
+  margin: 16px 0 0;
+  text-align: center;
+  color: var(--navy);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.heroForm .formReassurance {
+  margin-top: 13px;
+}
