@@ -49,53 +49,43 @@ export default function WylieRetirementSeminarPage() {
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Free Educational Retirement Seminar · Wylie, Texas</p>
-            <h1>Are You Within 10 Years of Retirement - or Recently Retired?</h1>
+            <h1>Within 10 Years of Retirement - or Recently Retired?</h1>
             <p className={styles.heroLead}>
-              Build a clearer retirement roadmap before and after the paycheck stops.
+              Start building your retirement income roadmap before the paycheck stops.
             </p>
             <p className={styles.heroSupport}>
-              Learn how retirement income, Social Security, taxes, withdrawals, healthcare,
-              longevity, and survivor planning fit together - so you can make better decisions
-              before retirement.
+              Learn how retirement income, Social Security, taxes, withdrawals, healthcare, and
+              longevity fit together so you can make better retirement decisions with more clarity.
             </p>
 
-            <div className={styles.eventHighlight}>
-              <div className={styles.dateBlock}>
-                <span className={styles.dateMonth}>OCTOBER</span>
-                <strong className={styles.dateDay}>12</strong>
-                <span className={styles.dateWeekday}>MONDAY</span>
+            <ul className={styles.heroBenefits}>
+              <li>A clearer picture of where retirement income may come from</li>
+              <li>A better understanding of potential income gaps and risks</li>
+              <li>A framework for organizing retirement decisions into a written roadmap</li>
+            </ul>
+
+            <div className={styles.heroEventLine} aria-label="Seminar date, time, and location">
+              <div>
+                <span>DATE</span>
+                <strong>Monday, October 12</strong>
               </div>
-              <div className={styles.eventMeta}>
-                <div>
-                  <span>TIME</span>
-                  <strong>6:00 PM</strong>
-                </div>
-                <div>
-                  <span>LOCATION</span>
-                  <strong>Rita &amp; Truett Smith Public Library</strong>
-                  <small>300 Country Club Road, Building 300<br />Wylie, TX 75098</small>
-                </div>
+              <div>
+                <span>TIME</span>
+                <strong>6:00 PM</strong>
+              </div>
+              <div>
+                <span>LOCATION</span>
+                <strong>Rita &amp; Truett Smith Public Library · Wylie, TX</strong>
               </div>
             </div>
 
-            <a className={styles.primaryCta} href="#register">Reserve My Free Seat</a>
-            <p className={styles.microcopy}>No charge to attend · Designed for adults age 50+ who are approaching retirement or recently retired · Seating is limited</p>
+            <p className={styles.heroTrustLine}>
+              Free educational event · No sales presentation · Seating is limited
+            </p>
           </div>
 
-          <aside className={styles.heroCard} aria-label="Seminar details">
-            <p className={styles.cardKicker}>Retirement Mindset &amp; Roadmap</p>
-            <h2>Turn uncertainty into a coordinated retirement plan.</h2>
-            <div className={styles.locationBlock}>
-              <strong>Rita &amp; Truett Smith Public Library</strong>
-              <span>300 Country Club Road, Building 300</span>
-              <span>Wylie, TX 75098</span>
-            </div>
-            <ul>
-              <li>Monday, October 12</li>
-              <li>6:00 PM</li>
-              <li>Free educational event</li>
-            </ul>
-            <a className={styles.secondaryCta} href="#register">Save My Seat</a>
+          <aside className={styles.heroForm} id="hero-register" aria-label="Reserve your seat">
+            <WylieSeminarRegistration />
           </aside>
         </div>
       </section>
