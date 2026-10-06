@@ -169,10 +169,13 @@ export function WylieSeminarRegistration() {
         <span>I confirm this registration is for someone age 50 or older.</span>
       </label>
 
-      <label className={styles.checkRow}>
-        <input name="industryProfessional" type="checkbox" />
-        <span>I am a financial advisor, insurance agent, or broker.</span>
-      </label>
+      <div className={styles.industryBlock}>
+        <span className={styles.industryLabel}>Industry professionals</span>
+        <label className={styles.checkRow}>
+          <input name="industryProfessional" type="checkbox" />
+          <span>I am a financial advisor, insurance agent, or broker.</span>
+        </label>
+      </div>
 
       <div className={styles.consentBox}>
         <label className={styles.checkRow}>
@@ -191,6 +194,8 @@ export function WylieSeminarRegistration() {
       </label>
 
       {error && <p className={styles.error} role="alert">{error}</p>}
+
+      <p className={styles.formReassurance}>Free to attend. No sales presentation.</p>
 
       <button className={styles.submitButton} type="submit" disabled={status === "submitting"}>
         {status === "submitting" ? "Reserving Your Seat..." : "Reserve My Free Seat"}
