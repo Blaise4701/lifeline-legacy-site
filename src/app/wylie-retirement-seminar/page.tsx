@@ -49,9 +49,9 @@ export default function WylieRetirementSeminarPage() {
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Free Educational Retirement Seminar · Wylie, Texas</p>
-            <h1>Are You Within 10 Years of Retirement - or Recently Retired?</h1>
+            <h1>Within 10 Years of Retirement - or Recently Retired?</h1>
             <p className={styles.heroLead}>
-              Build the first draft of your retirement income roadmap before the paycheck stops.
+              Start building your retirement income roadmap before the paycheck stops.
             </p>
             <p className={styles.heroSupport}>
               Learn how retirement income, Social Security, taxes, withdrawals, healthcare, and
