@@ -5,6 +5,7 @@ const routes = [
   "",
   "/continuity-bridge",
   "/checkup",
+  "/retirement-income-checkup",
   "/retirement-income",
   "/family-continuity",
   "/family-continuity-map",
