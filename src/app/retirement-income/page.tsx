@@ -73,7 +73,7 @@ export default function RetirementIncomePage() {
           }
           description="For decades, the goal was to build. Retirement asks a different question: how do the pieces turn into income you can rely on, for as long as you need it?"
           primary={{ href: "#questions", label: "Explore the eight questions" }}
-          secondary={{ href: "/checkup", label: "Take the Continuity Checkup" }}
+          secondary={{ href: "/retirement-income-checkup", label: "Take the Retirement Income Checkup" }}
           aside={
             <div>
               <p className="eyebrow">The shift</p>
