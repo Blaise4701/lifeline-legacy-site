@@ -1,5 +1,7 @@
 .page {
   --navy: #06204d;
+  --luxury-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --luxury-sans: "Montserrat", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
   --navy-2: #0b2e63;
   --gold: #b07a32;
   --gold-light: #d9b388;
@@ -43,7 +45,7 @@
 .split h2,
 .reviewIntro h2 {
   color: var(--navy);
-  font-family: var(--serif);
+  font-family: var(--luxury-serif);
 }
 
 .hero h1 {
@@ -123,7 +125,7 @@
   padding: 1rem 0;
 }
 
-.metric span { color: var(--gold-light); font-family: var(--serif); font-size: 1.4rem; }
+.metric span { color: var(--gold-light); font-family: var(--luxury-serif); font-size: 1.4rem; }
 .metric strong { font-size: 1rem; font-weight: 650; }
 
 .section,
@@ -384,7 +386,7 @@
 .heroFormCard :global(.iul-form-heading h2),
 .heroFormCard :global(.iul-lead-success h2) {
   color: var(--navy);
-  font-family: var(--serif);
+  font-family: var(--luxury-serif);
   font-size: clamp(1.8rem, 3vw, 2.45rem);
   line-height: 1.05;
   margin-bottom: .65rem;
@@ -487,7 +489,7 @@
 
 .reviewCta h2 {
   color: white;
-  font-family: var(--serif);
+  font-family: var(--luxury-serif);
   font-size: clamp(2.2rem, 4vw, 3.8rem);
   margin-bottom: .8rem;
   max-width: 15ch;
@@ -536,4 +538,36 @@
   .trustStrip {
     gap: .4rem;
   }
+}
+
+
+/* Campaign typography */
+.page {
+  font-family: var(--luxury-sans);
+}
+
+.hero h1,
+.sectionHeading h2,
+.darkGrid h2,
+.split h2,
+.reviewIntro h2,
+.reviewCta h2,
+.compareTop h3,
+.heroFormCard :global(.iul-form-heading h2),
+.heroFormCard :global(.iul-lead-success h2) {
+  font-family: var(--luxury-serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.eyebrow,
+.goldEyebrow,
+.cardLabel,
+.compareTop p,
+.heroFormCard :global(.iul-form-grid span),
+.primaryButton,
+.secondaryButton,
+.goldButton,
+.heroFormCard :global(.iul-submit) {
+  font-family: var(--luxury-sans);
 }
