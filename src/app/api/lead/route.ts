@@ -167,6 +167,18 @@ type EventSubmission = {
   website: string;
 };
 
+type IulStrategyLeadSubmission = {
+  type: "iul-strategy-lead";
+  firstName: string;
+  email: string;
+  phone: string;
+  state: string;
+  emailConsent: true;
+  smsConsent: boolean;
+  website: string;
+  attribution: Attribution;
+};
+
 type MapOptInSubmission = {
   type: "family-continuity-map-optin";
   firstName: string;
@@ -178,7 +190,7 @@ type MapOptInSubmission = {
   attribution: Attribution;
 };
 
-type LeadSubmission = ReviewStartSubmission | ReviewCompleteSubmission | EventSubmission | MapOptInSubmission;
+type LeadSubmission = ReviewStartSubmission | ReviewCompleteSubmission | EventSubmission | MapOptInSubmission | IulStrategyLeadSubmission;
 
 type GhlUpsertResponse = {
   contact?: {
@@ -309,6 +321,33 @@ function parseSubmission(value: unknown): LeadSubmission | null {
   if (!isRecord(value)) return null;
 
   const type = cleanText(value.type, 40);
+
+  if (type === "iul-strategy-lead") {
+    const firstName = cleanText(value.firstName, 80);
+    const email = cleanText(value.email, 254).toLowerCase();
+    const phone = cleanText(value.phone, 40);
+    const state = cleanText(value.state, 40);
+    const smsConsent = value.smsConsent === true;
+    if (
+      !firstName ||
+      !isEmail(email) ||
+      !isPhone(phone) ||
+      !includesValue(states, state) ||
+      value.emailConsent !== true
+    ) return null;
+
+    return {
+      type,
+      firstName,
+      email,
+      phone,
+      state,
+      emailConsent: true,
+      smsConsent,
+      website: cleanText(value.website, 200),
+      attribution: parseAttribution(value.attribution),
+    };
+  }
 
   if (type === "family-continuity-map-optin") {
     const firstName = cleanText(value.firstName, 80);
@@ -652,6 +691,11 @@ export async function POST(request: Request) {
       { key: "llfg_selected_pathway", fieldValue: "Retirement" },
     ];
     source = "LLFG Website · Event Registration";
+  } else if (submission.type === "iul-strategy-lead") {
+    customFields = [
+      { key: "llfg_selected_pathway", fieldValue: "Retirement" },
+    ];
+    source = "LLFG Website · IUL Strategy";
   } else {
     customFields = [
       { key: "llfg_selected_pathway", fieldValue: submission.pathway },
@@ -841,6 +885,39 @@ export async function POST(request: Request) {
       }
 
       return Response.json({ ok: true, alreadyRegistered: false }, { status: 201 });
+    }
+
+    if (submission.type === "iul-strategy-lead") {
+      const tags = [
+        "llf - website",
+        "llfg-path-retirement",
+        "llfg-iul-strategy-lead",
+        "llfg-email-service-consent",
+        `llfg-source-${normalizedSource(submission.attribution.source || "website")}`,
+      ];
+      if (submission.smsConsent) tags.push("llfg-sms-service-consent");
+
+      const ok = await resetAndAddTags(
+        contactId,
+        token,
+        tags,
+        ["llfg-iul-strategy-lead"],
+      );
+
+      if (!ok) {
+        return Response.json(
+          { ok: false, message: "Your request could not be completed. Please try again." },
+          { status: 502 },
+        );
+      }
+
+      return Response.json(
+        {
+          ok: true,
+          bookingUrl: process.env.GHL_CONTINUITY_CALENDAR_URL ?? null,
+        },
+        { status: 201 },
+      );
     }
 
     if (submission.type === "continuity-review-start") {
