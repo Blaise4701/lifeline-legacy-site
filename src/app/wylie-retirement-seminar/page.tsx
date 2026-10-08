@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { isEventRegistrationClosed, WYLIE_OCTOBER_12_CUTOFF } from "@/lib/event-registration-cutoff";
+import { workshops } from "@/lib/site-data";
 import { WylieSeminarRegistration } from "./wylie-seminar-registration";
 import styles from "./wylie.module.css";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Free Retirement Seminar in Wylie - October 12",
@@ -27,6 +31,9 @@ const topics = [
 ];
 
 export default function WylieRetirementSeminarPage() {
+  const workshop = workshops.find((item) => item.id === WYLIE_OCTOBER_12_CUTOFF.eventId)!;
+  const registrationClosed = isEventRegistrationClosed(workshop.id, workshop.dateTime);
+
   return (
     <main id="main-content" className={`${styles.page} wylie-landing-page`}>
       <section className={styles.topBar}>
@@ -85,7 +92,10 @@ export default function WylieRetirementSeminarPage() {
           </div>
 
           <aside className={styles.heroForm} id="hero-register" aria-label="Reserve your seat">
-            <WylieSeminarRegistration />
+            <WylieSeminarRegistration
+              cutoff={WYLIE_OCTOBER_12_CUTOFF.instant}
+              initiallyClosed={registrationClosed}
+            />
           </aside>
         </div>
       </section>
@@ -183,9 +193,11 @@ export default function WylieRetirementSeminarPage() {
         <div className={styles.registrationInner}>
           <div className={styles.registrationCopy}>
             <p className={styles.eyebrow}>Monday, October 12 · 6:00 PM</p>
-            <h2>Reserve your seat while space is available.</h2>
+            <h2>{registrationClosed ? "Thank you for your interest." : "Reserve your seat while space is available."}</h2>
             <p>
-              Registration takes about one minute. Bring your questions - no preparation is required.
+              {registrationClosed
+                ? "Explore future educational events and retirement planning resources from Lifeline Legacy Financial Group."
+                : "Registration takes about one minute. Bring your questions - no preparation is required."}
             </p>
             <div className={styles.locationMini}>
               <strong>Rita &amp; Truett Smith Public Library</strong>
@@ -194,7 +206,10 @@ export default function WylieRetirementSeminarPage() {
             </div>
           </div>
           <div className={styles.formWrap}>
-            <WylieSeminarRegistration />
+            <WylieSeminarRegistration
+              cutoff={WYLIE_OCTOBER_12_CUTOFF.instant}
+              initiallyClosed={registrationClosed}
+            />
           </div>
         </div>
       </section>

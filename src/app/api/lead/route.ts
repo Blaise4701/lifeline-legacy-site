@@ -1,6 +1,7 @@
 import { licensedStates, states, workshops } from "@/lib/site-data";
 import { MAP_CONSENT_VERSION, MAP_EMAIL_CONSENT_TEXT, MAP_SMS_CONSENT_TEXT } from "@/lib/family-continuity-map";
 import { emailPermission } from "@/lib/ghl-email-permission";
+import { isEventRegistrationClosed } from "@/lib/event-registration-cutoff";
 
 const GHL_API_ORIGIN = "https://services.leadconnectorhq.com";
 const GHL_API_VERSION = "2021-07-28";
@@ -585,10 +586,10 @@ export async function POST(request: Request) {
         { status: 422 },
       );
     }
-    if (Date.now() >= Date.parse(workshop.dateTime)) {
+    if (isEventRegistrationClosed(workshop.id, workshop.dateTime)) {
       return Response.json(
-        { ok: false, message: "Registration for this event has closed. Please choose another session." },
-        { status: 422 },
+        { ok: false, message: "Registration for this event is now closed." },
+        { status: 410 },
       );
     }
   }
