@@ -1,0 +1,350 @@
+.page {
+  --navy: #06204d;
+  --navy-2: #0b2e63;
+  --gold: #b07a32;
+  --gold-light: #d9b388;
+  --paper: #faf1e9;
+  --cream: #f9f6f4;
+  --ink: #17243c;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.hero {
+  background:
+    radial-gradient(circle at 82% 20%, rgba(217, 179, 136, 0.35), transparent 30rem),
+    linear-gradient(120deg, #fff 0%, #f9f6f4 57%, #eef3f9 100%);
+  overflow: hidden;
+  padding: clamp(5rem, 9vw, 8rem) 0;
+  position: relative;
+}
+
+.heroGlow {
+  border: 1px solid rgba(176, 122, 50, 0.18);
+  border-radius: 50%;
+  height: 36rem;
+  position: absolute;
+  right: -12rem;
+  top: -17rem;
+  width: 36rem;
+}
+
+.heroGrid {
+  align-items: center;
+  display: grid;
+  gap: clamp(3rem, 7vw, 6rem);
+  grid-template-columns: minmax(0, 1.12fr) minmax(20rem, .72fr);
+  position: relative;
+}
+
+.hero h1,
+.sectionHeading h2,
+.darkGrid h2,
+.split h2,
+.reviewIntro h2 {
+  color: var(--navy);
+  font-family: var(--serif);
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 6.2vw, 5.7rem);
+  line-height: 1.02;
+  margin-bottom: 1.4rem;
+  max-width: 12ch;
+}
+
+.lede {
+  color: #46536a;
+  font-size: clamp(1.06rem, 1.7vw, 1.28rem);
+  max-width: 45rem;
+}
+
+.eyebrow,
+.goldEyebrow {
+  color: var(--gold);
+  font-size: .73rem;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin-top: 2rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  align-items: center;
+  border-radius: .4rem;
+  display: inline-flex;
+  font-size: .88rem;
+  font-weight: 760;
+  justify-content: center;
+  min-height: 3.35rem;
+  padding: .8rem 1.35rem;
+  text-decoration: none;
+}
+
+.primaryButton { background: var(--navy); border: 1px solid var(--navy); color: white; }
+.secondaryButton { border: 1px solid var(--navy); color: var(--navy); }
+.primaryButton:hover { background: var(--navy-2); }
+.secondaryButton:hover { background: #fff; }
+
+.microcopy {
+  color: #687287;
+  font-size: .76rem;
+  margin-top: 1rem;
+}
+
+.heroCard {
+  background: var(--navy);
+  box-shadow: 0 24px 70px rgba(6, 32, 77, .18);
+  color: white;
+  padding: clamp(2rem, 4vw, 3rem);
+}
+
+.cardLabel {
+  color: var(--gold-light);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.metric {
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,.14);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto 1fr;
+  padding: 1rem 0;
+}
+
+.metric span { color: var(--gold-light); font-family: var(--serif); font-size: 1.4rem; }
+.metric strong { font-size: 1rem; font-weight: 650; }
+
+.section,
+.paperSection,
+.reviewSection {
+  padding: clamp(5rem, 8vw, 8rem) 0;
+}
+
+.sectionHeading {
+  margin-bottom: 3rem;
+  max-width: 58rem;
+}
+
+.sectionHeading h2,
+.split h2 {
+  font-size: clamp(2.35rem, 4.3vw, 4.1rem);
+  line-height: 1.05;
+}
+
+.sectionHeading > p:last-child,
+.split > div:first-child > p:last-child {
+  color: #596579;
+  font-size: 1.05rem;
+}
+
+.comparisonGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.compareCard {
+  background: white;
+  border: 1px solid #e4ddd4;
+  box-shadow: 0 12px 38px rgba(6,32,77,.06);
+  min-height: 30rem;
+}
+
+.compareTop {
+  background: var(--navy);
+  color: white;
+  padding: 1.8rem;
+}
+
+.compareCard:nth-child(2) .compareTop { background: #0d6256; }
+.compareCard:nth-child(3) .compareTop { background: #9a641d; }
+
+.compareTop span {
+  color: var(--gold-light);
+  display: block;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.compareTop h3 {
+  color: white;
+  font-size: 2.2rem;
+  margin: .25rem 0 .2rem;
+}
+
+.compareTop p {
+  font-size: .8rem;
+  font-weight: 750;
+  letter-spacing: .08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.compareCard ul {
+  list-style: none;
+  margin: 0;
+  padding: 1.5rem 1.6rem 1.8rem;
+}
+
+.compareCard li {
+  border-top: 1px solid #ece6de;
+  padding: .95rem 0 .95rem 1.5rem;
+  position: relative;
+}
+
+.compareCard li::before {
+  color: var(--gold);
+  content: "✓";
+  font-weight: 800;
+  left: 0;
+  position: absolute;
+}
+
+.darkSection {
+  background: var(--navy);
+  color: rgba(255,255,255,.78);
+  padding: clamp(5rem, 8vw, 8rem) 0;
+}
+
+.darkGrid {
+  display: grid;
+  gap: clamp(3rem, 8vw, 8rem);
+  grid-template-columns: .9fr 1.1fr;
+}
+
+.darkGrid h2 {
+  color: white;
+  font-size: clamp(2.3rem, 4.1vw, 4rem);
+}
+
+.featureList {
+  display: grid;
+  gap: .7rem;
+}
+
+.featureList > div {
+  border-top: 1px solid rgba(255,255,255,.16);
+  display: grid;
+  gap: .5rem;
+  padding: 1rem 0;
+}
+
+.featureList strong { color: white; font-size: 1.05rem; }
+.featureList span { color: rgba(255,255,255,.7); }
+
+.split {
+  align-items: start;
+  display: grid;
+  gap: clamp(3rem, 8vw, 8rem);
+  grid-template-columns: .9fr 1.1fr;
+}
+
+.questionList {
+  display: grid;
+  gap: .7rem;
+}
+
+.questionList > div {
+  align-items: start;
+  background: white;
+  border: 1px solid #e5ddd4;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto 1fr;
+  padding: 1.1rem 1.2rem;
+}
+
+.questionList span { color: var(--gold); font-weight: 900; }
+.questionList p { margin: 0; }
+
+.paperSection { background: var(--paper); }
+
+.tradeoffGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tradeoffGrid article {
+  background: white;
+  border-top: 3px solid var(--gold);
+  padding: 1.6rem;
+}
+
+.tradeoffGrid h3 { color: var(--navy); font-size: 1.5rem; }
+.tradeoffGrid p { color: #5d687c; }
+
+.reviewSection {
+  background: linear-gradient(120deg, #071c42, #0b2e63);
+  color: rgba(255,255,255,.78);
+}
+
+.reviewSection > div {
+  display: grid;
+  gap: clamp(3rem, 7vw, 6rem);
+  grid-template-columns: .8fr 1.2fr;
+}
+
+.reviewIntro h2 {
+  color: white;
+  font-size: clamp(2.4rem, 4vw, 3.8rem);
+}
+
+.reviewIntro ul { padding-left: 1.2rem; }
+.reviewIntro a { color: var(--gold-light); }
+
+.formShell :global(.review-journey-card) {
+  background: white;
+  color: #17243c;
+  margin: 0;
+}
+
+.formShell :global(.review-journey-card h2) { color: var(--navy); }
+
+.smallNote { font-size: .86rem; }
+
+.disclosure {
+  background: #041632;
+  color: rgba(255,255,255,.57);
+  font-size: .72rem;
+  padding: 1.5rem 0;
+}
+
+.disclosure p { margin: 0; }
+
+@media (max-width: 900px) {
+  .heroGrid,
+  .darkGrid,
+  .split,
+  .reviewSection > div {
+    grid-template-columns: 1fr;
+  }
+
+  .comparisonGrid,
+  .tradeoffGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 { max-width: 14ch; }
+}
+
+@media (max-width: 560px) {
+  .hero { padding-top: 3.8rem; }
+  .hero h1 { font-size: clamp(2.6rem, 12vw, 3.65rem); }
+  .actions { align-items: stretch; flex-direction: column; }
+  .primaryButton, .secondaryButton { width: 100%; }
+  .heroCard { padding: 1.5rem; }
+}
