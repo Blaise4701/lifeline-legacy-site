@@ -75,6 +75,17 @@ export default function IulRetirementStrategyPage() {
                 <span>Family protection</span>
               </div>
               <p className={styles.microcopy}>Educational information only. Product suitability and features vary by person, carrier, and state.</p>
+
+              <div className={styles.vslPlaceholder} aria-label="Video coming soon">
+                <div className={styles.vslPreview}>
+                  <div className={styles.vslPlay} aria-hidden="true">▶</div>
+                  <div className={styles.vslCopy}>
+                    <span>Watch the 3-minute overview</span>
+                    <strong>How an IUL may fit into a retirement income strategy</strong>
+                    <small>Video coming soon</small>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <aside className={styles.heroFormCard}>
