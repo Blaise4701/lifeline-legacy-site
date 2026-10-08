@@ -59,7 +59,11 @@ export default function IulRetirementStrategyPage() {
           <div className={styles.heroGrid}>
             <div>
               <p className={styles.eyebrow}>Retirement income + protection</p>
-              <h1>Could an IUL add more flexibility to your retirement strategy?</h1>
+              <h1>
+                Could an IUL add more<span className={styles.desktopBreak}><br /></span>
+                flexibility to your<span className={styles.desktopBreak}><br /></span>
+                retirement strategy?
+              </h1>
               <p className={styles.lede}>
                 Indexed Universal Life insurance is not a replacement for every retirement account.
                 For the right person, it can be one additional tool for tax diversification,
