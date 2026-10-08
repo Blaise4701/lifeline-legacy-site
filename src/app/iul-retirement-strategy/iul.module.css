@@ -49,10 +49,11 @@
 }
 
 .hero h1 {
-  font-size: clamp(3rem, 6.2vw, 5.7rem);
-  line-height: 1.02;
+  font-size: clamp(3.7rem, 5.1vw, 5rem);
+  line-height: .98;
   margin-bottom: 1.4rem;
-  max-width: 12ch;
+  max-width: none;
+  text-wrap: balance;
 }
 
 .lede {
@@ -387,9 +388,10 @@
 .heroFormCard :global(.iul-lead-success h2) {
   color: var(--navy);
   font-family: var(--luxury-serif);
-  font-size: clamp(1.8rem, 3vw, 2.45rem);
-  line-height: 1.05;
-  margin-bottom: .65rem;
+  font-size: clamp(2rem, 2.45vw, 2.7rem);
+  line-height: 1.02;
+  margin-bottom: .72rem;
+  text-wrap: balance;
 }
 
 .heroFormCard :global(.iul-form-heading p:last-child),
@@ -570,4 +572,28 @@
 .goldButton,
 .heroFormCard :global(.iul-submit) {
   font-family: var(--luxury-sans);
+}
+
+
+.desktopBreak {
+  display: inline;
+}
+
+.heroFormCard :global(.iul-desktop-break) {
+  display: inline;
+}
+
+@media (max-width: 900px) {
+  .desktopBreak {
+    display: none;
+  }
+
+  .heroFormCard :global(.iul-desktop-break) {
+    display: none;
+  }
+
+  .hero h1 {
+    max-width: 13ch;
+    text-wrap: balance;
+  }
 }
