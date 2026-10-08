@@ -17,7 +17,7 @@
     radial-gradient(circle at 82% 20%, rgba(217, 179, 136, 0.35), transparent 30rem),
     linear-gradient(120deg, #fff 0%, #f9f6f4 57%, #eef3f9 100%);
   overflow: hidden;
-  padding: clamp(5rem, 9vw, 8rem) 0;
+  padding: clamp(2.5rem, 4vw, 3.75rem) 0;
   position: relative;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .heroGrid {
-  align-items: center;
+  align-items: start;
   display: grid;
   gap: clamp(3rem, 7vw, 6rem);
   grid-template-columns: minmax(0, .95fr) minmax(24rem, .75fr);
@@ -345,7 +345,7 @@
 }
 
 @media (max-width: 560px) {
-  .hero { padding-top: 3.8rem; }
+  .hero { padding: 2.75rem 0 3rem; }
   .hero h1 { font-size: clamp(2.6rem, 12vw, 3.65rem); }
   .actions { align-items: stretch; flex-direction: column; }
   .primaryButton, .secondaryButton { width: 100%; }
