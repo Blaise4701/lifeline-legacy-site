@@ -33,7 +33,7 @@
   align-items: center;
   display: grid;
   gap: clamp(3rem, 7vw, 6rem);
-  grid-template-columns: minmax(0, 1.12fr) minmax(20rem, .72fr);
+  grid-template-columns: minmax(0, .95fr) minmax(24rem, .75fr);
   position: relative;
 }
 
@@ -347,4 +347,193 @@
   .actions { align-items: stretch; flex-direction: column; }
   .primaryButton, .secondaryButton { width: 100%; }
   .heroCard { padding: 1.5rem; }
+}
+
+
+/* Conversion-focused hero form */
+.heroFormCard {
+  align-self: stretch;
+  background: #ffffff;
+  border: 1px solid rgba(6, 32, 77, .1);
+  box-shadow: 0 24px 70px rgba(6, 32, 77, .16);
+  padding: clamp(1.5rem, 3vw, 2.2rem);
+}
+
+.trustStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  margin-top: 1.6rem;
+}
+
+.trustStrip span {
+  background: rgba(176, 122, 50, .1);
+  border: 1px solid rgba(176, 122, 50, .18);
+  border-radius: 999px;
+  color: var(--navy);
+  font-size: .74rem;
+  font-weight: 760;
+  padding: .42rem .7rem;
+}
+
+.heroFormCard :global(.iul-lead-form) {
+  display: grid;
+  gap: 1rem;
+}
+
+.heroFormCard :global(.iul-form-heading h2),
+.heroFormCard :global(.iul-lead-success h2) {
+  color: var(--navy);
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3vw, 2.45rem);
+  line-height: 1.05;
+  margin-bottom: .65rem;
+}
+
+.heroFormCard :global(.iul-form-heading p:last-child),
+.heroFormCard :global(.iul-lead-success p) {
+  color: #5d687c;
+  font-size: .92rem;
+  margin-bottom: 0;
+}
+
+.heroFormCard :global(.iul-form-grid) {
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.heroFormCard :global(.iul-form-grid label) {
+  display: grid;
+  gap: .35rem;
+}
+
+.heroFormCard :global(.iul-form-grid span) {
+  color: var(--navy);
+  font-size: .72rem;
+  font-weight: 760;
+}
+
+.heroFormCard :global(.iul-form-grid input),
+.heroFormCard :global(.iul-form-grid select) {
+  background: #fff;
+  border: 1px solid #d9dfeb;
+  border-radius: .25rem;
+  color: var(--ink);
+  min-height: 2.9rem;
+  padding: .65rem .72rem;
+  width: 100%;
+}
+
+.heroFormCard :global(.iul-form-grid input:focus),
+.heroFormCard :global(.iul-form-grid select:focus) {
+  border-color: var(--gold);
+  outline: 2px solid rgba(176,122,50,.16);
+  outline-offset: 1px;
+}
+
+.heroFormCard :global(.iul-state-note) {
+  color: #687287;
+  font-size: .7rem;
+  margin: -.2rem 0 0;
+}
+
+.heroFormCard :global(.iul-consent) {
+  align-items: flex-start;
+  color: #687287;
+  display: grid;
+  font-size: .68rem;
+  gap: .55rem;
+  grid-template-columns: auto 1fr;
+  line-height: 1.4;
+}
+
+.heroFormCard :global(.iul-consent input) {
+  margin-top: .18rem;
+}
+
+.heroFormCard :global(.iul-consent a) {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.heroFormCard :global(.iul-submit) {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+  font-size: .95rem;
+  min-height: 3.5rem;
+  width: 100%;
+}
+
+.heroFormCard :global(.iul-submit:hover) {
+  background: #99651f;
+  border-color: #99651f;
+}
+
+.heroFormCard :global(.iul-form-trust) {
+  color: #7a8393;
+  font-size: .68rem;
+  margin: -.35rem 0 0;
+  text-align: center;
+}
+
+.reviewCta {
+  align-items: center;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr auto;
+}
+
+.reviewCta h2 {
+  color: white;
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  margin-bottom: .8rem;
+  max-width: 15ch;
+}
+
+.reviewCta p {
+  max-width: 45rem;
+}
+
+.goldButton {
+  align-items: center;
+  background: var(--gold-light);
+  border-radius: .4rem;
+  color: var(--navy);
+  display: inline-flex;
+  font-weight: 800;
+  justify-content: center;
+  min-height: 3.4rem;
+  padding: .85rem 1.35rem;
+  text-decoration: none;
+}
+
+.goldButton:hover {
+  background: #e2bf91;
+}
+
+@media (max-width: 900px) {
+  .heroFormCard {
+    max-width: 42rem;
+  }
+
+  .reviewCta {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .heroFormCard :global(.iul-form-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  .heroFormCard {
+    padding: 1.25rem;
+  }
+
+  .trustStrip {
+    gap: .4rem;
+  }
 }
