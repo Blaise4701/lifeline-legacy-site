@@ -7,6 +7,7 @@ const routes = [
   "/checkup",
   "/retirement-income-checkup",
   "/retirement-income",
+  "/iul-retirement-strategy",
   "/family-continuity",
   "/family-continuity-map",
   "/business-continuity",
