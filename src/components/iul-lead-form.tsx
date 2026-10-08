@@ -98,7 +98,10 @@ export function IulLeadForm() {
     <form className="iul-lead-form" onSubmit={submit} id="hero-form">
       <div className="iul-form-heading">
         <p className="eyebrow">Complimentary strategy review</p>
-        <h2>See if an IUL deserves a place in your retirement plan.</h2>
+        <h2>
+          See if an IUL deserves a place<span className="iul-desktop-break"><br /></span>
+          in your retirement plan.
+        </h2>
         <p>Start with a few basics. No account numbers or financial statements required.</p>
       </div>
 
