@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { pageMetadata } from "@/lib/seo";
-import { ContinuityReviewForm } from "@/components/continuity-review-form";
+import { IulLeadForm } from "@/components/iul-lead-form";
 import styles from "./iul.module.css";
 
 export const metadata = pageMetadata({
@@ -66,19 +65,16 @@ export default function IulRetirementStrategyPage() {
                 For the right person, it can be one additional tool for tax diversification,
                 cash-value access, family protection, and legacy planning.
               </p>
-              <div className={styles.actions}>
-                <a className={styles.primaryButton} href="#review">Request a complimentary review</a>
-                <a className={styles.secondaryButton} href="#compare">Compare the strategies</a>
+              <div className={styles.trustStrip} aria-label="What the review covers">
+                <span>Tax diversification</span>
+                <span>Cash-value access</span>
+                <span>Family protection</span>
               </div>
               <p className={styles.microcopy}>Educational information only. Product suitability and features vary by person, carrier, and state.</p>
             </div>
 
-            <aside className={styles.heroCard} aria-label="IUL planning overview">
-              <p className={styles.cardLabel}>Four questions worth asking</p>
-              <div className={styles.metric}><span>01</span><strong>How will future income be taxed?</strong></div>
-              <div className={styles.metric}><span>02</span><strong>How much market exposure do you want?</strong></div>
-              <div className={styles.metric}><span>03</span><strong>How important is access and flexibility?</strong></div>
-              <div className={styles.metric}><span>04</span><strong>What should happen for your family?</strong></div>
+            <aside className={styles.heroFormCard}>
+              <IulLeadForm />
             </aside>
           </div>
         </div>
@@ -170,28 +166,17 @@ export default function IulRetirementStrategyPage() {
 
       <section className={styles.reviewSection} id="review">
         <div className="container">
-          <div className={styles.reviewIntro}>
-            <p className={styles.goldEyebrow}>Complimentary Continuity Review</p>
-            <h2>See whether an IUL belongs in your retirement strategy.</h2>
-            <p>
-              We will start with your goals, current retirement structure, tax-diversification needs,
-              protection priorities, and timeline. If an IUL does not fit, we will say so.
-            </p>
-            <ul>
-              <li>Private planning conversation</li>
-              <li>No account numbers or passwords required</li>
-              <li>No obligation to purchase a product</li>
-            </ul>
-            <p className={styles.smallNote}>
-              Prefer to keep learning first? <Link href="/retirement-income">Explore retirement income planning.</Link>
-            </p>
-          </div>
-
-          <Suspense fallback={<div className={styles.formShell}><p>Loading review request…</p></div>}>
-            <div className={styles.formShell}>
-              <ContinuityReviewForm />
+          <div className={styles.reviewCta}>
+            <div>
+              <p className={styles.goldEyebrow}>Ready for a closer look?</p>
+              <h2>See whether an IUL belongs in your retirement strategy.</h2>
+              <p>
+                Start with the short form above. We will look at your goals, current retirement structure,
+                tax-diversification needs, protection priorities, and timeline before discussing any product.
+              </p>
             </div>
-          </Suspense>
+            <a className={styles.goldButton} href="#hero-form">Request my complimentary review</a>
+          </div>
         </div>
       </section>
 
