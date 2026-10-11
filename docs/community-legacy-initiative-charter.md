@@ -22,9 +22,9 @@ Help families prepare the people who may need to act on their behalf during illn
 ## Required Estate Discovery Call (before document completion)
 Every participant schedules an Estate Discovery Call before completing any documents, including clients choosing Self Service, Assisted, or Full Service. The call explains the relevant documents, their purpose, limits, and the available Estate Guru processes before the documents are completed. This is a mandatory step of the estate-document service, **not** a Lifeline Continuity Review or insurance consultation. No insurance purchase, insurance marketing consent, or Lifeline Continuity Review is required.
 
-The person qualified and authorized to give document-specific legal explanations/advice, call ownership, scheduling link, and timing must be confirmed with Estate Guru before live booking is enabled. Lifeline may explain the process and help with scheduling but must not provide legal advice. The self-service pathway means DIY document completion **after** the call, not skipping the call.
+**Call owner: Lifeline Legacy Financial Group (LLFG).** LLFG conducts the mandatory Estate Discovery Call and provides general educational explanations about the purpose, function, common limitations, and process for Financial and Healthcare Powers of Attorney and optional trust planning. LLFG must not interpret a client's legal situation, select legal clauses, recommend legal instruments for particular facts, or prepare legal documents. Questions requiring individualized legal advice are referred to qualified Estate Guru legal professionals. Confirm LLFG's approved call script and escalation procedure with Estate Guru before launch. The LLFG calendar URL and operating details still need to be configured. The self-service pathway means DIY document completion **after** the call, not skipping the call.
 
-Expected participant sequence: select interest / support path -> schedule Estate Discovery Call -> receive document explanation -> Estate Guru routes or assists participant according to chosen service path -> complete and execute documents as required by applicable law.
+Expected participant sequence: select interest / support path -> schedule an LLFG-hosted Estate Discovery Call -> receive general document education and an explanation of the process -> LLFG makes the authorized Estate Guru handoff according to chosen service path -> complete and execute documents as required by applicable law.
 
 ## Parties and responsibilities
 - **LLFG:** Educational content, community organization relationships, events, and nonlegal administrative introductions. May independently offer an optional Continuity Review.
@@ -53,7 +53,7 @@ LLFG website and GHL may store only necessary identifying/contact data, source p
 Two churches and one nonprofit; establish partner agreements, run workshops, track voluntary requests, successful Estate Guru handoffs, non-sensitive fulfillment indicators where permitted, and partner satisfaction. No insurance-conversion quota imposed on a partner.
 
 ## Launch gates
-- Verify the Estate Discovery Call host, scheduling URL, required legal explanation, and booking-to-completion process.
+- Configure the LLFG Estate Discovery Call calendar, approved educational call script, Estate Guru legal-advice escalation procedure, and booking-to-completion process.
 - Verify Estate Guru onboarding mechanism, permitted branding, supported states, approved product/service pricing wording, and legal-professional responsibilities.
 - Legal/compliance review of public no-cost/free POA claims, Texas insurance inducement/advertising requirements, nonprofit and church relationships, referral compensation if any, and marketing consent.
 - Update privacy disclosures for Estate Guru referrals and appropriate data sharing.
