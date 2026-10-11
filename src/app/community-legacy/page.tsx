@@ -29,10 +29,10 @@ export default function CommunityLegacyPage() {
       <section className="section section-paper">
         <div className="container" style={{ maxWidth: 990 }}>
           <p className="eyebrow">Start with understanding</p>
-          <h2>First, schedule your Estate Discovery Call.</h2>
-          <p>Before completing documents, every participant schedules an Estate Discovery Call for a thorough explanation of the relevant documents, what they do, and how the process works.</p>
+          <h2>First, schedule your Estate Discovery Call with Lifeline Legacy.</h2>
+          <p>Before completing documents, every participant schedules an LLFG-hosted Estate Discovery Call to learn about the purpose and general limitations of relevant documents and how the Estate Guru process works. Questions requiring individualized legal advice are directed to appropriately qualified Estate Guru professionals.</p>
           <p>This step applies to Self Service, Assisted Service, and Full Service. It is part of the Estate Guru document process, not a Lifeline Continuity Review or an insurance consultation.</p>
-          <p>Online scheduling will be available once the Estate Guru call workflow is confirmed.</p>
+          <p>Online scheduling will be available once the dedicated LLFG Estate Discovery Call calendar and handoff workflow are configured.</p>
         </div>
       </section>
       <section className="section section-paper">
