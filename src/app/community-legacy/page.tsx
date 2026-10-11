@@ -8,9 +8,9 @@ export const metadata = pageMetadata({
 });
 
 const pathways = [
-  { title: "Self Service", description: "Estate Guru sends you a secure link so you can work through the document process independently." },
-  { title: "Assisted Service", description: "Lifeline Legacy helps you get connected and complete administrative onboarding with Estate Guru." },
-  { title: "Full Service", description: "An Estate Guru advisor offers guidance through the process." },
+  { title: "Self Service", description: "After your Estate Discovery Call, Estate Guru sends you a secure link so you can complete the document process independently." },
+  { title: "Assisted Service", description: "Lifeline Legacy helps you get connected, schedule your Estate Discovery Call, and complete administrative onboarding with Estate Guru." },
+  { title: "Full Service", description: "Following your Estate Discovery Call, an Estate Guru advisor offers guidance through the process." },
 ];
 
 export default function CommunityLegacyPage() {
@@ -24,6 +24,15 @@ export default function CommunityLegacyPage() {
             The Lifeline Community Legacy Initiative helps families prepare for life&apos;s unexpected transitions through education, community partnerships, and access to essential estate-planning resources.
           </p>
           <p>Continuity. Certainty. Legacy.</p>
+        </div>
+      </section>
+      <section className="section section-paper">
+        <div className="container" style={{ maxWidth: 990 }}>
+          <p className="eyebrow">Start with understanding</p>
+          <h2>First, schedule your Estate Discovery Call.</h2>
+          <p>Before completing documents, every participant schedules an Estate Discovery Call for a thorough explanation of the relevant documents, what they do, and how the process works.</p>
+          <p>This step applies to Self Service, Assisted Service, and Full Service. It is part of the Estate Guru document process, not a Lifeline Continuity Review or an insurance consultation.</p>
+          <p>Online scheduling will be available once the Estate Guru call workflow is confirmed.</p>
         </div>
       </section>
       <section className="section section-paper">
