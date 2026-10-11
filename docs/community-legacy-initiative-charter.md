@@ -14,10 +14,17 @@ Help families prepare the people who may need to act on their behalf during illn
 - Estate Guru Healthcare Power of Attorney: no cost to the client.
 - Optional trust: paid; a will is included in the trust package.
 - Three service delivery pathways with no added service charge:
-  1. **Self Service:** Estate Guru sends the client a link; the client completes the process independently.
-  2. **Assisted:** LLFG helps the client establish the Estate Guru relationship and navigate administrative onboarding, without legal advice.
-  3. **Full Service:** An Estate Guru advisor guides the client through the process.
+  1. **Self Service:** After the required Estate Discovery Call, Estate Guru sends the client a link; the client completes the process independently.
+  2. **Assisted:** LLFG helps the client establish the Estate Guru relationship, schedule the required Estate Discovery Call, and navigate administrative onboarding, without legal advice.
+  3. **Full Service:** After the required Estate Discovery Call, an Estate Guru advisor guides the client through the process.
 - None of the pathways requires a Continuity Review, insurance purchase, or consent to insurance marketing.
+
+## Required Estate Discovery Call (before document completion)
+Every participant schedules an Estate Discovery Call before completing any documents, including clients choosing Self Service, Assisted, or Full Service. The call explains the relevant documents, their purpose, limits, and the available Estate Guru processes before the documents are completed. This is a mandatory step of the estate-document service, **not** a Lifeline Continuity Review or insurance consultation. No insurance purchase, insurance marketing consent, or Lifeline Continuity Review is required.
+
+The person qualified and authorized to give document-specific legal explanations/advice, call ownership, scheduling link, and timing must be confirmed with Estate Guru before live booking is enabled. Lifeline may explain the process and help with scheduling but must not provide legal advice. The self-service pathway means DIY document completion **after** the call, not skipping the call.
+
+Expected participant sequence: select interest / support path -> schedule Estate Discovery Call -> receive document explanation -> Estate Guru routes or assists participant according to chosen service path -> complete and execute documents as required by applicable law.
 
 ## Parties and responsibilities
 - **LLFG:** Educational content, community organization relationships, events, and nonlegal administrative introductions. May independently offer an optional Continuity Review.
@@ -46,6 +53,7 @@ LLFG website and GHL may store only necessary identifying/contact data, source p
 Two churches and one nonprofit; establish partner agreements, run workshops, track voluntary requests, successful Estate Guru handoffs, non-sensitive fulfillment indicators where permitted, and partner satisfaction. No insurance-conversion quota imposed on a partner.
 
 ## Launch gates
+- Verify the Estate Discovery Call host, scheduling URL, required legal explanation, and booking-to-completion process.
 - Verify Estate Guru onboarding mechanism, permitted branding, supported states, approved product/service pricing wording, and legal-professional responsibilities.
 - Legal/compliance review of public no-cost/free POA claims, Texas insurance inducement/advertising requirements, nonprofit and church relationships, referral compensation if any, and marketing consent.
 - Update privacy disclosures for Estate Guru referrals and appropriate data sharing.
