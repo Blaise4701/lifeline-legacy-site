@@ -1,16 +1,34 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import Link from "next/link";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import styles from "./wylie.module.css";
 
 type Status = "idle" | "submitting" | "submitted";
 
-export function WylieSeminarRegistration() {
+type WylieSeminarRegistrationProps = {
+  cutoff: string;
+  initiallyClosed: boolean;
+};
+
+export function WylieSeminarRegistration({ cutoff, initiallyClosed }: WylieSeminarRegistrationProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
   const [guestCount, setGuestCount] = useState(0);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+  const [registrationClosed, setRegistrationClosed] = useState(initiallyClosed);
   const submitting = useRef(false);
+
+  useEffect(() => {
+    if (registrationClosed) return;
+
+    const remaining = Date.parse(cutoff) - Date.now();
+    const timeout = window.setTimeout(
+      () => setRegistrationClosed(true),
+      Math.max(0, Math.min(remaining, 2_147_483_647)),
+    );
+    return () => window.clearTimeout(timeout);
+  }, [cutoff, registrationClosed]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -65,6 +83,11 @@ export function WylieSeminarRegistration() {
         alreadyRegistered?: boolean;
       };
 
+      if (response.status === 410) {
+        setRegistrationClosed(true);
+        return;
+      }
+
       if (!response.ok || !result.ok) {
         throw new Error(result.message || "We could not reserve your seat. Please try again.");
       }
@@ -78,6 +101,23 @@ export function WylieSeminarRegistration() {
     } finally {
       submitting.current = false;
     }
+  }
+
+  if (registrationClosed) {
+    return (
+      <div className={styles.successCard} role="status">
+        <p className={styles.formEyebrow}>Event registration</p>
+        <h3>Registration for this event is now closed.</h3>
+        <p>
+          Thank you for your interest in Lifeline Legacy Financial Group&apos;s retirement education
+          seminars.
+        </p>
+        <p className={styles.successSmall}>
+          Visit our <Link href="/">website</Link> to learn about upcoming educational events or
+          request a complimentary <Link href="/continuity-review">Continuity Review</Link>.
+        </p>
+      </div>
+    );
   }
 
   if (status === "submitted") {
