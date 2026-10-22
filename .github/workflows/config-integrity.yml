@@ -1,0 +1,35 @@
+name: Configuration integrity
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  config-integrity:
+    name: Configuration integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Check configuration without executing repository code
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          expected = {
+              "eslint.config.mjs": "870f1adccecf3051cbcd9fd307cef51d7633cf510979c181a81f4b1797273493",
+              "next.config.ts": "614bce25b089c3f19b1e17a6346c74b858034040154c6621e7d35303004767cc",
+          }
+          for name, digest in expected.items():
+              actual = hashlib.sha256(Path(name).read_bytes()).hexdigest()
+              if actual != digest:
+                  raise SystemExit(name + " failed integrity review. Inspect as text; do not run it.")
+          scripts = json.loads(Path("package.json").read_text())["scripts"]
+          for name in ("predev", "prebuild", "prelint"):
+              if scripts.get(name) != "node scripts/check-config-integrity.mjs":
+                  raise SystemExit(name + " must retain the integrity guard.")
+          print("Configuration integrity passed without loading project code.")
+          PY
