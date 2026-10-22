@@ -1,78 +1,88 @@
 import Link from "next/link";
 import { pageMetadata } from "@/lib/seo";
+import styles from "./community-legacy.module.css";
 
 export const metadata = pageMetadata({
   title: "Community Legacy Initiative | Lifeline Legacy",
-  description: "An integral part of the Continuity Bridge framework: family estate-readiness education, Power of Attorney access through Estate Guru, and community partnerships.",
+  description: "Understand your estate-planning options, explore Powers of Attorney through Estate Guru, and choose the support that works for your family.",
   path: "/community-legacy",
 });
 
 const pathways = [
-  { title: "Self Service", description: "After your Estate Discovery Call, Estate Guru sends you a secure link so you can complete the document process independently." },
-  { title: "Assisted Service", description: "Lifeline Legacy helps you get connected, schedule your Estate Discovery Call, and complete administrative onboarding with Estate Guru." },
-  { title: "Full Service", description: "Following your Estate Discovery Call, an Estate Guru advisor offers guidance through the process." },
+  { title: "Self Service", label: "Complete it independently", description: "After your Estate Discovery Call, receive a secure link from Estate Guru and complete the document process at your own pace." },
+  { title: "Assisted Service", label: "Get help getting started", description: "Lifeline Legacy helps you connect with Estate Guru, arrange your call, and navigate administrative onboarding." },
+  { title: "Full Service", label: "Receive guided support", description: "After your Estate Discovery Call, an Estate Guru advisor guides you through the document process." },
+];
+const steps = [
+  { title: "Start with a conversation.", description: "An Estate Discovery Call with Lifeline Legacy explains the documents, their general limitations, and the process." },
+  { title: "Choose your support.", description: "Select Self Service, Assisted Service, or Full Service. The Discovery Call comes first for every pathway." },
+  { title: "Complete your documents.", description: "Continue with Estate Guru for document preparation and instructions on signing and execution." },
 ];
 
 export default function CommunityLegacyPage() {
   return (
-    <main id="main-content">
-      <section className="section section-dark">
-        <div className="container" style={{ maxWidth: 990, paddingTop: 64, paddingBottom: 64 }}>
-          <p className="eyebrow eyebrow-light">An integral part of the Continuity Bridge™</p>
-          <h1>Protect Your Wishes. Empower Your Loved Ones.</h1>
-          <p style={{ maxWidth: 750, fontSize: "1.15rem", lineHeight: 1.7 }}>
-            The Lifeline Community Legacy Initiative helps families prepare for life&apos;s unexpected transitions through education, community partnerships, and access to essential estate-planning resources.
-          </p>
-          <p>Continuity. Certainty. Legacy.</p>
-        </div>
-      </section>
-      <section className="section section-paper">
-        <div className="container" style={{ maxWidth: 990 }}>
-          <p className="eyebrow">Start with understanding</p>
-          <h2>First, schedule your Estate Discovery Call with Lifeline Legacy.</h2>
-          <p>Before completing documents, every participant schedules an LLFG-hosted Estate Discovery Call to learn about the purpose and general limitations of relevant documents and how the Estate Guru process works. Questions requiring individualized legal advice are directed to appropriately qualified Estate Guru professionals.</p>
-          <p>This step applies to Self Service, Assisted Service, and Full Service. It is part of the Estate Guru document process, not a Lifeline Continuity Review or an insurance consultation.</p>
-          <p>Online scheduling will be available once the dedicated LLFG Estate Discovery Call calendar and handoff workflow are configured.</p>
-        </div>
-      </section>
-      <section className="section section-paper">
-        <div className="container" style={{ maxWidth: 990 }}>
-          <p className="eyebrow">A real family benefit</p>
-          <h2>Financial and Healthcare Powers of Attorney at no cost to the client.</h2>
-          <p>Through Lifeline Legacy&apos;s existing Estate Guru relationship, eligible participants can access Financial and Healthcare Powers of Attorney without paying for those documents.</p>
-          <p>Optional trust planning is a paid service. A will is included with the purchased trust package.</p>
-          <p><strong>No insurance purchase or Lifeline Continuity Review is required to access the POA benefit.</strong></p>
-        </div>
-      </section>
-      <section className="section">
-        <div className="container" style={{ maxWidth: 990 }}>
-          <p className="eyebrow">Choose the right level of support</p>
-          <h2>Three pathways. No additional service fee.</h2>
-          <div className="feature-path-grid">
-            {pathways.map((pathway) => (
-              <article key={pathway.title} style={{ padding: 24, border: "1px solid #d9d5ce", borderRadius: 12 }}>
-                <h3>{pathway.title}</h3>
-                <p>{pathway.description}</p>
-              </article>
-            ))}
+    <main id="main-content" className={styles.page}>
+      <section className={styles.hero} aria-labelledby="legacy-title">
+        <div className={styles.container + " " + styles.heroGrid}>
+          <div>
+            <p className={styles.kicker}>The Community Legacy Initiative</p>
+            <h1 id="legacy-title">Help your loved ones know your wishes.</h1>
+            <p className={styles.lede}>Prepare for the moments when someone you trust may need to act on your behalf. Start with clear education and estate-planning resources through Lifeline Legacy and Estate Guru.</p>
+            <div className={styles.actions}>
+              <a className={styles.primary} href="#your-options">Explore your options</a>
+              <a className={styles.lightLink} href="#how-it-works">See how it works</a>
+            </div>
+            <p className={styles.heroNote}>No insurance purchase or Lifeline Continuity Review is required.</p>
           </div>
-          <p style={{ marginTop: 24 }}>Lifeline provides education and administrative introductions, not legal advice. Estate Guru manages legal-document services and advisor support.</p>
+          <aside className={styles.heroCard} aria-label="The purpose of planning ahead">
+            <span className={styles.cardLabel}>For the people who matter most</span>
+            <p className={styles.cardStatement}>Your wishes.<br />A trusted person.<br />A clearer path forward.</p>
+            <p>Part of the Legacy pillar of the Continuity Bridge™.</p>
+            <div className={styles.pillars}><span>Continuity.</span><span>Certainty.</span><span>Legacy.</span></div>
+          </aside>
         </div>
       </section>
-      <section className="section section-paper">
-        <div className="container" style={{ maxWidth: 990 }}>
-          <p className="eyebrow">For churches and nonprofits</p>
-          <h2>Help the families your organization already serves.</h2>
-          <p>We are developing Family Protection and Legacy Workshops with community partners. The objective is to provide useful education and accessible planning resources, without requiring members to meet with an insurance professional.</p>
-          <p>Interested in exploring a community partnership? Contact <a href="mailto:info@lifelinelegacyfinancial.com?subject=Community%20Legacy%20Partnership">info@lifelinelegacyfinancial.com</a>.</p>
+
+      <section id="your-options" className={styles.section} aria-labelledby="benefits-title">
+        <div className={styles.container}>
+          <div className={styles.heading}><p className={styles.kicker}>Understand your options</p><h2 id="benefits-title">Practical preparation for your family.</h2><p>Eligible participants can access Financial and Healthcare Powers of Attorney through Estate Guru at no cost for those documents.</p></div>
+          <div className={styles.cards}>
+            <article className={styles.card}><span className={styles.tag}>Financial decisions</span><h3>Financial Power of Attorney</h3><p>Generally allows someone you authorize to handle specified financial matters on your behalf, subject to the document and applicable law.</p><strong className={styles.benefit}>No cost for eligible participants.</strong></article>
+            <article className={styles.card}><span className={styles.tag}>Healthcare decisions</span><h3>Healthcare Power of Attorney</h3><p>Generally names someone to make healthcare decisions when you cannot, subject to the document and applicable law.</p><strong className={styles.benefit}>No cost for eligible participants.</strong></article>
+            <article className={styles.card}><span className={styles.tag}>Optional paid service</span><h3>Trust planning</h3><p>Explore trust planning through Estate Guru if you wish to consider additional estate-planning options.</p><strong className={styles.benefit}>A will is included with a purchased trust package.</strong></article>
+          </div>
+          <p className={styles.note}>Availability, eligibility, and document execution requirements depend on applicable law and provider requirements.</p>
         </div>
       </section>
-      <section className="section">
-        <div className="container" style={{ maxWidth: 990 }}>
-          <h2>Part of one coordinated framework</h2>
-          <p>The Community Legacy Initiative puts the Legacy pillar of the Continuity Bridge™ into action while supporting the broader goal of family preparedness.</p>
-          <p><Link href="/continuity-bridge">Learn about the Continuity Bridge™ framework</Link> · <Link href="/family-continuity-map">Explore the Family Continuity Map™</Link></p>
-          <small>Educational information only, not legal, tax, securities, or investment advice. Document availability and the process for preparing and executing documents depend on applicable law and provider requirements.</small>
+
+      <section id="how-it-works" className={styles.softSection} aria-labelledby="steps-title">
+        <div className={styles.container}>
+          <div className={styles.heading}><p className={styles.kicker}>A clear first step</p><h2 id="steps-title">Understand first. Then move forward.</h2></div>
+          <ol className={styles.steps}>{steps.map((step, index) => <li key={step.title}><span className={styles.number} aria-hidden="true">0{index + 1}</span><h3>{step.title}</h3><p>{step.description}</p></li>)}</ol>
+          <div className={styles.callout}><strong>About your Estate Discovery Call</strong><p>This educational call is required before document completion. It is separate from a Lifeline Continuity Review or insurance consultation. Individual legal questions are referred to appropriately qualified Estate Guru professionals.</p><p className={styles.note}>Online scheduling is not yet available.</p></div>
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="support-title">
+        <div className={styles.container}>
+          <div className={styles.heading}><p className={styles.kicker}>Support that fits your needs</p><h2 id="support-title">Choose how you want to proceed.</h2><p>Three service pathways are available, with no additional service fee. Optional trust planning remains a paid service.</p></div>
+          <div className={styles.cards}>{pathways.map(path => <article className={styles.card} key={path.title}><span className={styles.tag}>{path.label}</span><h3>{path.title}</h3><p>{path.description}</p></article>)}</div>
+          <p className={styles.note}>Lifeline Legacy provides general education and administrative support, not legal advice. Estate Guru manages legal-document services and advisor support.</p>
+        </div>
+      </section>
+
+      <section className={styles.partnerSection} aria-labelledby="partner-title">
+        <div className={styles.container + " " + styles.partnerGrid}>
+          <div><p className={styles.kicker}>For churches and nonprofits</p><h2 id="partner-title">Bring the conversation to your community.</h2><p>We are developing Family Protection and Legacy Workshops to help the families your organization serves understand their options and prepare for important decisions.</p><p>Participation does not require an insurance purchase or consent to insurance marketing.</p></div>
+          <aside className={styles.partnerCard}><h3>Explore a community workshop.</h3><p>Connect with Lifeline Legacy to discuss a workshop for your church or nonprofit.</p><a className={styles.primary} href="mailto:info@lifelinelegacyfinancial.com?subject=Community%20Legacy%20Partnership">Email us about a workshop</a><p className={styles.note}>Please do not send medical details, legal documents, or other sensitive information by email.</p></aside>
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="framework-title">
+        <div className={styles.container + " " + styles.closing}>
+          <p className={styles.kicker}>Continuity. Certainty. Legacy.</p><h2 id="framework-title">One part of your family's bigger picture.</h2><p>The Community Legacy Initiative supports the Legacy pillar of the Continuity Bridge™ and helps families prepare for life's changes.</p>
+          <div className={styles.actions}><Link className={styles.outline} href="/continuity-bridge">Explore the Continuity Bridge™</Link><Link className={styles.textLink} href="/family-continuity-map">View the Family Continuity Map™</Link></div>
+          <p className={styles.disclaimer}>Educational information only. This is not legal, tax, securities, or investment advice. Document availability, preparation, and execution depend on applicable law and provider requirements. <Link href="/privacy">Read our privacy policy.</Link></p>
         </div>
       </section>
     </main>
