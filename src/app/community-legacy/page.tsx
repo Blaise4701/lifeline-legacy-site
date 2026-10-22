@@ -80,7 +80,7 @@ export default function CommunityLegacyPage() {
 
       <section className={styles.section} aria-labelledby="framework-title">
         <div className={styles.container + " " + styles.closing}>
-          <p className={styles.kicker}>Continuity. Certainty. Legacy.</p><h2 id="framework-title">One part of your family's bigger picture.</h2><p>The Community Legacy Initiative supports the Legacy pillar of the Continuity Bridge™ and helps families prepare for life's changes.</p>
+          <p className={styles.kicker}>Continuity. Certainty. Legacy.</p><h2 id="framework-title">One part of your family&apos;s bigger picture.</h2><p>The Community Legacy Initiative supports the Legacy pillar of the Continuity Bridge™ and helps families prepare for life&apos;s changes.</p>
           <div className={styles.actions}><Link className={styles.outline} href="/continuity-bridge">Explore the Continuity Bridge™</Link><Link className={styles.textLink} href="/family-continuity-map">View the Family Continuity Map™</Link></div>
           <p className={styles.disclaimer}>Educational information only. This is not legal, tax, securities, or investment advice. Document availability, preparation, and execution depend on applicable law and provider requirements. <Link href="/privacy">Read our privacy policy.</Link></p>
         </div>
