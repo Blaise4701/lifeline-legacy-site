@@ -94,7 +94,6 @@ export default function AboutPage() {
             </div>
             <address>
               <a href={site.phoneHref}>Office · {site.phone}</a>
-              <a href={site.cellHref}>Direct · {site.cell}</a>
               <a href={site.emailHref}>{site.email}</a>
             </address>
           </div>

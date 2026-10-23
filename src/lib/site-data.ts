@@ -3,8 +3,8 @@ export const site = {
   shortName: "LLFG",
   phone: "972-764-8516",
   phoneHref: "tel:+19727648516",
-  cell: "469-354-9924",
-  cellHref: "tel:+14693549924",
+  cell: "972-764-8516",
+  cellHref: "tel:+19727648516",
   email: "info@lifelinelegacyfinancial.com",
   emailHref: "mailto:info@lifelinelegacyfinancial.com",
   location: "Dallas-Fort Worth, Texas",
@@ -309,6 +309,7 @@ export const workshops = [
   },
   {
     id: "wylie-october-12",
+    registrationClosed: true,
     series: "wylie-fall",
     eventType: "Seminar",
     dateTime: "2026-10-12T18:00:00-05:00",

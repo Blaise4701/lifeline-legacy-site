@@ -462,18 +462,33 @@ async function ghlRequest(
   body: unknown,
   method: "POST" | "DELETE" | "GET" = "POST",
 ) {
-  return fetch(`${GHL_API_ORIGIN}${path}`, {
-    method,
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-      Version: GHL_API_VERSION,
-    },
-    ...(method === "GET" ? {} : { body: JSON.stringify(body) }),
-    cache: "no-store",
-    signal: AbortSignal.timeout(10_000),
-  });
+  const maxAttempts = method === "GET" || path.endsWith("/tags") || path === "/contacts/upsert" ? 3 : 1;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await fetch(`${GHL_API_ORIGIN}${path}`, {
+        method,
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Version: GHL_API_VERSION,
+        },
+        ...(method === "GET" ? {} : { body: JSON.stringify(body) }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (response.ok || (response.status !== 429 && response.status < 500) || attempt === maxAttempts) {
+        if (!response.ok) console.error("GHL request failed.", { operation: path.replace(/contacts\/[^/]+/, "contacts/[id]"), method, status: response.status, attempt });
+        return response;
+      }
+      await response.body?.cancel();
+    } catch (error) {
+      console.error("GHL request transport failed.", { method, attempt, errorType: error instanceof Error ? error.name : "unknown" });
+      if (attempt === maxAttempts) throw error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, attempt * 250));
+  }
+  throw new Error("GHL retry limit reached");
 }
 
 function slug(value: string) {
@@ -547,7 +562,7 @@ async function resetAndAddTags(
 async function addEventTags(contactId: string, token: string, tags: string[]) {
   const response = await ghlRequest(`/contacts/${contactId}/tags`, token, { tags });
   if (!response.ok) {
-    console.error("GHL event tagging failed.", { status: response.status });
+    console.error("GHL contact tagging failed.", { status: response.status });
     return null;
   }
   const result = (await response.json()) as GhlTagsResponse;
@@ -707,6 +722,12 @@ export async function POST(request: Request) {
     }
 
     if (submission.type === "family-continuity-map-optin") {
+      const sourceTags = ["llf - website", "lead-magnet:continuity-map", "llfg-email-service-consent", `llfg-source-${normalizedSource(submission.attribution.source || "website")}`];
+      const savedTags = await addEventTags(contactId, token, sourceTags);
+      if (!savedTags || !sourceTags.every((tag) => savedTags.includes(tag))) {
+        console.error("GHL Map source tagging could not be confirmed.");
+        return Response.json({ ok: false, message: "Your Map request could not be completed. Please try again." }, { status: 502 });
+      }
       const contactResponse = await ghlRequest(`/contacts/${contactId}`, token, undefined, "GET");
       if (!contactResponse.ok) {
         console.error("GHL Map email permission lookup failed.", { status: contactResponse.status });
