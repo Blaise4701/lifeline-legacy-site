@@ -24,7 +24,7 @@ export default function ContinuityBridgePage() {
               <span>One plan that can keep moving.</span>
             </>
           }
-          description="The Continuity Bridge™ is a way to organize the questions your financial pieces need to answer together—before a product, account, or document is considered on its own."
+          description="The Continuity Bridge™ is a way to organize the questions your financial pieces need to answer together before a product, account, or document is considered on its own."
           primary={{ href: "#explore", label: "Explore the three sections" }}
           secondary={{ href: "/checkup", label: "Take the Continuity Checkup" }}
           aside={
@@ -44,7 +44,7 @@ export default function ContinuityBridgePage() {
             <p className="eyebrow">Why a bridge?</p>
             <h2>A plan should carry people across change.</h2>
             <p>
-              Accounts, policies, benefits, documents, and business agreements are important pieces. The bridge asks whether they carry the same priorities in the same direction—especially when income changes, health changes, an owner steps away, or a family has to act.
+              Accounts, policies, benefits, documents, and business agreements are important pieces. The bridge asks whether they carry the same priorities in the same direction, especially when income changes, health changes, an owner steps away, or a family has to act.
             </p>
           </div>
         </section>

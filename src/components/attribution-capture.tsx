@@ -32,6 +32,7 @@ export function AttributionCapture() {
       const params = new URLSearchParams(window.location.search);
       const payload = {
         source: inferSource(params),
+        medium: clean(params.get("utm_medium"), 80),
         campaign: clean(params.get("utm_campaign"), 100),
         eventId: clean(params.get("event"), 80),
         landingPath: window.location.pathname,

@@ -11,7 +11,7 @@ Production-oriented Next.js website for Lifeline Legacy Financial Group. The exp
 - Learning center with the complete ten-session fall 2026 seminar and workshop schedule
 - Server-side GoHighLevel capture for licensed-state Continuity Review requests and workshop registrations
 - Complete first-person founder story and the lived experience behind the Continuity Bridge™ Framework
-- Draft privacy, terms, and disclosure pages
+- September 29, 2026 Privacy Policy and draft terms and disclosure pages
 - Metadata, favicon, sitemap, robots file, custom 404, print styles, focus states, reduced-motion support, and mobile navigation
 
 ## Routes
@@ -26,7 +26,7 @@ Production-oriented Next.js website for Lifeline Legacy Financial Group. The exp
 | `/business-continuity` | Business owner pathway |
 | `/learn` | Guides and the fall 2026 seminar and workshop schedule |
 | `/about` | Blaise Tamo and LLFG story |
-| `/privacy` | Pre-launch privacy draft |
+| `/privacy` | September 29, 2026 Privacy Policy |
 | `/terms` | Pre-launch terms draft |
 | `/disclosures` | Pre-launch disclosure draft |
 
@@ -49,14 +49,22 @@ Copy `.env.example` to `.env.local` for local CRM testing. The private integrati
 
 | Environment variable | Purpose |
 | --- | --- |
-| `GHL_PRIVATE_INTEGRATION_TOKEN` | Dedicated LLFG website token with only `contacts.write` permission |
+| `GHL_PRIVATE_INTEGRATION_TOKEN` | Dedicated LLFG website token with `contacts.read` for Map email-permission checks and `contacts.write` for contacts, notes and tags |
 | `GHL_LOCATION_ID` | LLFG sub-account identifier |
 | `GHL_CONTINUITY_CALENDAR_URL` | Optional public scheduling URL returned after an eligible review request |
+| `GHL_CMAP_DELIVERY_READY` | `false` until the Map PDF, contact fields, tag trigger, GHL workflows, email checks, and live delivery test are complete; then set `true` and redeploy |
+| `GHL_FAMILY_CONTINUITY_REVIEW_URL` | Tested HTTPS booking URL for the dedicated Your Family Continuity Review calendar; redeploy when set |
+
+## Family Continuity Map
+
+The `/family-continuity` page now includes a Map request form, and `/family-continuity-map` is the standalone landing page. The Map is delivered only through GHL email. Neither the blank PDF link nor completed household answers belong on the website. The form captures contact details, request attribution, and separate email/SMS permission; GHL emails later collect only the self-reported score band.
+
+The website upserts a GHL contact, checks email DND status with `contacts.read`, and adds the `cmap:delivery-requested` trigger tag only after a successful check. If Map delivery is not configured, it keeps the form unavailable and returns HTTP 503. For all GHL assets, workflow copy, manual checks, and launch tests, follow [the Map GHL setup guide](docs/family-continuity-map-ghl-setup.md).
 
 ## Pre-launch items
 
 1. Reconfirm the licensing disclosure whenever the approved state list changes.
-2. Obtain final compliance approval for privacy, terms, disclosures, titles, and all educational copy.
+2. Obtain final compliance approval for terms, disclosures, titles, and all educational copy; keep the published Privacy Policy current as site practices change.
 3. Approve and connect the dedicated Continuity Review calendar URL.
 4. Review and publish the new GHL tag-triggered notification workflows after a test submission passes.
 5. Finish or remove resources currently labeled “in development.”
@@ -75,7 +83,7 @@ The server route at `/api/lead` sends only the information the visitor explicitl
 - Three descriptive summary labels: Continuity, Certainty, Legacy
 - Selected learning interest
 
-Review requests from outside the licensed-state list are not transmitted. Workshop registrations send the same basic contact fields, set the selected pathway to Retirement, and store the chosen event as the learning interest.
+Review requests from outside the licensed-state list are not transmitted. Workshop registrations send the contact fields, set the selected pathway to Retirement, and store each event/guest/consent snapshot as its own GHL contact note. Event-specific tags, rather than the mutable learning-interest contact field, drive the planned GHL workflows.
 
 The dedicated GHL fields are:
 
@@ -85,7 +93,7 @@ The dedicated GHL fields are:
 - `llfg_legacy_summary`
 - `llfg_learning_interest`
 
-Submissions add the existing `llf - website` tag plus either `llfg-continuity-review-request` or `llfg-event-registration`. Tagging uses the additive contact-tag endpoint so existing contact tags are not overwritten. The submission tag is reset immediately before it is added, allowing a re-entry-enabled workflow to run again if the same contact submits later.
+Submissions add the existing `llf - website` tag plus either `llfg-continuity-review-request` or `llfg-event-registration`. Tagging uses the additive contact-tag endpoint so existing contact tags are not overwritten. Review submission tags are reset for re-entry. Event registrations instead read back the tag set and add the stable `llfg-event-{id}` trigger only once per contact and event, after recording the event note and event-specific consent/status tags. The general event tag does not send messages until GHL workflows are tested and published. See [the seminar registration workflow guide](docs/seminar-registration-workflow.md) for the nine event mappings, templates, reminder waits, attendance, cancellation, and remaining manual steps.
 
 Do not send balances, account numbers, free-form financial details, or raw Checkup answers to advertising platforms. Confirm state availability before offering a scheduling slot.
 

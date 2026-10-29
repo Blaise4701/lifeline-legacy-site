@@ -19,7 +19,7 @@ const graph = {
       areaServed: [
         {
           "@type": "AdministrativeArea",
-          name: "Dallas–Fort Worth, Texas",
+          name: "Dallas-Fort Worth, Texas",
         },
         ...licensedStates.map((state) => ({
           "@type": "State",

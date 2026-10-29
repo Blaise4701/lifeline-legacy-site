@@ -7,7 +7,7 @@ import { pathways, site, workshops } from "@/lib/site-data";
 
 export const metadata = pageMetadata({
   title: "Retirement Income & Continuity Planning in DFW",
-  description: "Education-first retirement income, family protection, business continuity, and legacy planning for Dallas–Fort Worth families and business owners.",
+  description: "Education-first retirement income, family protection, business continuity, and legacy planning for Dallas-Fort Worth families and business owners.",
   path: "/",
 });
 
@@ -51,47 +51,48 @@ export default function Home() {
   return (
     <>
       <main id="main-content">
-        <section className="home-hero">
-          <div className="container home-hero-grid">
-            <div className="home-hero-copy">
-              <p className="eyebrow home-hero-eyebrow">Education-first planning · Dallas–Fort Worth</p>
+        <section className="home-hero home-hero-video">
+          <video
+            className="home-hero-video-media"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/brand/lifeline-home-hero-poster.jpg"
+            aria-hidden="true"
+          >
+            <source src="/brand/lifeline-home-hero.mp4" type="video/mp4" />
+          </video>
+          <div className="home-hero-video-overlay" aria-hidden="true" />
+          <div className="container home-hero-video-grid">
+            <div className="home-hero-copy home-hero-copy-video">
+              <p className="eyebrow home-hero-eyebrow">Education-first planning · Dallas-Fort Worth</p>
               <h1>
                 <span>You’ve built the pieces.</span>
                 <span>Do they work as <em>one plan?</em></span>
               </h1>
               <p className="hero-lede">
-                Most people already have pieces—retirement accounts, insurance, savings, benefits, documents, or a business. The real question is whether those pieces are coordinated to keep life moving when circumstances change.
+                Most people already have pieces: retirement accounts, insurance, savings, benefits, documents, or a business. The real question is whether those pieces are coordinated to keep life moving when circumstances change.
               </p>
               <div className="button-row">
                 <Link className="button" href="#bridge">Explore the Continuity Bridge</Link>
                 <Link className="button button-outline" href="/checkup">Take the Continuity Checkup</Link>
+              </div>
+              <div className="hero-video-question">
+                <p>The question behind every plan</p>
+                <strong>If life changes tomorrow, will the people who depend on you be okay?</strong>
+                <div className="hero-video-pillars" aria-label="Continuity, Certainty, Legacy">
+                  <span>Continuity</span>
+                  <span>Certainty</span>
+                  <span>Legacy</span>
+                </div>
               </div>
               <p className="hero-note">
                 <span>Start with the questions</span>
                 <span>No account numbers</span>
                 <span>No upfront contact form</span>
               </p>
-            </div>
-            <div className="hero-bridge-visual" aria-label="The Continuity Bridge has three connected sections: Continuity, Certainty, and Legacy">
-              <div className="bridge-arch" aria-hidden="true">
-                <span className="arch-line arch-one" />
-                <span className="arch-line arch-two" />
-                <span className="arch-line arch-three" />
-                <span className="arch-line arch-four" />
-                <span className="arch-line arch-five" />
-                <span className="arch-line arch-six" />
-                <span className="arch-line arch-seven" />
-                <span className="bridge-deck" />
-              </div>
-              <p>The question behind every plan</p>
-              <blockquote>
-                <span>If life changes tomorrow,</span>
-                <strong className="hero-question">
-                  <span>will the people who depend on</span>
-                  <span>you be okay?</span>
-                </strong>
-              </blockquote>
-              <div className="hero-pillars"><span>Continuity</span><span>Certainty</span><span>Legacy</span></div>
             </div>
           </div>
         </section>
@@ -216,7 +217,7 @@ export default function Home() {
             <div>
               <p className="eyebrow">Workshops, guides, and conversations</p>
               <h2>Learn it before you decide anything.</h2>
-              <p>Ten fall education sessions are scheduled at public libraries in Dallas and Wylie. Online registration will open shortly.</p>
+              <p>Fall retirement education sessions are scheduled across Dallas and Wylie, including seminars and hands-on written-plan workshops.</p>
               <Link className="button" href="/learn#workshops">View the full event schedule</Link>
             </div>
             <div className="resource-stack">
@@ -235,15 +236,15 @@ export default function Home() {
           <div className="container founder-grid">
             <div className="founder-photo-wrap">
               <Image
-                src="/brand/blaise-tamo.png"
+                src="/brand/blaise-tamo-home.jpg"
                 alt="Blaise Tamo, Founder and CEO of Lifeline Legacy Financial Group"
-                width={836}
-                height={941}
+                width={960}
+                height={1080}
                 loading="eager"
                 className="founder-photo"
                 sizes="(max-width: 800px) 100vw, 45vw"
               />
-              <div className="founder-photo-caption">Dallas–Fort Worth</div>
+              <div className="founder-photo-caption">Dallas-Fort Worth</div>
             </div>
             <div>
               <p className="eyebrow">Meet Blaise Tamo</p>

@@ -2,6 +2,7 @@ import { pageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/page-hero";
 import { PillarQuestionSection } from "@/components/pillar-question-section";
 import { ReviewInvite } from "@/components/review-invite";
+import { FamilyContinuityMapForm } from "@/components/family-continuity-map-form";
 
 export const metadata = pageMetadata({
   title: "Family Protection & Continuity Planning in DFW",
@@ -12,7 +13,7 @@ export const metadata = pageMetadata({
 const continuity = [
   {
     question: "If income paused for six months, what would keep the household moving?",
-    explanation: "Map essential obligations, available reserves, workplace benefits, and protection so the family understands what would happen first—not merely what exists.",
+    explanation: "Map essential obligations, available reserves, workplace benefits, and protection so the family understands what would happen first, not merely what exists.",
     also: "Certainty",
   },
   {
@@ -88,6 +89,23 @@ export default function FamilyContinuityPage() {
           </div>
         </section>
 
+        <section className="section map-inline-section" id="family-continuity-map">
+          <div className="container map-inline-grid">
+            <div>
+              <p className="eyebrow">A practical place to begin</p>
+              <h2>Could Your Family Find the Plan If They Needed It?</h2>
+              <p>The Family Continuity Map™ helps you organize the people, responsibilities, documents, and decisions your family may need if life changes unexpectedly.</p>
+              <ul className="map-inline-list">
+                <li>Identify who would step in</li>
+                <li>See where responsibilities depend on one person</li>
+                <li>Clarify where key documents and contacts can be found</li>
+                <li>Find the gaps that may deserve attention</li>
+              </ul>
+            </div>
+            <FamilyContinuityMapForm buttonLabel="Send Me the Map" ready={process.env.GHL_CMAP_DELIVERY_READY === "true"} />
+          </div>
+        </section>
+
         <div className="container framework-stack">
           <PillarQuestionSection number="01" pillar="Continuity" description="Keeping household income, care, and responsibilities moving through disruption." questions={continuity} />
           <PillarQuestionSection number="02" pillar="Certainty" description="Giving each resource a clear role and the family a visible sequence to follow." questions={certainty} />
@@ -102,7 +120,7 @@ export default function FamilyContinuityPage() {
             </div>
             <div className="boundary-card">
               <h3>Professional boundaries matter.</h3>
-              <p>Insurance planning should be coordinated with—not substituted for—legal documents, tax guidance, healthcare directives, or investment advice from the appropriate professionals.</p>
+              <p>Insurance planning should be coordinated with legal documents, tax guidance, healthcare directives, and investment advice from the appropriate professionals, not substituted for them.</p>
             </div>
           </div>
         </section>
