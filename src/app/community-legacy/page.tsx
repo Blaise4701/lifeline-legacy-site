@@ -8,6 +8,8 @@ export const metadata = pageMetadata({
   path: "/community-legacy",
 });
 
+const estateDiscoveryCallUrl = "https://api.leadconnectorhq.com/widget/bookings/llfg-estate-discovery-call";
+
 const pathways = [
   { title: "Self Service", label: "Complete it independently", description: "After your Estate Discovery Call, receive a secure link from Estate Guru and complete the document process at your own pace." },
   { title: "Assisted Service", label: "Get help getting started", description: "Lifeline Legacy helps you connect with Estate Guru, arrange your call, and navigate administrative onboarding." },
@@ -29,7 +31,7 @@ export default function CommunityLegacyPage() {
             <h1 id="legacy-title">Help your loved ones know your wishes.</h1>
             <p className={styles.lede}>Prepare for the moments when someone you trust may need to act on your behalf. Start with clear education and estate-planning resources through Lifeline Legacy and Estate Guru.</p>
             <div className={styles.actions}>
-              <a className={styles.primary} href="#your-options">Explore your options</a>
+              <a className={styles.primary} href={estateDiscoveryCallUrl}>Schedule your Estate Discovery Call</a>
               <a className={styles.lightLink} href="#how-it-works">See how it works</a>
             </div>
             <p className={styles.heroNote}>No insurance purchase or Lifeline Continuity Review is required.</p>
@@ -59,7 +61,7 @@ export default function CommunityLegacyPage() {
         <div className={styles.container}>
           <div className={styles.heading}><p className={styles.kicker}>A clear first step</p><h2 id="steps-title">Understand first. Then move forward.</h2></div>
           <ol className={styles.steps}>{steps.map((step, index) => <li key={step.title}><span className={styles.number} aria-hidden="true">0{index + 1}</span><h3>{step.title}</h3><p>{step.description}</p></li>)}</ol>
-          <div className={styles.callout}><strong>About your Estate Discovery Call</strong><p>This educational call is required before document completion. It is separate from a Lifeline Continuity Review or insurance consultation. Individual legal questions are referred to appropriately qualified Estate Guru professionals.</p><p className={styles.note}>Online scheduling is not yet available.</p></div>
+          <div className={styles.callout}><strong>About your Estate Discovery Call</strong><p>This educational call is required before document completion. It is separate from a Lifeline Continuity Review or insurance consultation. Individual legal questions are referred to appropriately qualified Estate Guru professionals.</p><div className={styles.actions}><a className={styles.primary} href={estateDiscoveryCallUrl}>Schedule your Estate Discovery Call</a></div><p className={styles.note}>If you need help scheduling, contact <a href="mailto:info@lifelinelegacyfinancial.com">info@lifelinelegacyfinancial.com</a>. Please do not send legal documents or medical details by email.</p></div>
         </div>
       </section>
 
