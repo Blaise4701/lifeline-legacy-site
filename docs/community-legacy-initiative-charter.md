@@ -52,11 +52,13 @@ LLFG website and GHL may store only necessary identifying/contact data, source p
 ## Pilot
 Two churches and one nonprofit; establish partner agreements, run workshops, track voluntary requests, successful Estate Guru handoffs, non-sensitive fulfillment indicators where permitted, and partner satisfaction. No insurance-conversion quota imposed on a partner.
 
-## Launch gates
+## Completed reviews
+Blaise Tamo confirmed on October 29, 2026 that branding, eligibility, consent, privacy, and compliance review are completed. These items are treated as resolved based on the program owner's confirmation; this records that confirmation rather than an independent legal review.
+
+## Remaining implementation and verification
 - Configure the LLFG Estate Discovery Call calendar, approved educational call script, Estate Guru legal-advice escalation procedure, and booking-to-completion process.
-- Verify Estate Guru onboarding mechanism, permitted branding, supported states, approved product/service pricing wording, and legal-professional responsibilities.
-- Legal/compliance review of public no-cost/free POA claims, Texas insurance inducement/advertising requirements, nonprofit and church relationships, referral compensation if any, and marketing consent.
-- Update privacy disclosures for Estate Guru referrals and appropriate data sharing.
+- Configure the approved Estate Guru onboarding mechanism and operational handoff.
+- Implement the approved consent and privacy requirements in any participant forms and Estate Guru data-sharing flow.
 - Confirm process for accessibility, handoff failures, and participant support.
 - Complete end-to-end QA with test users.
 - Do not merge/publish this page with live service CTAs until the above are satisfied.
