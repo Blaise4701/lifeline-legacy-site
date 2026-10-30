@@ -57,11 +57,14 @@ Blaise Tamo confirmed on October 29, 2026 that branding, eligibility, consent, p
 
 ## Remaining implementation and verification
 - Verify the connected LLFG Estate Discovery Call calendar, educational call script, Estate Guru legal-advice escalation procedure, and booking-to-completion process.
-- Configure the approved Estate Guru onboarding mechanism and operational handoff.
+- Verify the staff-managed post-call Estate Guru process separately from the phase 1 website booking flow.
 - Implement the approved consent and privacy requirements in any participant forms and Estate Guru data-sharing flow.
 - Confirm process for accessibility, handoff failures, and participant support.
 - Complete end-to-end QA with test users.
 - Do not merge/publish this page with live service CTAs until the above are satisfied.
 
 ## Phase 1 implementation
-Reviewable website overview + charter. No client data forms or nonfunctional Estate Guru links. Phase 2 to add partner approved handoff + forms and GHL integration.
+Website overview, program charter, and direct booking on the LLFG Estate Discovery Call calendar. Blaise confirmed that website visitors book on LLFG's calendar. The website does not need a public Estate Guru referral link, separate participant intake form, or automated provider handoff for this phase. LLFG handles the next steps after the call according to the approved program process.
+
+## Booking verification
+The Preview page rendered and its primary scheduling button opened the correct 30-minute LLFG | Estate Discovery Call calendar with available appointment times. No appointment was submitted, so confirmation delivery and booking-triggered workflows remain unverified.
