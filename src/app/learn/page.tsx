@@ -75,7 +75,7 @@ export default async function LearnPage() {
         <PageHero
           className="learn-hero"
           eyebrow="The LLFG learning center"
-          title={<>Learn the structure before you choose a solution.</>}
+          title={<><span>Learn the structure before</span>{" "}<span>you choose a solution.</span></>}
           description="Better decisions begin with better questions. Explore plain-language guides and conversations that show how income, protection, people, and documents fit together."
           primary={{ href: "#resources", label: "Browse the resources" }}
           secondary={{ href: "/checkup", label: "Take the Continuity Checkup" }}

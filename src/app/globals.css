@@ -4152,14 +4152,14 @@ ul:last-child {
   }
 
   .learn-page-shell .learn-hero .page-hero-copy {
-    max-width: 48rem;
+    max-width: none;
   }
 
   .learn-page-shell .learn-hero .page-hero-copy h1 {
     font-size: clamp(3.05rem, 4.2vw, 4.2rem);
     line-height: 0.98;
     margin-bottom: 1rem;
-    max-width: 11.5ch;
+    max-width: none;
   }
 
   .learn-page-shell .learn-hero .hero-lede {
@@ -6532,4 +6532,16 @@ ul:last-child {
   .map-result-actions .button {
     width: 100%;
   }
+}
+
+/* Keep the learning-center headline complete on two deliberate lines. */
+.learn-page-shell .learn-hero .page-hero-copy h1 {
+  max-width: none;
+  font-size: clamp(1.25rem, 4.5vw, 4.2rem);
+  line-height: 1.08;
+}
+
+.learn-page-shell .learn-hero .page-hero-copy h1 > span {
+  display: block;
+  white-space: nowrap;
 }
