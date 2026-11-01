@@ -1,11 +1,12 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { states } from "@/lib/site-data";
 
 type WorkshopRegistrationProps = {
   workshop: {
     id: string;
+    dateTime: string;
     title: string;
     date: string;
     time: string;
@@ -25,10 +26,19 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
   const submitting = useRef(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
 
+  const [timeClosed, setTimeClosed] = useState(false);
+  useEffect(() => {
+    if (workshop.registrationClosed || workshop.cancelled) return;
+    const update = () => setTimeClosed(Date.now() >= Date.parse(workshop.dateTime));
+    update();
+    const timer = window.setInterval(update, 1000);
+    return () => window.clearInterval(timer);
+  }, [workshop.dateTime, workshop.registrationClosed, workshop.cancelled]);
+
   if (workshop.cancelled) {
     return <span className="status-label">Event cancelled</span>;
   }
-  if (workshop.registrationClosed) {
+  if (workshop.registrationClosed || timeClosed) {
     return <span className="status-label">Registration closed</span>;
   }
 
