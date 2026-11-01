@@ -1,3 +1,4 @@
+import { isRegistrationClosed } from "@/lib/workshop-status";
 import { licensedStates, states, workshops } from "@/lib/site-data";
 import { MAP_CONSENT_VERSION, MAP_EMAIL_CONSENT_TEXT, MAP_SMS_CONSENT_TEXT } from "@/lib/family-continuity-map";
 import { emailPermission } from "@/lib/ghl-email-permission";
@@ -585,7 +586,7 @@ export async function POST(request: Request) {
         { status: 422 },
       );
     }
-    if (Date.now() >= Date.parse(workshop.dateTime)) {
+    if (isRegistrationClosed(workshop)) {
       return Response.json(
         { ok: false, message: "Registration for this event has closed. Please choose another session." },
         { status: 422 },

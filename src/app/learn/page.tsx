@@ -2,7 +2,9 @@ import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 import { ReviewInvite } from "@/components/review-invite";
-import { WorkshopRegistration } from "@/components/workshop-registration";
+import { WorkshopCard } from "@/components/workshop-card";
+import { hasWorkshopEnded } from "@/lib/workshop-status";
+import { connection } from "next/server";
 import { workshops } from "@/lib/site-data";
 
 export const metadata = pageMetadata({
@@ -39,10 +41,10 @@ const resources = [
   {
     type: "Family guide",
     title: "The Family Continuity Map",
-    text: "A future worksheet for responsibilities, contacts, document locations, and the first actions a household may need to take.",
-    href: "",
-    action: "In development",
-    ready: false,
+    text: "A practical worksheet for responsibilities, contacts, document locations, and the first actions a household may need to take.",
+    href: "/family-continuity-map",
+    action: "Explore the Family Continuity Map",
+    ready: true,
   },
   {
     type: "Owner guide",
@@ -62,31 +64,11 @@ const resources = [
   },
 ] as const;
 
-const seminarSeries = [
-  {
-    key: "renner-fall",
-    eyebrow: "Renner Frankford · September-October",
-    title: "Prepare. Stress-Test. Build.",
-    description:
-      "Three connected sessions for people approaching retirement: understand the countdown, test the assumptions, then put the first version of the income plan on paper.",
-  },
-  {
-    key: "wylie-fall",
-    eyebrow: "Wylie · October",
-    title: "Reduce Risk. Build the Roadmap. Create the Plan.",
-    description:
-      "A three-event progression from retirement-income risk, to the planning roadmap, to a hands-on written retirement-paycheck workshop.",
-  },
-  {
-    key: "november-fall",
-    eyebrow: "Dallas-Fort Worth · November",
-    title: "Early Decisions. Income Coordination. Written Plan.",
-    description:
-      "November goes deeper into the first years of retirement and includes an extended two-part workshop at Fretz Park.",
-  },
-] as const;
-
-export default function LearnPage() {
+export default async function LearnPage() {
+  await connection();
+  const now = Date.now();
+  const upcoming = workshops.filter((workshop) => !hasWorkshopEnded(workshop, now) && !("cancelled" in workshop && workshop.cancelled))
+    .sort((a, b) => Date.parse(a.dateTime) - Date.parse(b.dateTime));
   return (
     <div className="learn-page-shell">
       <main id="main-content">
@@ -131,76 +113,18 @@ export default function LearnPage() {
         <section className="section section-dark learn-workshops-section" id="workshops" aria-labelledby="workshops-title">
           <div className="container">
             <div className="section-heading centered-heading heading-light">
-              <p className="eyebrow eyebrow-light">Fall 2026 retirement education series</p>
+              <p className="eyebrow eyebrow-light">Upcoming retirement education sessions</p>
               <h2 id="workshops-title">Retirement Should Feel Like Freedom.</h2>
               <p>Choose the conversation that matches the decision in front of you. Each seminar stands on its own, while the series builds from awareness to a written retirement-income plan.</p>
             </div>
 
-            <div className="seminar-series-list">
-              {seminarSeries.map((series) => {
-                const seriesWorkshops = workshops.filter((workshop) => workshop.series === series.key);
-
-                return (
-                  <section className="seminar-series-group" key={series.key} aria-labelledby={`series-${series.key}`}>
-                    <div className="seminar-series-heading">
-                      <p className="eyebrow eyebrow-light">{series.eyebrow}</p>
-                      <h3 id={`series-${series.key}`}>{series.title}</h3>
-                      <p>{series.description}</p>
-                    </div>
-
-                    <div className="workshop-card-grid">
-                      {seriesWorkshops.map((workshop, index) => (
-                        <article className="workshop-card workshop-card-detailed" id={workshop.id} key={workshop.id}>
-                          <div className="workshop-meta">
-                            <span>{String(index + 1).padStart(2, "0")}</span>
-                            <div>
-                              <p className="workshop-format">{workshop.eventType}</p>
-                              <time dateTime={workshop.dateTime}>{workshop.date} · {workshop.time}</time>
-                            </div>
-                          </div>
-
-                          <h3>{workshop.title}</h3>
-                          <p className="workshop-subtitle">{workshop.subtitle}</p>
-                          <p className="workshop-description">{workshop.description}</p>
-
-                          <div className="workshop-detail-block">
-                            <p className="workshop-detail-label">What you’ll work through</p>
-                            <ul className="workshop-highlight-list">
-                              {workshop.highlights.map((highlight) => (
-                                <li key={highlight}>{highlight}</li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          {"parts" in workshop && (
-                            <div className="workshop-parts">
-                              {workshop.parts.map((part) => (
-                                <div className="workshop-part" key={part.title}>
-                                  <span>{part.time}</span>
-                                  <strong>{part.title}</strong>
-                                  <p>{part.outcome}</p>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-
-                          <div className="workshop-outcome">
-                            <p className="workshop-detail-label">What you’ll leave with</p>
-                            <p>{workshop.outcome}</p>
-                          </div>
-
-                          <div className="workshop-card-footer">
-                            <p className="workshop-location">{workshop.location}</p>
-                            <p className="workshop-address">{workshop.address}</p>
-                            <WorkshopRegistration workshop={workshop} />
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </section>
-                );
-              })}
+            <div className="workshop-card-grid">
+              {upcoming.map((workshop, index) => (
+                <WorkshopCard key={workshop.id} workshop={workshop} index={index} now={now} />
+              ))}
             </div>
+            {upcoming.length === 0 && <p>New sessions will be announced here. Please check back for upcoming dates.</p>}
+            <p><Link className="button button-secondary" href="/learn/seminar-archive">Browse past seminars</Link></p>
           </div>
         </section>
 

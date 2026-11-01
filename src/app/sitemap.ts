@@ -11,6 +11,7 @@ const routes = [
   "/family-continuity-map",
   "/business-continuity",
   "/learn",
+  "/learn/seminar-archive",
   "/about",
   "/privacy",
   "/terms",

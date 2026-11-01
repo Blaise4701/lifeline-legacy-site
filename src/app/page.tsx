@@ -1,3 +1,5 @@
+import { connection } from "next/server";
+import { hasWorkshopEnded } from "@/lib/workshop-status";
 import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
@@ -47,7 +49,11 @@ const homePathways = [
   },
 ] as const;
 
-export default function Home() {
+export default async function Home() {
+  await connection();
+  const now = Date.now();
+  const upcoming = workshops.filter((workshop) => !hasWorkshopEnded(workshop, now) && !("cancelled" in workshop && workshop.cancelled))
+    .sort((a, b) => Date.parse(a.dateTime) - Date.parse(b.dateTime));
   return (
     <>
       <main id="main-content">
@@ -217,11 +223,13 @@ export default function Home() {
             <div>
               <p className="eyebrow">Workshops, guides, and conversations</p>
               <h2>Learn it before you decide anything.</h2>
-              <p>Fall retirement education sessions are scheduled across Dallas and Wylie, including seminars and hands-on written-plan workshops.</p>
-              <Link className="button" href="/learn#workshops">View the full event schedule</Link>
+              <p>Explore upcoming retirement seminars and hands-on written-plan workshops in Dallas-Fort Worth.</p>
+              <Link className="button" href="/learn#workshops">View upcoming sessions</Link>
+              <p><Link className="text-link" href="/learn/seminar-archive">Browse past seminars →</Link></p>
             </div>
             <div className="resource-stack">
-              {workshops.slice(0, 4).map((workshop) => (
+              {upcoming.length === 0 && <p>New seminar dates will be announced here.</p>}
+              {upcoming.slice(0, 4).map((workshop) => (
                 <article key={workshop.id}>
                   <span>{workshop.eventType} · <time dateTime={workshop.dateTime}>{workshop.shortDate} · {workshop.time}</time></span>
                   <h3>{workshop.title}</h3>

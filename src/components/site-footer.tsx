@@ -28,6 +28,8 @@ export function SiteFooter() {
             <li><Link href="/family-continuity">Family continuity</Link></li>
             <li><Link href="/business-continuity">Business continuity</Link></li>
             <li><Link href="/learn">Learning center</Link></li>
+            <li><Link href="/learn/seminar-archive">Past seminars</Link></li>
+            <li><Link href="/family-continuity-map">Family Continuity Map</Link></li>
           </ul>
         </div>
 
