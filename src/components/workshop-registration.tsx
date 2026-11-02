@@ -12,6 +12,7 @@ type WorkshopRegistrationProps = {
     time: string;
     location: string;
     address: string;
+    registrationDeadline?: string | null;
     cancelled?: boolean;
     registrationClosed?: boolean;
   };
@@ -29,11 +30,11 @@ export function WorkshopRegistration({ workshop }: WorkshopRegistrationProps) {
   const [timeClosed, setTimeClosed] = useState(false);
   useEffect(() => {
     if (workshop.registrationClosed || workshop.cancelled) return;
-    const update = () => setTimeClosed(Date.now() >= Date.parse(workshop.dateTime));
+    const update = () => setTimeClosed(Date.now() >= Date.parse(workshop.registrationDeadline ?? workshop.dateTime));
     update();
     const timer = window.setInterval(update, 1000);
     return () => window.clearInterval(timer);
-  }, [workshop.dateTime, workshop.registrationClosed, workshop.cancelled]);
+  }, [workshop.dateTime, workshop.registrationDeadline, workshop.registrationClosed, workshop.cancelled]);
 
   if (workshop.cancelled) {
     return <span className="status-label">Event cancelled</span>;
