@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { WorkshopRegistration } from "@/components/workshop-registration";
 import { workshops, site } from "@/lib/site-data";
@@ -5,11 +6,29 @@ import { isRegistrationClosed } from "@/lib/workshop-status";
 import { pageMetadata } from "@/lib/seo";
 import styles from "./workshop.module.css";
 
-export const metadata = pageMetadata({
+const baseMetadata = pageMetadata({
   title: "You’re Not Too Late: A 10-Year Retirement Catch-Up Plan",
   description: "Free public workshop with Blaise D. Tamo and May K. Li, PhD. November 21, 2026, 10:00 AM to 12:30 PM at Harrington Library in Plano. Reserve by November 18.",
   path: "/retirement-catch-up",
 });
+
+const shareImage = {
+  url: "https://lifelinelegacyfinancial.com/retirement-catch-up/share-flyer.jpg",
+  width: 1024,
+  height: 1536,
+  type: "image/jpeg",
+  alt: "You’re Not Too Late: A 10-Year Retirement Catch-Up Plan. Free workshop, November 21, 2026, 10:00 AM to 12:30 PM, Harrington Library in Plano. Reserve by November 18. Call 972-764-8516.",
+};
+
+export const metadata: Metadata = {
+  ...baseMetadata,
+  openGraph: { ...baseMetadata.openGraph, images: [shareImage] },
+  twitter: {
+    ...baseMetadata.twitter,
+    card: "summary_large_image",
+    images: [{ url: shareImage.url, alt: shareImage.alt }],
+  },
+};
 
 export default async function RetirementCatchUpPage() {
   await connection();
