@@ -24,3 +24,11 @@ test('invalid dates fail closed', () => {
   assert.equal(isRegistrationClosed({ dateTime: 'invalid' }), true);
   assert.equal(hasWorkshopEnded({ dateTime: 'invalid' }), true);
 });
+
+ test('Plano registration closes after November 18 in Dallas, while the event remains upcoming', () => {
+  const plano = { dateTime: '2026-11-21T10:00:00-06:00', endDateTime: '2026-11-21T12:30:00-06:00', registrationDeadline: '2026-11-19T00:00:00-06:00' };
+  assert.equal(isRegistrationClosed(plano, Date.parse('2026-11-19T05:59:59Z')), false);
+  assert.equal(isRegistrationClosed(plano, Date.parse('2026-11-19T06:00:00Z')), true);
+  assert.equal(hasWorkshopEnded(plano, Date.parse('2026-11-19T06:00:00Z')), false);
+  assert.equal(hasWorkshopEnded(plano, Date.parse('2026-11-21T18:30:00Z')), true);
+});
