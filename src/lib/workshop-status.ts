@@ -1,6 +1,7 @@
 export type ScheduledWorkshop = {
   dateTime: string;
   endDateTime?: string | null;
+  registrationDeadline?: string | null;
   cancelled?: boolean;
   registrationClosed?: boolean;
 };
@@ -12,6 +13,6 @@ export function hasWorkshopEnded(workshop: ScheduledWorkshop, now = Date.now()) 
 }
 
 export function isRegistrationClosed(workshop: ScheduledWorkshop, now = Date.now()) {
-  const start = Date.parse(workshop.dateTime);
+  const start = Date.parse(workshop.registrationDeadline ?? workshop.dateTime);
   return Boolean(workshop.cancelled || workshop.registrationClosed) || !Number.isFinite(start) || now >= start;
 }
