@@ -199,6 +199,32 @@ export const standardEventReminders = {
 
 export const workshops = [
   {
+    id: "plano-november-21-catch-up",
+    series: "november-fall",
+    eventType: "Workshop + Q&A",
+    dateTime: "2026-11-21T10:00:00-06:00",
+    endDateTime: "2026-11-21T12:30:00-06:00",
+    registrationDeadline: "2026-11-19T00:00:00-06:00",
+    date: "November 21, 2026",
+    shortDate: "Nov 21",
+    time: "10:00 AM to 12:30 PM",
+    title: "You’re Not Too Late: A 10-Year Retirement Catch-Up Plan",
+    subtitle: "Practical retirement planning and a fresh mindset, starting where you are.",
+    description: "Join Blaise D. Tamo and May K. Li, PhD for a free public workshop combining retirement education, mindset, and practical next steps for people who feel behind on retirement preparation.",
+    outcome: "Leave with a clearer picture of your retirement income needs, priorities for the next decade, and practical next steps to discuss with your financial and tax professionals.",
+    highlights: [
+      "Assess where you are and define a realistic retirement income goal",
+      "Explore saving priorities and Social Security considerations",
+      "Identify risks, income gaps, and decisions to coordinate",
+      "Build your next steps with a more constructive mindset",
+    ],
+    location: "Harrington Library",
+    address: "1501 18th St, Plano, TX 75074",
+    preparation: standardEventPreparation,
+    reminders: standardEventReminders,
+    capacity: null,
+  },
+  {
     id: "retirement-countdown",
     series: "renner-fall",
     eventType: "Seminar",
