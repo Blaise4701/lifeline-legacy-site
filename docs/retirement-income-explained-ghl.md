@@ -26,28 +26,32 @@ Consent records are separate: email registration notice (transactional), SMS (ev
 
 ## GHL workflows (folder `LLFG Website`, timezone America/Chicago)
 
-One workflow handles everything so a "Both" registrant gets one set of reminders, timed from their first session.
+Built and **published 2026-11-05** (account timezone US/Central; re-entry off; stop-on-response off). Each contact is enrolled once, so a "Both" registrant gets one set of reminders timed from the 2:00 PM start. Every dated wait uses GHL's default "if this date has passed: skip outbound messages until the next wait", so late registrants only get reminders still in the future.
 
-**`LLFG | 2026-11-12 Retirement Income Explained | confirmation + reminders`**
-- Trigger: Contact Tag Added = `llfg-event-2026-11-12`. Re-entry off.
-- Immediately: confirmation email (below). If `llfg-event-fretz-november-12-workshop-sms-consent`: confirmation SMS.
-- If/else on session tag: **Workshop or Both** → first session 2:00 PM; **Seminar** → 5:00 PM.
-- Reminder 1 (24 h before first session): Workshop/Both Wed Nov 11, 2:00 PM; Seminar Wed Nov 11, 5:00 PM. Use "Wait until" that exact date/time and **skip if the time has passed** (late registrants get only the reminders still in the future).
-- Reminder 2 (3 h before first session): Workshop/Both Thu Nov 12, 11:00 AM; Seminar Thu Nov 12, 2:00 PM. Same skip rule.
-- Before each reminder: continue only if `...-status-registered` or `...-status-confirmed` is present and `...-status-cancelled` is not. Send SMS only with the event SMS consent tag.
-- Post-event: Fri Nov 13, 10:00 AM, thank-you email with an optional Continuity Review invitation, only if not cancelled. (Attendance is not inferred.)
+**Email: `LLFG | 2026-11-12 Retirement Income Explained | confirmation + reminders`**
+- Trigger: Contact Tag Added = `llfg-event-2026-11-12` (added last by the website).
+- Confirmation email → If/else **Session**: `llfg-seminar-2026-11-12` → Evening branch; otherwise → Afternoon (Workshop or Both).
+- Evening: wait Wed Nov 11 5:00 PM → 24 h email; wait Thu Nov 12 2:00 PM → 3 h email; wait Fri Nov 13 10:00 AM → post-event email.
+- Afternoon: wait Wed Nov 11 2:00 PM → 24 h email; wait Thu Nov 12 11:00 AM → 3 h email; wait Fri Nov 13 10:00 AM → post-event email.
+- Sender: account default (no custom From name/address set).
 
-**`LLFG | 2026-11-12 Retirement Income Explained | cancellation`**
-- Trigger: Contact Tag Added = `llfg-event-fretz-november-12-workshop-status-cancelled` → remove from the workflow above, internal notification.
+**SMS: `LLFG | 2026-11-12 Retirement Income Explained | SMS (consent only)`**
+- Trigger: Contact Tag Added = `llfg-event-fretz-november-12-workshop-sms-consent`. Nobody without that event consent tag can enter this workflow. Also fires if someone opts in on a repeat submission.
+- Wait 1 minute (so `llfg_nov_12_session` is saved) → confirmation SMS → same Session branch and dated waits → 24 h SMS → 3 h SMS. No post-event SMS. A2P 10DLC brand and campaign show Approved in Trust Center.
+
+Both workflows were created at the top level of Automation → Workflows (not inside the `LLFG Website` folder); move them there if you prefer.
 
 ### Correcting or cancelling a registration (staff)
-- **Change session:** remove the old session tag, add the new one, update `llfg_nov_12_session`, and add a dated note. If the first session time changed, remove the contact from the reminder workflow and add them back (re-sends confirmation with the new session).
-- **Add/remove a guest:** update `llfg_nov_12_guest_count` / `llfg_nov_12_guest_name`, swap `...-guests-{0|1}` tag, add a dated note.
-- **Cancel:** remove `...-status-registered`, add `...-status-cancelled`. Never delete the contact or the original note.
+- **Cancel:** open the contact → remove them from both Nov 12 workflows (contact's Automation panel or each workflow's Enrollment history), remove `...-status-registered`, add `...-status-cancelled`, add a dated note. Never delete the contact or the original note.
+- **Change session:** remove from both workflows, swap the session tag, update `llfg_nov_12_session`, add a dated note, then remove and re-add the tag `llfg-event-2026-11-12` (and the SMS consent tag if they consented) so they re-enter with the right timing and get a fresh confirmation.
+- **Add/remove a guest:** update `llfg_nov_12_guest_count` / `llfg_nov_12_guest_name`, swap the `...-guests-{0|1}` tag, add a dated note.
 
-## Message copy (static per workflow; only merge field is `{{contact.first_name}}`)
+### Test records
+Test registrations made on 2026-11-05 are tagged `llfg-test-record` (contacts "Blaise Tamo": Both + "Test Guest", registered before the workflows were published, so not enrolled; and "Testing Wylie": Workshop + SMS, enrolled in both workflows). Exclude `llfg-test-record` from seat counts. Remove "Testing Wylie" from both workflows if you do not want its live reminders on Nov 11/12.
 
-Session text per branch: Workshop = "Afternoon Workshop, 2:00 PM to 5:00 PM"; Seminar = "Evening Seminar, 5:00 PM to 7:00 PM"; Both = "Afternoon Workshop and Evening Seminar, 2:00 PM to 7:00 PM". Calendar link per branch: `https://lifelinelegacyfinancial.com/retirement-income-explained/calendar/{workshop|seminar|both}`.
+## Message copy (as built; merge fields `{{contact.first_name}}` and `{{contact.llfg_nov_12_session}}`)
+
+The session text comes from the custom field, so the copy is identical in both branches. The confirmation email lists all three calendar links (`https://lifelinelegacyfinancial.com/retirement-income-explained/calendar/{workshop|seminar|both}`); they work once this branch is in production.
 
 **Confirmation email.** Subject: You're registered: Retirement Income Explained, Nov 12
 > Hi {{contact.first_name}}, your free seat is reserved for Retirement Income Explained: How to Turn Your Retirement Savings Into a Retirement Paycheck.
