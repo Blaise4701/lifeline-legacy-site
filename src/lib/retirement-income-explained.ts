@@ -5,6 +5,16 @@
 export const RIE_EVENT_ID = "fretz-november-12-workshop";
 export const RIE_PATH = "/retirement-income-explained";
 export const RIE_THANK_YOU_PATH = "/retirement-income-explained/thank-you";
+export const RIE_MANAGE_PATH = "/retirement-income-explained/manage";
+
+// Added only when the registrant agreed to the current SMS wording, which includes
+// one post-event thank-you text. Earlier registrants agreed to reminders only.
+export const RIE_SMS_THANKYOU_TAG = "llfg-event-fretz-november-12-workshop-sms-thankyou-consent";
+// A change/cancel request from the manage page. GHL removes the contact from the
+// reminder workflow and alerts staff, who confirm the change.
+export const RIE_CHANGE_REQUEST_TAG = "llfg-event-2026-11-12-change-requested";
+export const rieChangeRequestTypes = ["cancel", "workshop", "seminar", "both", "guest", "other"] as const;
+export type RieChangeRequest = (typeof rieChangeRequestTypes)[number];
 
 // GHL stores tags in lower case. These are the owner-requested tags
 // (LLFG-Event-2026-11-12, LLFG-Workshop-2026-11-12, ...) as GHL will show them.
@@ -97,10 +107,25 @@ export const rieCustomFieldKeys = {
   guestCount: "llfg_nov_12_guest_count",
   guestName: "llfg_nov_12_guest_name",
   attribution: "llfg_nov_12_attribution",
+  // Message merge fields. Written before the trigger tag so no message can send
+  // with an empty session name, time or calendar link.
+  sessionName: "llfg_nov_12_session_name",
+  sessionTime: "llfg_nov_12_session_time",
+  startTime: "llfg_nov_12_start_time",
+  calendarLink: "llfg_nov_12_calendar_link",
 } as const;
 
+export function startTimeLabel(key: RieSessionKey) {
+  return rieSessions[key].time.split(" to ")[0];
+}
+
+export function calendarLink(key: RieSessionKey) {
+  return `https://lifelinelegacyfinancial.com${RIE_PATH}/calendar/${key}`;
+}
+
+export const RIE_SMS_CONSENT_VERSION = "2026-11-05-v2";
 export const RIE_SMS_CONSENT_TEXT =
-  "Yes, text me my registration confirmation and event reminders for Retirement Income Explained at the mobile number above. Up to 3 messages. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not required to register.";
+  "Yes, text me my registration confirmation, event reminders, and one post-event thank-you for Retirement Income Explained at the mobile number above. Up to 4 messages. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not required to register.";
 export const RIE_MARKETING_CONSENT_TEXT =
   "Yes, email me occasional LLFG retirement education and future event invitations. I can unsubscribe at any time.";
 export const RIE_EMAIL_NOTICE =

@@ -93,8 +93,8 @@ export default async function RetirementIncomeExplainedThankYou({
 
           <h2>Need to change or cancel?</h2>
           <p>
-            Reply to your confirmation email, call <a href={site.phoneHref}>{site.phone}</a>, or email{" "}
-            <a href={site.emailHref}>{site.email}</a>. We will update your session or release your seat.
+            Use the <Link href={`${RIE_PATH}/manage`}>change or cancel form</Link>, call <a href={site.phoneHref}>{site.phone}</a>,
+            or email <a href={site.emailHref}>{site.email}</a>. We will update your session or release your seat.
           </p>
 
           <div className={styles.buttonRow}>

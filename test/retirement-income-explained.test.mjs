@@ -39,6 +39,9 @@ beforeEach(() => {
       return Response.json({ tags: existingTags });
     }
     if (path === "/contacts/c1/notes") return Response.json({ note: { id: "n1" } }, { status: 201 });
+    if (path === "/contacts/search/duplicate") {
+      return Response.json({ contact: existingTags.includes("llfg-event-2026-11-12") ? { id: "c1", tags: existingTags } : null });
+    }
     if (path === "/contacts/c1" && init.method === "PUT") {
       return failFields ? new Response("{}", { status: 422 }) : Response.json({ contact: { id: "c1" } });
     }
@@ -216,10 +219,11 @@ test("CRM upsert failure shows an error and records nothing", async () => {
   assert.equal(noteCalls().length, 0);
 });
 
-test("a custom-field failure does not lose a recorded registration", async () => {
+test("a custom-field failure stops before the trigger tags so no message sends with blank fields", async () => {
   failFields = true;
   const response = await post(base);
-  assert.equal(response.status, 201);
+  assert.equal(response.status, 502);
+  assert.ok(!tagCalls().flat().includes("llfg-event-2026-11-12"));
 });
 
 test("other events keep their original required fields and tags", async () => {
@@ -238,4 +242,33 @@ test("other events keep their original required fields and tags", async () => {
   assert.ok(all.includes("llfg-event-age-50-plus-yes"));
   assert.ok(!all.some((tag) => tag.includes("2026-11-12")));
   assert.equal(calls.filter((call) => call.method === "PUT").length, 0);
+});
+
+test("session merge fields are saved before trigger tags, and SMS consent adds the thank-you tag", async () => {
+  const response = await post({ ...base, session: "seminar", smsConsent: true });
+  assert.equal(response.status, 201);
+  const putIndex = calls.findIndex((call) => call.method === "PUT");
+  const triggerIndex = calls.findIndex((call) => call.body?.tags?.includes("llfg-event-2026-11-12"));
+  assert.ok(putIndex > -1 && putIndex < triggerIndex);
+  const fields = Object.fromEntries(calls[putIndex].body.customFields.map((f) => [f.key, f.field_value]));
+  assert.equal(fields.llfg_nov_12_session_name, "Evening Seminar");
+  assert.equal(fields.llfg_nov_12_start_time, "5:00 PM");
+  assert.equal(fields.llfg_nov_12_calendar_link, "https://lifelinelegacyfinancial.com/retirement-income-explained/calendar/seminar");
+  assert.ok(tagCalls().flat().includes("llfg-event-fretz-november-12-workshop-sms-thankyou-consent"));
+});
+
+test("change request: registered contact gets a note and the request tag; unknown email gets the same reply", async () => {
+  const req = { type: "event-change-request", firstName: "T", email: "test-registrant@example.com", request: "cancel", details: "", website: "" };
+  const unknown = await post(req);
+  assert.equal(unknown.status, 200);
+  const unknownBody = await unknown.json();
+  assert.equal(noteCalls().length, 0);
+  existingTags = ["llfg-event-2026-11-12"];
+  const known = await post(req);
+  assert.equal(known.status, 200);
+  assert.deepEqual(await known.json(), unknownBody);
+  assert.equal(noteCalls().length, 1);
+  assert.ok(existingTags.includes("llfg-event-2026-11-12-change-requested"));
+  assert.equal(calls.filter((call) => call.path === "/contacts/upsert").length, 0, "never creates a contact");
+  assert.equal((await post({ ...req, request: "other", details: "" })).status, 400);
 });
