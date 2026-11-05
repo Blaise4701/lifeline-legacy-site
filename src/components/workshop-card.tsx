@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { WorkshopRegistration } from "@/components/workshop-registration";
 import type { workshops } from "@/lib/site-data";
 import { isRegistrationClosed } from "@/lib/workshop-status";
@@ -48,7 +49,13 @@ export function WorkshopCard({ workshop, index, now }: Props) {
       <div className="workshop-card-footer">
         <p className="workshop-location">{workshop.location}</p>
         <p className="workshop-address">{workshop.address}</p>
-        <WorkshopRegistration workshop={{ ...workshop, registrationClosed: isRegistrationClosed(workshop, now) }} />
+        {"registrationHref" in workshop ? (
+          isRegistrationClosed(workshop, now)
+            ? <span className="status-label">Registration closed</span>
+            : <Link className="button button-small workshop-register-button" href={workshop.registrationHref}>{workshop.registrationLabel}</Link>
+        ) : (
+          <WorkshopRegistration workshop={{ ...workshop, registrationClosed: isRegistrationClosed(workshop, now) }} />
+        )}
       </div>
     </article>
   );
