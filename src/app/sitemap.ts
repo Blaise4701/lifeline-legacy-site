@@ -12,6 +12,7 @@ const routes = [
   "/business-continuity",
   "/learn",
   "/retirement-catch-up",
+  "/retirement-income-explained",
   "/learn/seminar-archive",
   "/about",
   "/privacy",

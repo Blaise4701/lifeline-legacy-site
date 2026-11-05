@@ -2,6 +2,18 @@ import { isRegistrationClosed } from "@/lib/workshop-status";
 import { licensedStates, states, workshops } from "@/lib/site-data";
 import { MAP_CONSENT_VERSION, MAP_EMAIL_CONSENT_TEXT, MAP_SMS_CONSENT_TEXT } from "@/lib/family-continuity-map";
 import { emailPermission } from "@/lib/ghl-email-permission";
+import {
+  RIE_EVENT_ID,
+  RIE_EVENT_TAG,
+  RIE_MARKETING_CONSENT_TEXT,
+  RIE_SMS_CONSENT_TEXT,
+  isRieSession,
+  isSessionClosed,
+  rieCustomFieldKeys,
+  rieSessions,
+  sessionFromTags,
+  type RieSessionKey,
+} from "@/lib/retirement-income-explained";
 
 const GHL_API_ORIGIN = "https://services.leadconnectorhq.com";
 const GHL_API_VERSION = "2021-07-28";
@@ -160,12 +172,16 @@ type EventSubmission = {
     lastName: string;
     relationship: string;
   }>;
-  age50Plus: "yes" | "no" | "prefer-not-to-say";
-  industryProfessional: "yes" | "no";
+  // Optional ("") only for the session-based Retirement Income Explained funnel.
+  age50Plus: "yes" | "no" | "prefer-not-to-say" | "";
+  industryProfessional: "yes" | "no" | "";
   eventId: string;
   consent: boolean;
   smsConsent: boolean;
   website: string;
+  session: RieSessionKey | null;
+  marketingConsent: boolean;
+  attribution: Attribution;
 };
 
 type MapOptInSubmission = {
@@ -396,6 +412,51 @@ function parseSubmission(value: unknown): LeadSubmission | null {
     const website = cleanText(value.website, 200);
     const consent = value.consent === true;
     const smsConsent = value.smsConsent === true;
+    const marketingConsent = value.marketingConsent === true;
+    const sessionValue = cleanText(value.session, 16);
+    const isRie = eventId === RIE_EVENT_ID;
+
+    if (isRie) {
+      // Session funnel: name, email, mobile and session are required; state and
+      // qualification answers are optional; at most one guest.
+      if (
+        !firstName ||
+        !lastName ||
+        !isEmail(email) ||
+        !isPhone(phone) ||
+        !isRieSession(sessionValue) ||
+        !(state === "" || includesValue(states, state)) ||
+        !includesValue(["0", "1"] as const, guestCount) ||
+        guests.length !== Number(guestCount) ||
+        guests.some((guest) => !guest.firstName || !guest.lastName ||
+          !includesValue(["", "Spouse/Partner", "Family member", "Friend", "Other"] as const, guest.relationship)) ||
+        !includesValue(["", "yes", "no", "prefer-not-to-say"] as const, age50Plus) ||
+        !includesValue(["", "yes", "no"] as const, industryProfessional) ||
+        !consent
+      ) {
+        return null;
+      }
+
+      return {
+        type,
+        firstName,
+        lastName,
+        email,
+        phone,
+        state,
+        guestCount,
+        guests,
+        age50Plus,
+        industryProfessional,
+        eventId,
+        consent,
+        smsConsent,
+        website,
+        session: sessionValue,
+        marketingConsent,
+        attribution: parseAttribution(value.attribution),
+      };
+    }
 
     if (
       !firstName ||
@@ -432,6 +493,9 @@ function parseSubmission(value: unknown): LeadSubmission | null {
       consent,
       smsConsent,
       website,
+      session: null,
+      marketingConsent: false,
+      attribution: parseAttribution(value.attribution),
     };
   }
 
@@ -461,7 +525,7 @@ async function ghlRequest(
   path: string,
   token: string,
   body: unknown,
-  method: "POST" | "DELETE" | "GET" = "POST",
+  method: "POST" | "DELETE" | "GET" | "PUT" = "POST",
 ) {
   return fetch(`${GHL_API_ORIGIN}${path}`, {
     method,
@@ -592,6 +656,12 @@ export async function POST(request: Request) {
         { status: 422 },
       );
     }
+    if (submission.session && isSessionClosed(submission.session)) {
+      return Response.json(
+        { ok: false, message: `The ${rieSessions[submission.session].label} has already started. Please choose the Evening Seminar.` },
+        { status: 422 },
+      );
+    }
   }
 
   if (
@@ -652,7 +722,9 @@ export async function POST(request: Request) {
     customFields = [
       { key: "llfg_selected_pathway", fieldValue: "Retirement" },
     ];
-    source = "LLFG Website · Event Registration";
+    source = submission.session
+      ? "LLFG Website · Retirement Income Explained (Nov 12)"
+      : "LLFG Website · Event Registration";
   } else {
     customFields = [
       { key: "llfg_selected_pathway", fieldValue: submission.pathway },
@@ -681,7 +753,9 @@ export async function POST(request: Request) {
     ...(submission.phone ? { phone: submission.phone } : {}),
     email: submission.email,
     locationId,
-    ...(submission.type !== "family-continuity-map-optin" ? { state: submission.state, country: "US" } : {}),
+    ...(submission.type !== "family-continuity-map-optin"
+      ? { ...(submission.state ? { state: submission.state } : {}), country: "US" }
+      : {}),
     source,
     customFields,
     createNewIfDuplicateAllowed: false,
@@ -743,17 +817,19 @@ export async function POST(request: Request) {
       const workshop = workshops.find((item) => item.id === submission.eventId)!;
       const eventTag = `llfg-event-${workshop.id}`;
       const eventPrefix = `${eventTag}-`;
+      const session = submission.session;
       const commonTags = [
         "llf - website",
         "llfg-event-registration",
         `llfg-event-guests-${submission.guestCount}`,
-        `llfg-event-age-50-plus-${slug(submission.age50Plus)}`,
-        `llfg-event-industry-professional-${submission.industryProfessional}`,
         "llfg-email-service-consent",
       ];
-
+      if (submission.age50Plus) commonTags.push(`llfg-event-age-50-plus-${slug(submission.age50Plus)}`);
+      if (submission.industryProfessional) commonTags.push(`llfg-event-industry-professional-${submission.industryProfessional}`);
       if (submission.age50Plus === "no") commonTags.push("llfg-under-50");
       if (submission.industryProfessional === "yes") commonTags.push("llfg-industry-professional");
+      // Optional, separate education/marketing email permission. Never required to register.
+      if (submission.marketingConsent) commonTags.push("llfg-email-education-consent");
 
       // The tag API returns the entire tag set. Check it before recording a second
       // registration or firing another confirmation for this contact and event.
@@ -790,16 +866,43 @@ export async function POST(request: Request) {
             );
           }
         }
-        return Response.json({ ok: true, alreadyRegistered: true }, { status: 200 });
+        // A repeat submission never changes the session; the registrant is told
+        // which session is on file and how to change it.
+        return Response.json(
+          { ok: true, alreadyRegistered: true, ...(session ? { session: sessionFromTags(currentTags) } : {}) },
+          { status: 200 },
+        );
       }
+
+      const submittedAt = new Date().toISOString();
+      const sessionDetails = session ? rieSessions[session] : null;
 
       // A contact may register for several events. Store each immutable event and
       // guest snapshot as a separate contact note, never as a mutable contact field.
       const note = await ghlRequest(`/contacts/${contactId}/notes`, token, {
         title: `LLFG event registration: ${workshop.id}`,
         body: JSON.stringify({
-          source: "LLFG Website · Event Registration",
+          source: sessionDetails ? "LLFG Website · Retirement Income Explained (Nov 12)" : "LLFG Website · Event Registration",
+          submittedAt,
           eventId: workshop.id,
+          ...(sessionDetails ? {
+            session: session,
+            sessionLabel: sessionDetails.label,
+            sessionTime: sessionDetails.time,
+            sessionStart: sessionDetails.start,
+            sessionEnd: sessionDetails.end,
+            seatsReserved: 1 + Number(submission.guestCount),
+            marketingEmailConsent: submission.marketingConsent,
+            ...(submission.marketingConsent ? { marketingEmailConsentText: RIE_MARKETING_CONSENT_TEXT } : {}),
+            ...(submission.smsConsent ? { smsConsentText: RIE_SMS_CONSENT_TEXT } : {}),
+            attribution: {
+              source: submission.attribution.source,
+              medium: submission.attribution.medium,
+              campaign: submission.attribution.campaign,
+              landingPath: submission.attribution.landingPath,
+              referrer: referrerWithoutQuery(submission.attribution.referrer),
+            },
+          } : {}),
           title: workshop.title,
           subtitle: workshop.subtitle,
           date: workshop.date,
@@ -827,21 +930,49 @@ export async function POST(request: Request) {
         );
       }
 
-      const statusTags = [
-        `${eventPrefix}status-registered`,
-        `${eventPrefix}age-50-plus-${slug(submission.age50Plus)}`,
-        `${eventPrefix}industry-professional-${submission.industryProfessional}`,
-      ];
+      const statusTags = [`${eventPrefix}status-registered`];
+      if (submission.age50Plus) statusTags.push(`${eventPrefix}age-50-plus-${slug(submission.age50Plus)}`);
+      if (submission.industryProfessional) statusTags.push(`${eventPrefix}industry-professional-${submission.industryProfessional}`);
       if (submission.smsConsent) statusTags.push(`${eventPrefix}sms-consent`);
+      if (sessionDetails) {
+        // The session tag must exist before the trigger tag so the GHL workflow can branch on it.
+        statusTags.push(sessionDetails.tag, `${eventPrefix}guests-${submission.guestCount}`);
+      }
+      // Trigger tags go last: the event's stable tag, plus the owner-requested date tag.
+      const triggerTags = sessionDetails ? [eventTag, RIE_EVENT_TAG] : [eventTag];
       if (!await addEventTags(contactId, token, statusTags) ||
-          !await addEventTags(contactId, token, [eventTag])) {
+          !await addEventTags(contactId, token, triggerTags)) {
         return Response.json(
           { ok: false, message: "Your registration could not be completed. Please try again." },
           { status: 502 },
         );
       }
 
-      return Response.json({ ok: true, alreadyRegistered: false }, { status: 201 });
+      if (sessionDetails) {
+        // Structured fields for reporting and merge fields. Best effort: the
+        // registration is already recorded by the note and tags above.
+        const guest = submission.guests[0];
+        const attribution = [submission.attribution.source, submission.attribution.medium, submission.attribution.campaign]
+          .filter(Boolean).join(" / ");
+        try {
+          const fieldResponse = await ghlRequest(`/contacts/${contactId}`, token, {
+            customFields: [
+              { key: rieCustomFieldKeys.session, field_value: sessionDetails.fieldValue },
+              { key: rieCustomFieldKeys.guestCount, field_value: submission.guestCount },
+              { key: rieCustomFieldKeys.guestName, field_value: guest ? `${guest.firstName} ${guest.lastName}` : "" },
+              { key: rieCustomFieldKeys.attribution, field_value: attribution || "website" },
+            ],
+          }, "PUT");
+          if (!fieldResponse.ok) console.error("GHL event custom field update failed.", { status: fieldResponse.status });
+        } catch {
+          console.error("GHL event custom field update failed.", { reason: "network" });
+        }
+      }
+
+      return Response.json(
+        { ok: true, alreadyRegistered: false, ...(session ? { session } : {}) },
+        { status: 201 },
+      );
     }
 
     if (submission.type === "continuity-review-start") {

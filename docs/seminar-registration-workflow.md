@@ -23,7 +23,7 @@ Copy dates and copy from `src/lib/site-data.ts` whenever editing workflows. All 
 | `wylie-october-12` | Oct 12, 6:00 PM CDT | Retirement Mindset & Roadmap; Rita & Truett Smith Public Library, 300 Country Club Road, Building 300, Wylie, TX 75098 | Seminar / unknown; upcoming |
 | `wylie-october-29` | Oct 29, 6:00 PM CDT | Build Your Written Retirement Income Plan; Rita & Truett Smith Public Library, 300 Country Club Road, Building 300, Wylie, TX 75098 | Workshop / unknown; upcoming |
 | `november-10-first-five-years` | Nov 10, 6:00 PM CST | The First Five Years of Retirement; no confirmed venue | Seminar / unknown; cancelled, no registration or workflow |
-| `fretz-november-12-workshop` | Nov 12, 2:00 PM CST | Build Your Written Retirement Income Plan; Fretz Park Branch Library, 6990 Belt Line Road, Dallas, TX 75254 | Two-Part Workshop / 7:30 PM; upcoming |
+| `fretz-november-12-workshop` | Nov 12, 2:00 PM CST | Retirement Income Explained (Afternoon Workshop 2:00 to 5:00 PM, Evening Seminar 5:00 to 7:00 PM); Fretz Park Branch Library, 6990 Belt Line Road, Dallas, TX 75254 | Workshop + Seminar / 7:00 PM; upcoming. Session-based funnel: see `docs/retirement-income-explained-ghl.md` |
 | `renner-november-14-workshop` | Nov 14, 10:00 AM CST | Build Your Written Retirement Income Plan; Renner Frankford Branch Library, 6400 Frankford Road, Dallas, TX 75252 | Workshop / unknown; upcoming |
 
 Each workflow must use its own `llfg-event-{id}` trigger and its own **literal** title, subtitle, date, time, location, address and preparation instructions. `{{event.title}}`, `{{event.date}}` etc. below are **editor placeholders**, not verified GHL merge fields. Replace with static values for that workflow before saving. The only contact merge field needed in attendee templates is `{{contact.first_name}}`. Never insert `{{contact.llfg_learning_interest}}` into an event email/SMS. If a venue or schedule changes, update the website config and every affected draft/active template, inspect queued waits, and notify already registered people manually.
@@ -185,7 +185,7 @@ The website rate-limit/spam controls for `/api/lead` should be reviewed before b
 | 4. Two guests | Two named guests in one note; no guest contacts |
 | 5. Email consent only | 201, no event SMS consent tag; **zero SMS** in every branch |
 | 6. Workshop vs seminar | Matching event type/preparation; no wrong-event title |
-| 7. Nov 12 two-part | Fretz date/time and correct schedule, 7:30 PM end, workshop preparation |
+| 7. Nov 12 sessions | Fretz date, chosen session time (2-5, 5-7 or 2-7 PM), one reminder set for Both; see `docs/retirement-income-explained-ghl.md` |
 | 8. Submission error | 400/502 with visible error, no confirmation; recoverable retry |
 | 9. Same email + same event | 200 `alreadyRegistered`, no second note or event trigger; different event gets its own note and tag |
 | 10. Mobile | Single-column form, conditional guest fields, clear loading/success, no overflow or reload |
