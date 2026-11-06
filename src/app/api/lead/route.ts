@@ -3,15 +3,22 @@ import { licensedStates, states, workshops } from "@/lib/site-data";
 import { MAP_CONSENT_VERSION, MAP_EMAIL_CONSENT_TEXT, MAP_SMS_CONSENT_TEXT } from "@/lib/family-continuity-map";
 import { emailPermission } from "@/lib/ghl-email-permission";
 import {
+  RIE_CHANGE_REQUEST_TAG,
   RIE_EVENT_ID,
   RIE_EVENT_TAG,
   RIE_MARKETING_CONSENT_TEXT,
   RIE_SMS_CONSENT_TEXT,
+  RIE_SMS_CONSENT_VERSION,
+  RIE_SMS_THANKYOU_TAG,
+  calendarLink,
   isRieSession,
   isSessionClosed,
+  rieChangeRequestTypes,
   rieCustomFieldKeys,
   rieSessions,
   sessionFromTags,
+  startTimeLabel,
+  type RieChangeRequest,
   type RieSessionKey,
 } from "@/lib/retirement-income-explained";
 
@@ -195,7 +202,23 @@ type MapOptInSubmission = {
   attribution: Attribution;
 };
 
-type LeadSubmission = ReviewStartSubmission | ReviewCompleteSubmission | EventSubmission | MapOptInSubmission;
+// Nov 12 "change or cancel my registration" request. It never creates a contact
+// and never changes a registration by itself: staff confirm every change.
+type EventChangeRequestSubmission = {
+  type: "event-change-request";
+  firstName: string;
+  email: string;
+  request: RieChangeRequest;
+  details: string;
+  website: string;
+};
+
+type LeadSubmission =
+  | ReviewStartSubmission
+  | ReviewCompleteSubmission
+  | EventSubmission
+  | MapOptInSubmission
+  | EventChangeRequestSubmission;
 
 type GhlUpsertResponse = {
   contact?: {
@@ -326,6 +349,16 @@ function parseSubmission(value: unknown): LeadSubmission | null {
   if (!isRecord(value)) return null;
 
   const type = cleanText(value.type, 40);
+
+  if (type === "event-change-request") {
+    const firstName = cleanText(value.firstName, 80);
+    const email = cleanText(value.email, 254).toLowerCase();
+    const request = cleanText(value.request, 16);
+    const details = cleanText(value.details, 500);
+    if (!isEmail(email) || !includesValue(rieChangeRequestTypes, request)) return null;
+    if ((request === "guest" || request === "other") && !details) return null;
+    return { type, firstName, email, request, details, website: cleanText(value.website, 200) };
+  }
 
   if (type === "family-continuity-map-optin") {
     const firstName = cleanText(value.firstName, 80);
@@ -619,6 +652,72 @@ async function addEventTags(contactId: string, token: string, tags: string[]) {
   return Array.isArray(result.tags) ? result.tags : null;
 }
 
+const changeRequestLabels: Record<RieChangeRequest, string> = {
+  cancel: "Cancel my registration",
+  workshop: "Change to the Afternoon Workshop (2:00 PM to 5:00 PM)",
+  seminar: "Change to the Evening Seminar (5:00 PM to 7:00 PM)",
+  both: "Change to Both Sessions (2:00 PM to 7:00 PM)",
+  guest: "Add, change, or remove a guest",
+  other: "Something else",
+};
+
+// Same answer whether or not a registration exists, so the form cannot be used to
+// discover who registered.
+const CHANGE_REQUEST_RECEIVED = {
+  ok: true,
+  message: "Thank you. If this email address has a registration, we have received your request and will confirm the change by email or phone.",
+};
+
+async function handleChangeRequest(submission: EventChangeRequestSubmission, token: string, locationId: string) {
+  try {
+    const search = new URLSearchParams({ locationId, email: submission.email });
+    const lookup = await ghlRequest(`/contacts/search/duplicate?${search.toString()}`, token, undefined, "GET");
+    if (!lookup.ok) {
+      console.error("GHL change request lookup failed.", { status: lookup.status });
+      return Response.json(
+        { ok: false, message: "We could not record your request online. Please call 972-764-8516 or reply to your confirmation email." },
+        { status: 502 },
+      );
+    }
+    const result = (await lookup.json()) as { contact?: { id?: string; tags?: string[] } | null };
+    const contact = result.contact;
+    const registered = Boolean(contact?.id && contact.tags?.some((tag) => tag.toLowerCase() === RIE_EVENT_TAG));
+    if (!registered || !contact?.id) {
+      return Response.json(CHANGE_REQUEST_RECEIVED, { status: 200 });
+    }
+
+    const note = await ghlRequest(`/contacts/${contact.id}/notes`, token, {
+      title: "LLFG event change request: 2026-11-12",
+      body: JSON.stringify({
+        source: "LLFG Website · Change or cancel request (Nov 12)",
+        submittedAt: new Date().toISOString(),
+        request: submission.request,
+        requestLabel: changeRequestLabels[submission.request],
+        nameGiven: submission.firstName,
+        details: submission.details,
+        status: "Pending staff confirmation",
+      }, null, 2),
+    });
+    // The tag stops reminders (GHL removes the contact from the event workflow)
+    // and alerts staff. It is removed and re-added for each new request.
+    await ghlRequest(`/contacts/${contact.id}/tags`, token, { tags: [RIE_CHANGE_REQUEST_TAG] }, "DELETE");
+    const tagged = await addEventTags(contact.id, token, [RIE_CHANGE_REQUEST_TAG]);
+    if (!note.ok || !tagged) {
+      return Response.json(
+        { ok: false, message: "We could not record your request online. Please call 972-764-8516 or reply to your confirmation email." },
+        { status: 502 },
+      );
+    }
+    return Response.json(CHANGE_REQUEST_RECEIVED, { status: 200 });
+  } catch {
+    console.error("GHL change request failed.", { reason: "network" });
+    return Response.json(
+      { ok: false, message: "We could not record your request online. Please call 972-764-8516 or reply to your confirmation email." },
+      { status: 502 },
+    );
+  }
+}
+
 export async function POST(request: Request) {
   if (!sameOrigin(request)) {
     return Response.json({ ok: false, message: "Request origin was not accepted." }, { status: 403 });
@@ -667,6 +766,7 @@ export async function POST(request: Request) {
   if (
     submission.type !== "event-registration" &&
     submission.type !== "family-continuity-map-optin" &&
+    submission.type !== "event-change-request" &&
     !(licensedStates as readonly string[]).includes(submission.state)
   ) {
     return Response.json(
@@ -692,6 +792,10 @@ export async function POST(request: Request) {
       { ok: false, message: "Online requests are temporarily unavailable. Please call or email LLFG." },
       { status: 503 },
     );
+  }
+
+  if (submission.type === "event-change-request") {
+    return handleChangeRequest(submission, token, locationId);
   }
 
   let customFields: Array<{ key: string; fieldValue: string }> = [];
@@ -845,7 +949,7 @@ export async function POST(request: Request) {
         const smsTag = `${eventPrefix}sms-consent`;
         const previouslyConsented = currentTags.some((tag) => tag.toLowerCase() === smsTag);
         if (previouslyConsented && !submission.smsConsent) {
-          const removal = await ghlRequest(`/contacts/${contactId}/tags`, token, { tags: [smsTag] }, "DELETE");
+          const removal = await ghlRequest(`/contacts/${contactId}/tags`, token, { tags: session ? [smsTag, RIE_SMS_THANKYOU_TAG] : [smsTag] }, "DELETE");
           if (!removal.ok) {
             console.error("GHL event SMS opt-out failed.", { status: removal.status });
             return Response.json(
@@ -859,7 +963,7 @@ export async function POST(request: Request) {
             title: `LLFG event SMS consent: ${workshop.id}`,
             body: `Website registrant explicitly opted in to SMS reminders for event ${workshop.id} on a repeat registration.`,
           });
-          if (!consentNote.ok || !await addEventTags(contactId, token, [smsTag])) {
+          if (!consentNote.ok || !await addEventTags(contactId, token, session ? [smsTag, RIE_SMS_THANKYOU_TAG] : [smsTag])) {
             return Response.json(
               { ok: false, message: "Your SMS preference could not be updated. Please contact LLFG directly." },
               { status: 502 },
@@ -894,7 +998,7 @@ export async function POST(request: Request) {
             seatsReserved: 1 + Number(submission.guestCount),
             marketingEmailConsent: submission.marketingConsent,
             ...(submission.marketingConsent ? { marketingEmailConsentText: RIE_MARKETING_CONSENT_TEXT } : {}),
-            ...(submission.smsConsent ? { smsConsentText: RIE_SMS_CONSENT_TEXT } : {}),
+            ...(submission.smsConsent ? { smsConsentText: RIE_SMS_CONSENT_TEXT, smsConsentVersion: RIE_SMS_CONSENT_VERSION } : {}),
             attribution: {
               source: submission.attribution.source,
               medium: submission.attribution.medium,
@@ -937,7 +1041,37 @@ export async function POST(request: Request) {
       if (sessionDetails) {
         // The session tag must exist before the trigger tag so the GHL workflow can branch on it.
         statusTags.push(sessionDetails.tag, `${eventPrefix}guests-${submission.guestCount}`);
+        // Current SMS wording includes one post-event thank-you text.
+        if (submission.smsConsent) statusTags.push(RIE_SMS_THANKYOU_TAG);
       }
+
+      if (sessionDetails && session) {
+        // Message merge fields must be saved before the trigger tag; the GHL
+        // workflow sends the confirmation the moment that tag is added.
+        const guest = submission.guests[0];
+        const attribution = [submission.attribution.source, submission.attribution.medium, submission.attribution.campaign]
+          .filter(Boolean).join(" / ");
+        const fieldResponse = await ghlRequest(`/contacts/${contactId}`, token, {
+          customFields: [
+            { key: rieCustomFieldKeys.session, field_value: sessionDetails.fieldValue },
+            { key: rieCustomFieldKeys.sessionName, field_value: sessionDetails.label },
+            { key: rieCustomFieldKeys.sessionTime, field_value: sessionDetails.time },
+            { key: rieCustomFieldKeys.startTime, field_value: startTimeLabel(session) },
+            { key: rieCustomFieldKeys.calendarLink, field_value: calendarLink(session) },
+            { key: rieCustomFieldKeys.guestCount, field_value: submission.guestCount },
+            { key: rieCustomFieldKeys.guestName, field_value: guest ? `${guest.firstName} ${guest.lastName}` : "" },
+            { key: rieCustomFieldKeys.attribution, field_value: attribution || "website" },
+          ],
+        }, "PUT");
+        if (!fieldResponse.ok) {
+          console.error("GHL event custom field update failed.", { status: fieldResponse.status });
+          return Response.json(
+            { ok: false, message: "Your registration could not be completed. Please try again." },
+            { status: 502 },
+          );
+        }
+      }
+
       // Trigger tags go last: the event's stable tag, plus the owner-requested date tag.
       const triggerTags = sessionDetails ? [eventTag, RIE_EVENT_TAG] : [eventTag];
       if (!await addEventTags(contactId, token, statusTags) ||
@@ -946,27 +1080,6 @@ export async function POST(request: Request) {
           { ok: false, message: "Your registration could not be completed. Please try again." },
           { status: 502 },
         );
-      }
-
-      if (sessionDetails) {
-        // Structured fields for reporting and merge fields. Best effort: the
-        // registration is already recorded by the note and tags above.
-        const guest = submission.guests[0];
-        const attribution = [submission.attribution.source, submission.attribution.medium, submission.attribution.campaign]
-          .filter(Boolean).join(" / ");
-        try {
-          const fieldResponse = await ghlRequest(`/contacts/${contactId}`, token, {
-            customFields: [
-              { key: rieCustomFieldKeys.session, field_value: sessionDetails.fieldValue },
-              { key: rieCustomFieldKeys.guestCount, field_value: submission.guestCount },
-              { key: rieCustomFieldKeys.guestName, field_value: guest ? `${guest.firstName} ${guest.lastName}` : "" },
-              { key: rieCustomFieldKeys.attribution, field_value: attribution || "website" },
-            ],
-          }, "PUT");
-          if (!fieldResponse.ok) console.error("GHL event custom field update failed.", { status: fieldResponse.status });
-        } catch {
-          console.error("GHL event custom field update failed.", { reason: "network" });
-        }
       }
 
       return Response.json(
