@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <meta name="impact-site-verification" value="08aa5f67-d158-4820-baae-a3d271130e5c" />
+        <meta name="impact-site-verification" {...{ value: "08aa5f67-d158-4820-baae-a3d271130e5c" }} />
       </head>
       <body>
         <SeoStructuredData />
