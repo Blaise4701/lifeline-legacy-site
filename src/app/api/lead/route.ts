@@ -292,6 +292,7 @@ function parseReviewCommon(value: Record<string, unknown>): ReviewCommon | null 
     !isEmail(email) ||
     !includesValue(states, state) ||
     !includesValue(pathways, pathway) ||
+    !isPhone(phone) ||
     !emailConsent
   ) {
     return null;
