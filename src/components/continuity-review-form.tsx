@@ -311,7 +311,7 @@ export function ContinuityReviewForm() {
         <p className="eyebrow">Review request complete</p>
         <h2>Choose a time for your Continuity Review.</h2>
         <p>
-          Your request and preparation answers are saved. Select a time that works for you. The Review is a private, no-pressure planning conversation.
+          Your request and preparation answers are saved. Select a time that works for your complimentary, no-obligation 30-minute telephone discovery call.
         </p>
         {bookingUrl ? (
           <>
@@ -402,7 +402,7 @@ export function ContinuityReviewForm() {
       <p className="eyebrow">A personal next step</p>
       <h2>Tell us where to reach you.</h2>
       <p>
-        A Continuity Review is a private conversation about your questions and planning priorities. Your Checkup is not sent unless you choose to share it on the next step.
+        Start your complimentary, no-obligation 30-minute telephone discovery call request. No prior Checkup is required. If you have completed one, you can choose whether to share its summary in the next step.
       </p>
 
       <form className="review-form" onSubmit={submitContact}>
