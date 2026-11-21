@@ -133,6 +133,7 @@ type Attribution = {
 
 type ReviewCommon = {
   firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   state: string;
@@ -278,6 +279,7 @@ function referrerWithoutQuery(value: string) {
 
 function parseReviewCommon(value: Record<string, unknown>): ReviewCommon | null {
   const firstName = cleanText(value.firstName, 80);
+  const lastName = cleanText(value.lastName, 80);
   const email = cleanText(value.email, 254).toLowerCase();
   const phone = cleanText(value.phone, 40);
   const state = cleanText(value.state, 40);
@@ -289,6 +291,7 @@ function parseReviewCommon(value: Record<string, unknown>): ReviewCommon | null 
 
   if (
     !firstName ||
+    !lastName ||
     !isEmail(email) ||
     !includesValue(states, state) ||
     !includesValue(pathways, pathway) ||
@@ -300,6 +303,7 @@ function parseReviewCommon(value: Record<string, unknown>): ReviewCommon | null 
 
   return {
     firstName,
+    lastName,
     email,
     phone,
     state,
@@ -854,7 +858,7 @@ export async function POST(request: Request) {
 
   const contactBody = {
     ...(submission.firstName ? { firstName: submission.firstName } : {}),
-    ...(submission.type === "event-registration" && submission.lastName ? { lastName: submission.lastName } : {}),
+    ...("lastName" in submission && submission.lastName ? { lastName: submission.lastName } : {}),
     ...(submission.phone ? { phone: submission.phone } : {}),
     email: submission.email,
     locationId,

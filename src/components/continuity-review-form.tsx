@@ -11,6 +11,7 @@ type Step = "contact" | "prepare" | "unavailable" | "calendar";
 
 type ContactData = {
   firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   state: string;
@@ -163,6 +164,7 @@ export function ContinuityReviewForm() {
     const pathway = String(data.get("pathway") ?? "") as Pathway;
     const nextContact: ContactData = {
       firstName: String(data.get("firstName") ?? "").trim(),
+      lastName: String(data.get("lastName") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
       phone: String(data.get("phone") ?? "").trim(),
       state: String(data.get("state") ?? ""),
@@ -175,6 +177,10 @@ export function ContinuityReviewForm() {
 
     if (!nextContact.firstName) {
       setFormError("Enter your first name to continue.");
+      return;
+    }
+    if (!nextContact.lastName) {
+      setFormError("Enter your last name to continue.");
       return;
     }
     if (!/^\S+@\S+\.\S+$/.test(nextContact.email)) {
@@ -418,6 +424,10 @@ export function ContinuityReviewForm() {
           <label>
             <span>First name</span>
             <input name="firstName" autoComplete="given-name" required />
+          </label>
+          <label>
+            <span>Last name</span>
+            <input name="lastName" autoComplete="family-name" required />
           </label>
           <label>
             <span>Email</span>
