@@ -4,12 +4,14 @@ import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { licensedStateCodes, licensedStates, states } from "@/lib/site-data";
+import { buildBookingUrl } from "@/lib/booking-prefill";
 
 type Pathway = "Retirement" | "Family" | "Business";
 type Step = "contact" | "prepare" | "unavailable" | "calendar";
 
 type ContactData = {
   firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   state: string;
@@ -162,6 +164,7 @@ export function ContinuityReviewForm() {
     const pathway = String(data.get("pathway") ?? "") as Pathway;
     const nextContact: ContactData = {
       firstName: String(data.get("firstName") ?? "").trim(),
+      lastName: String(data.get("lastName") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
       phone: String(data.get("phone") ?? "").trim(),
       state: String(data.get("state") ?? ""),
@@ -176,8 +179,17 @@ export function ContinuityReviewForm() {
       setFormError("Enter your first name to continue.");
       return;
     }
+    if (!nextContact.lastName) {
+      setFormError("Enter your last name to continue.");
+      return;
+    }
     if (!/^\S+@\S+\.\S+$/.test(nextContact.email)) {
       setFormError("Enter a valid email address.");
+      return;
+    }
+    const phoneDigits = nextContact.phone.replace(/\D/g, "");
+    if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+      setFormError("Enter the phone number where we should call you for your appointment.");
       return;
     }
     if (!states.includes(nextContact.state as (typeof states)[number])) {
@@ -306,6 +318,8 @@ export function ContinuityReviewForm() {
   }
 
   if (step === "calendar") {
+    // Pass what the visitor already entered so the calendar form does not ask again.
+    const calendarUrl = bookingUrl && contact ? buildBookingUrl(bookingUrl, contact) : bookingUrl;
     return (
       <section className="review-journey-card review-calendar" aria-live="polite">
         <p className="eyebrow">Review request complete</p>
@@ -317,11 +331,11 @@ export function ContinuityReviewForm() {
           <>
             <iframe
               className="review-calendar-frame"
-              src={bookingUrl}
+              src={calendarUrl}
               title="Continuity Review scheduling calendar"
             />
             <p className="form-helper">
-              If the calendar does not load here, <a href={bookingUrl} target="_blank" rel="noreferrer">open it in a new tab</a>.
+              If the calendar does not load here, <a href={calendarUrl} target="_blank" rel="noreferrer">open it in a new tab</a>.
             </p>
           </>
         ) : (
@@ -412,12 +426,19 @@ export function ContinuityReviewForm() {
             <input name="firstName" autoComplete="given-name" required />
           </label>
           <label>
+            <span>Last name</span>
+            <input name="lastName" autoComplete="family-name" required />
+          </label>
+          <label>
             <span>Email</span>
             <input name="email" type="email" autoComplete="email" required />
           </label>
           <label>
-            <span>Mobile phone <small>(optional)</small></span>
-            <input name="phone" type="tel" autoComplete="tel" />
+            <span>Phone number</span>
+            <input name="phone" type="tel" autoComplete="tel" required aria-describedby="phone-help" />
+            <small id="phone-help">
+              We need this to call you at your appointment time. Giving us your number for the appointment does not sign you up for text messages.
+            </small>
           </label>
           <label>
             <span>Your state</span>
