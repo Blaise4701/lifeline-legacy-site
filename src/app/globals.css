@@ -1512,6 +1512,10 @@ ul:last-child {
   font-weight: 450;
 }
 
+.review-form .form-grid label {
+  align-content: start;
+}
+
 .form-grid input,
 .form-grid select {
   background: var(--cream-50);
