@@ -3827,10 +3827,12 @@ ul:last-child {
 
   .retirement-page-shell .framework-pillar {
     gap: 1.7rem;
+    grid-template-columns: minmax(0, 1fr);
     padding: 2.6rem 0;
   }
 
   .retirement-page-shell .framework-pillar-heading {
+    position: static;
     top: auto;
   }
 
