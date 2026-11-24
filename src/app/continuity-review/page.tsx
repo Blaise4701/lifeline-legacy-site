@@ -1,13 +1,32 @@
+import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { Suspense } from "react";
 import { ContinuityReviewForm } from "@/components/continuity-review-form";
 
-export const metadata = pageMetadata({
+const baseMetadata = pageMetadata({
   title: "Your Complimentary Continuity Review",
   description: "Schedule a complimentary, no-obligation 30-minute telephone discovery call with Lifeline Legacy Financial Group. No prior assessment is required.",
   path: "/continuity-review",
   noindex: true,
 });
+
+const shareImage = {
+  url: "https://lifelinelegacyfinancial.com/brand/og-continuity-review.png",
+  width: 1200,
+  height: 630,
+  type: "image/png",
+  alt: "Your Complimentary Continuity Review with Blaise D. Tamo, Lifeline Legacy Financial Group. A 30-minute phone call with no obligation.",
+};
+
+export const metadata: Metadata = {
+  ...baseMetadata,
+  openGraph: { ...baseMetadata.openGraph, images: [shareImage] },
+  twitter: {
+    ...baseMetadata.twitter,
+    card: "summary_large_image",
+    images: [{ url: shareImage.url, alt: shareImage.alt }],
+  },
+};
 
 export default function ContinuityReviewPage() {
   return (
